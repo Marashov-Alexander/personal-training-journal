@@ -1,0 +1,203 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ExerciseFragment.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">ru.ok.technopolis.training.personal.fragments</a> &gt; <span class="el_source">ExerciseFragment.kt</span></div><h1>ExerciseFragment.kt</h1><pre class="source lang-java linenums">package ru.ok.technopolis.training.personal.fragments
+
+import android.graphics.Color
+import android.os.Bundle
+import android.view.ContextMenu
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.widget.ArrayAdapter
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.Spinner
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.fragment_exercise.*
+import kotlinx.android.synthetic.main.item_exercise_element.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import ru.ok.technopolis.training.personal.R
+import ru.ok.technopolis.training.personal.db.entity.ExerciseEntity
+import ru.ok.technopolis.training.personal.db.entity.ExerciseParameterEntity
+import ru.ok.technopolis.training.personal.db.entity.ExerciseTypeEntity
+import ru.ok.technopolis.training.personal.db.entity.MeasureUnitEntity
+import ru.ok.technopolis.training.personal.db.entity.ParameterEntity
+import ru.ok.technopolis.training.personal.db.entity.ParameterTypeEntity
+import ru.ok.technopolis.training.personal.db.model.ParameterModel
+import ru.ok.technopolis.training.personal.items.ItemsList
+import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.EXERCISE_ID_KEY
+import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.WORKOUT_ID_KEY
+import ru.ok.technopolis.training.personal.utils.logger.Logger
+import ru.ok.technopolis.training.personal.utils.recycler.adapters.ParameterListAdapter
+import ru.ok.technopolis.training.personal.viewholders.ExerciseElementViewHolder
+
+<span class="fc" id="L37">class ExerciseFragment : BaseFragment() {</span>
+
+    private var exerciseNameEditText: EditText? = null
+    private var exerciseTypeSpinner: Spinner? = null
+    private var recyclerView: RecyclerView? = null
+    private var addParameterButton: ImageView? = null
+    private var removeParameterButton: ImageView? = null
+    private var exercise: ExerciseEntity? = null
+    private var workoutId: Long? = null
+    private var exerciseId: Long? = null
+    private var listAdapter: ParameterListAdapter? = null
+    private var elements: ItemsList&lt;ParameterModel&gt;? = null
+    private var measureUnitChoices: MutableList&lt;MeasureUnitEntity&gt;? = null
+    private var parameterTypeChoices: MutableList&lt;ParameterTypeEntity&gt;? = null
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+<span class="fc" id="L53">        super.onViewCreated(view, savedInstanceState)</span>
+
+<span class="fc" id="L55">        recyclerView = elements_list</span>
+<span class="fc" id="L56">        removeParameterButton = delete_parameter_button</span>
+<span class="fc" id="L57">        exerciseNameEditText = exercise_name</span>
+<span class="fc" id="L58">        exerciseTypeSpinner = exercise_type_spinner</span>
+
+<span class="fc" id="L60">        addParameterButton = add_parameter_button</span>
+<span class="pc bpc" id="L61" title="1 of 2 branches missed.">        addParameterButton?.let { registerForContextMenu(it) }</span>
+
+<span class="pc bpc" id="L63" title="1 of 3 branches missed.">        GlobalScope.launch(Dispatchers.IO) {</span>
+<span class="pc bpc" id="L64" title="1 of 2 branches missed.">            activity?.let {</span>
+<span class="pc bpc" id="L65" title="2 of 4 branches missed.">                workoutId = (it.intent.extras?.get(WORKOUT_ID_KEY)) as Long</span>
+<span class="pc bpc" id="L66" title="2 of 4 branches missed.">                exerciseId = (it.intent.extras?.get(EXERCISE_ID_KEY)) as Long</span>
+<span class="fc" id="L67">            }</span>
+<span class="pc bpc" id="L68" title="3 of 6 branches missed.">            exercise = database?.exerciseDao()?.getById(exerciseId!!)</span>
+<span class="pc bpc" id="L69" title="4 of 8 branches missed.">            val parametersList = database?.exerciseParameterDao()?.getParametersForExercise(exerciseId!!)!!</span>
+<span class="pc bpc" id="L70" title="4 of 8 branches missed.">            measureUnitChoices = database?.measureUnitDao()?.getAll()?.toMutableList()!!</span>
+<span class="pc bpc" id="L71" title="4 of 8 branches missed.">            parameterTypeChoices = database?.parameterTypeDao()?.getAll()?.toMutableList()!!</span>
+<span class="pc bpc" id="L72" title="4 of 8 branches missed.">            val exerciseTypeChoices = database?.exerciseTypeDao()?.getAll()?.toMutableList()!!</span>
+
+<span class="fc" id="L74">            val parameterModelList = parametersList.map {</span>
+<span class="nc bnc" id="L75" title="All 4 branches missed.">                ParameterModel(it, measureUnitChoices!!, parameterTypeChoices!!)</span>
+<span class="fc" id="L76">            }.toMutableList()</span>
+
+<span class="pc bpc" id="L78" title="2 of 4 branches missed.">            withContext(Dispatchers.Main) {</span>
+
+<span class="pc bpc" id="L80" title="1 of 2 branches missed.">                exerciseTypeSpinner?.adapter = ArrayAdapter&lt;ExerciseTypeEntity&gt;(</span>
+<span class="fc" id="L81">                    requireContext(), R.layout.spinner_item, exerciseTypeChoices</span>
+                )
+<span class="pc bpc" id="L83" title="2 of 4 branches missed.">                exerciseTypeSpinner?.setSelection(exercise!!.typeId.toInt() - 1)</span>
+
+<span class="pc bpc" id="L85" title="2 of 4 branches missed.">                exerciseNameEditText?.setText(exercise?.name)</span>
+
+<span class="fc" id="L87">                elements = ItemsList(parameterModelList)</span>
+
+<span class="fc" id="L89">                listAdapter = ParameterListAdapter(</span>
+<span class="fc" id="L90">                    holderType = ExerciseElementViewHolder::class,</span>
+<span class="fc" id="L91">                    layoutId = R.layout.item_exercise_element,</span>
+<span class="pc bpc" id="L92" title="1 of 2 branches missed.">                    dataSource = elements!!,</span>
+<span class="fc" id="L93">                    onDeleteParameterClick = {</span>
+<span class="nc bnc" id="L94" title="All 3 branches missed.">                        GlobalScope.launch(Dispatchers.IO) {</span>
+<span class="nc bnc" id="L95" title="All 6 branches missed.">                            database?.exerciseParameterDao()?.delete(exerciseId!!, it.parameter.id)</span>
+<span class="nc bnc" id="L96" title="All 4 branches missed.">                            withContext(Dispatchers.Main) {</span>
+<span class="nc bnc" id="L97" title="All 2 branches missed.">                                elements!!.remove(it)</span>
+<span class="nc" id="L98">                            }</span>
+<span class="nc" id="L99">                        }</span>
+<span class="nc" id="L100">                    }</span>
+                )
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">                recyclerView?.adapter = listAdapter</span>
+<span class="pc bpc" id="L103" title="1 of 2 branches missed.">                recyclerView?.layoutManager = LinearLayoutManager(activity)</span>
+
+<span class="pc bpc" id="L105" title="1 of 2 branches missed.">                addParameterButton?.setOnClickListener {</span>
+<span class="nc" id="L106">                    it.showContextMenu()</span>
+<span class="pc" id="L107">                }</span>
+            }
+<span class="pc" id="L109">        }</span>
+
+<span class="fc" id="L111">        setHasOptionsMenu(true)</span>
+<span class="fc" id="L112">    }</span>
+
+    private fun createNewParameter(parameter: ParameterEntity? = null) {
+<span class="nc bnc" id="L115" title="All 3 branches missed.">        GlobalScope.launch(Dispatchers.IO) {</span>
+<span class="nc bnc" id="L116" title="All 4 branches missed.">            val parameterEntity = parameter?.copy() ?: ParameterEntity(&quot;&quot;, 1, 1)</span>
+<span class="nc" id="L117">            parameterEntity.id = 0</span>
+<span class="nc bnc" id="L118" title="All 6 branches missed.">            parameterEntity.id = database?.parameterDao()?.insert(parameterEntity)!!</span>
+<span class="nc bnc" id="L119" title="All 4 branches missed.">            database?.exerciseParameterDao()?.insert(ExerciseParameterEntity(</span>
+<span class="nc bnc" id="L120" title="All 2 branches missed.">                exerciseId!!,</span>
+<span class="nc" id="L121">                parameterEntity.id</span>
+            ))
+<span class="nc bnc" id="L123" title="All 4 branches missed.">            withContext(Dispatchers.Main) {</span>
+<span class="nc bnc" id="L124" title="All 2 branches missed.">                elements?.add(</span>
+<span class="nc bnc" id="L125" title="All 4 branches missed.">                    ParameterModel(parameterEntity, measureUnitChoices!!, parameterTypeChoices!!)</span>
+<span class="nc" id="L126">                )</span>
+            }
+<span class="nc" id="L128">        }</span>
+<span class="nc" id="L129">    }</span>
+
+    private fun addParameter(parameter: ParameterEntity) {
+<span class="nc" id="L132">        createNewParameter(parameter)</span>
+<span class="nc" id="L133">    }</span>
+
+    override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
+<span class="nc" id="L136">        super.onCreateContextMenu(menu, v, menuInfo)</span>
+<span class="nc bnc" id="L137" title="All 2 branches missed.">        if (v.id == add_parameter_button.id) {</span>
+<span class="nc" id="L138">            menu.add(0, 0, 0, v.resources.getString(R.string.create_new)).setOnMenuItemClickListener {</span>
+<span class="nc" id="L139">                createNewParameter()</span>
+<span class="nc" id="L140">                true</span>
+            }
+<span class="nc bnc" id="L142" title="All 3 branches missed.">            GlobalScope.launch(Dispatchers.IO) {</span>
+<span class="nc bnc" id="L143" title="All 2 branches missed.">                database?.let {</span>
+<span class="nc" id="L144">                    val parameters = it.parameterDao().getAll().distinctBy { param -&gt; param.name }</span>
+<span class="nc bnc" id="L145" title="All 4 branches missed.">                    withContext(Dispatchers.Main) {</span>
+<span class="nc bnc" id="L146" title="All 2 branches missed.">                        for (parameter in parameters) {</span>
+<span class="nc" id="L147">                            menu.add(1, parameter.id.toInt(), 0, parameter.name).setOnMenuItemClickListener {</span>
+<span class="nc" id="L148">                                addParameter(parameter)</span>
+<span class="nc" id="L149">                                true</span>
+                            }
+                        }
+<span class="nc" id="L152">                    }</span>
+<span class="nc" id="L153">                }</span>
+<span class="nc" id="L154">            }</span>
+        }
+<span class="nc" id="L156">    }</span>
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+<span class="fc" id="L159">        Logger.d(this, &quot;onCreateOptionsMenu&quot;)</span>
+<span class="fc" id="L160">        inflater.inflate(R.menu.apply_reject_menu, menu)</span>
+<span class="fc" id="L161">        val saveButton: MenuItem = menu.findItem(R.id.apply_changes)</span>
+<span class="fc" id="L162">        saveButton.setOnMenuItemClickListener {</span>
+<span class="pc bpc" id="L163" title="1 of 2 branches missed.">            val exerciseName = exerciseNameEditText!!.text.toString()</span>
+<span class="pc bpc" id="L164" title="1 of 2 branches missed.">            val typeId = exerciseTypeSpinner!!.selectedItemId</span>
+<span class="pc bpc" id="L165" title="1 of 2 branches missed.">            if (exerciseName == &quot;&quot;) {</span>
+<span class="nc bnc" id="L166" title="All 2 branches missed.">                exerciseNameEditText?.setBackgroundColor(Color.RED)</span>
+            } else {
+<span class="pc bpc" id="L168" title="1 of 3 branches missed.">                GlobalScope.launch(Dispatchers.IO) {</span>
+<span class="pc bpc" id="L169" title="1 of 2 branches missed.">                    exercise?.name = exerciseName</span>
+<span class="pc bpc" id="L170" title="1 of 2 branches missed.">                    exercise?.typeId = typeId + 1</span>
+<span class="pc bpc" id="L171" title="3 of 6 branches missed.">                    database?.exerciseDao()?.update(exercise!!)</span>
+
+<span class="pc bpc" id="L173" title="1 of 2 branches missed.">                    listAdapter!!.data.forEach {</span>
+<span class="nc" id="L174">                        val parameter = it.parameter</span>
+<span class="nc bnc" id="L175" title="All 4 branches missed.">                        database?.parameterDao()?.update(parameter)</span>
+<span class="nc" id="L176">                    }</span>
+
+<span class="pc bpc" id="L178" title="2 of 4 branches missed.">                    withContext(Dispatchers.Main) {</span>
+<span class="pc bpc" id="L179" title="1 of 2 branches missed.">                        router?.goToPrevFragment()</span>
+                    }
+<span class="pc" id="L181">                }</span>
+            }
+<span class="fc" id="L183">            true</span>
+        }
+<span class="fc" id="L185">        val cancelButton: MenuItem = menu.findItem(R.id.reject_changes)</span>
+<span class="fc" id="L186">        cancelButton.setOnMenuItemClickListener {</span>
+<span class="nc bnc" id="L187" title="All 2 branches missed.">            val exerciseName = exerciseNameEditText?.text.toString()</span>
+<span class="nc bnc" id="L188" title="All 3 branches missed.">            GlobalScope.launch(Dispatchers.IO) {</span>
+<span class="nc bnc" id="L189" title="All 2 branches missed.">                if (exerciseName == &quot;&quot;) {</span>
+<span class="nc bnc" id="L190" title="All 6 branches missed.">                    database?.exerciseDao()?.delete(exercise!!)</span>
+                }
+<span class="nc bnc" id="L192" title="All 4 branches missed.">                withContext(Dispatchers.Main) {</span>
+<span class="nc bnc" id="L193" title="All 2 branches missed.">                    router?.goToPrevFragment()</span>
+                }
+<span class="nc" id="L195">            }</span>
+
+<span class="nc" id="L197">            true</span>
+        }
+<span class="fc" id="L199">    }</span>
+
+<span class="fc" id="L201">    override fun getFragmentLayoutId(): Int = R.layout.fragment_exercise</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span>Generated by the Android Gradle plugin 3.6.1</div></body></html>

@@ -1,0 +1,168 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AccountSettingsFragment.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">ru.ok.technopolis.training.personal.fragments.settings</a> &gt; <span class="el_source">AccountSettingsFragment.kt</span></div><h1>AccountSettingsFragment.kt</h1><pre class="source lang-java linenums">package ru.ok.technopolis.training.personal.fragments.settings
+
+import android.os.Bundle
+import android.view.View
+import com.afollestad.materialdialogs.MaterialDialog
+import com.afollestad.materialdialogs.input.input
+import kotlinx.android.synthetic.main.fragment_account_settings.*
+import retrofit2.Response
+import ru.ok.technopolis.training.personal.R
+import ru.ok.technopolis.training.personal.api.Api
+import ru.ok.technopolis.training.personal.dto.FatherNameDto
+import ru.ok.technopolis.training.personal.dto.FirstNameDto
+import ru.ok.technopolis.training.personal.dto.LastNameDto
+import ru.ok.technopolis.training.personal.dto.UserDto
+import ru.ok.technopolis.training.personal.fragments.BaseFragment
+import ru.ok.technopolis.training.personal.repository.CurrentUserRepository
+import ru.ok.technopolis.training.personal.utils.auth.AuthorizationHelper
+import ru.ok.technopolis.training.personal.utils.logger.Logger
+import ru.ok.technopolis.training.personal.utils.toast.ToastUtils
+import java.net.HttpURLConnection
+
+<span class="nc" id="L22">class AccountSettingsFragment : BaseFragment() {</span>
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+<span class="nc" id="L25">        super.onViewCreated(view, savedInstanceState)</span>
+<span class="nc" id="L26">        val currentUser = CurrentUserRepository.currentUser.value</span>
+<span class="nc bnc" id="L27" title="All 2 branches missed.">        currentUser?.let { user -&gt;</span>
+<span class="nc" id="L28">            last_name_header.text = user.lastName</span>
+<span class="nc" id="L29">            first_name_header.text = user.firstName</span>
+<span class="nc" id="L30">            father_name_header.text = user.fatherName</span>
+<span class="nc" id="L31">            user_image.setImageURI(user.pictureUrlStr)</span>
+
+<span class="nc bnc" id="L33" title="All 2 branches missed.">            context?.let {</span>
+<span class="nc" id="L34">                last_name_ll.setOnClickListener { _ -&gt;</span>
+<span class="nc" id="L35">                    MaterialDialog(it).show {</span>
+<span class="nc" id="L36">                        title(R.string.last_name)</span>
+<span class="nc" id="L37">                        negativeButton(R.string.close) { mt -&gt;</span>
+<span class="nc" id="L38">                            mt.cancel()</span>
+<span class="nc" id="L39">                        }</span>
+<span class="nc" id="L40">                        input(</span>
+<span class="nc bnc" id="L41" title="All 2 branches missed.">                                prefill = CurrentUserRepository.currentUser.value?.lastName,</span>
+<span class="nc" id="L42">                                maxLength = 30,</span>
+<span class="nc" id="L43">                                callback = { dialog, lastName -&gt;</span>
+<span class="nc" id="L44">                                    val lastNameStr = lastName.toString()</span>
+<span class="nc bnc" id="L45" title="All 2 branches missed.">                                    if (AuthorizationHelper.isCorrectName(lastNameStr)) {</span>
+<span class="nc" id="L46">                                        taskContainer.add(Api.changeUserData(</span>
+<span class="nc" id="L47">                                                user.id,</span>
+<span class="nc" id="L48">                                                LastNameDto(lastNameStr),</span>
+<span class="nc bnc" id="L49" title="All 2 branches missed.">                                                CurrentUserRepository.getCurrentUserToken(it) ?: &quot;&quot;</span>
+<span class="nc" id="L50">                                        ).subscribe(</span>
+<span class="nc" id="L51">                                                { response -&gt;</span>
+<span class="nc" id="L52">                                                    run {</span>
+<span class="nc" id="L53">                                                        val userDto = response.body()</span>
+<span class="nc bnc" id="L54" title="All 2 branches missed.">                                                        userDto?.lastName = lastNameStr</span>
+<span class="nc" id="L55">                                                        onResponse(response, userDto)</span>
+<span class="nc" id="L56">                                                    }</span>
+<span class="nc" id="L57">                                                },</span>
+<span class="nc" id="L58">                                                { throwable -&gt; onFail(throwable) }</span>
+                                        ))
+                                    }
+<span class="nc" id="L61">                                })</span>
+<span class="nc" id="L62">                    }</span>
+<span class="nc" id="L63">                    first_name_ll.setOnClickListener { _ -&gt;</span>
+<span class="nc" id="L64">                        MaterialDialog(it).show {</span>
+<span class="nc" id="L65">                            title(R.string.first_name)</span>
+<span class="nc" id="L66">                            negativeButton(R.string.close) { mt -&gt;</span>
+<span class="nc" id="L67">                                mt.cancel()</span>
+<span class="nc" id="L68">                            }</span>
+<span class="nc" id="L69">                            input(</span>
+<span class="nc bnc" id="L70" title="All 2 branches missed.">                                    prefill = CurrentUserRepository.currentUser.value?.firstName,</span>
+<span class="nc" id="L71">                                    maxLength = 30,</span>
+<span class="nc" id="L72">                                    callback = { dialog, firstName -&gt;</span>
+<span class="nc" id="L73">                                        val firstNameStr = firstName.toString()</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">                                        if (AuthorizationHelper.isCorrectName(firstNameStr)) {</span>
+<span class="nc" id="L75">                                            taskContainer.add(Api.changeUserData(</span>
+<span class="nc" id="L76">                                                    user.id,</span>
+<span class="nc" id="L77">                                                    FirstNameDto(firstNameStr),</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">                                                    CurrentUserRepository.getCurrentUserToken(it)</span>
+<span class="nc" id="L79">                                                            ?: &quot;&quot;</span>
+<span class="nc" id="L80">                                            ).subscribe(</span>
+<span class="nc" id="L81">                                                    { response -&gt;</span>
+<span class="nc" id="L82">                                                        run {</span>
+<span class="nc" id="L83">                                                            val userDto = response.body()</span>
+<span class="nc bnc" id="L84" title="All 2 branches missed.">                                                            userDto?.firstName = firstNameStr</span>
+<span class="nc" id="L85">                                                            onResponse(response, userDto)</span>
+<span class="nc" id="L86">                                                        }</span>
+<span class="nc" id="L87">                                                    },</span>
+<span class="nc" id="L88">                                                    { throwable -&gt; onFail(throwable) }</span>
+                                            ))
+                                        } else {
+<span class="nc" id="L91">                                            ToastUtils.showLongToast(it, R.string.incorrect_first_name)</span>
+                                        }
+<span class="nc" id="L93">                                    }</span>
+                            )
+<span class="nc" id="L95">                        }</span>
+<span class="nc" id="L96">                    }</span>
+<span class="nc" id="L97">                    father_name_ll.setOnClickListener { _ -&gt;</span>
+<span class="nc" id="L98">                        MaterialDialog(it).show {</span>
+<span class="nc" id="L99">                            title(R.string.father_name)</span>
+<span class="nc" id="L100">                            negativeButton(R.string.close) { mt -&gt;</span>
+<span class="nc" id="L101">                                mt.cancel()</span>
+<span class="nc" id="L102">                            }</span>
+<span class="nc" id="L103">                            input(</span>
+<span class="nc bnc" id="L104" title="All 2 branches missed.">                                    prefill = CurrentUserRepository.currentUser.value?.fatherName,</span>
+<span class="nc" id="L105">                                    maxLength = 30,</span>
+<span class="nc" id="L106">                                    callback = { dialog, fatherName -&gt;</span>
+<span class="nc" id="L107">                                        val fatherNameStr = fatherName.toString()</span>
+<span class="nc bnc" id="L108" title="All 2 branches missed.">                                        if (AuthorizationHelper.isCorrectName(fatherNameStr)) {</span>
+<span class="nc" id="L109">                                            taskContainer.add(Api.changeUserData(</span>
+<span class="nc" id="L110">                                                    user.id,</span>
+<span class="nc" id="L111">                                                    FatherNameDto(fatherNameStr),</span>
+<span class="nc bnc" id="L112" title="All 2 branches missed.">                                                    CurrentUserRepository.getCurrentUserToken(it)</span>
+<span class="nc" id="L113">                                                            ?: &quot;&quot;</span>
+<span class="nc" id="L114">                                            ).subscribe(</span>
+<span class="nc" id="L115">                                                    { response -&gt;</span>
+<span class="nc" id="L116">                                                        run {</span>
+<span class="nc" id="L117">                                                            val userDto = response.body()</span>
+<span class="nc bnc" id="L118" title="All 2 branches missed.">                                                            userDto?.fatherName = fatherNameStr</span>
+<span class="nc" id="L119">                                                            onResponse(response, userDto)</span>
+<span class="nc" id="L120">                                                        }</span>
+<span class="nc" id="L121">                                                    },</span>
+<span class="nc" id="L122">                                                    { throwable -&gt; onFail(throwable) }</span>
+                                            ))
+                                        } else {
+<span class="nc" id="L125">                                            ToastUtils.showLongToast(it, R.string.incorrect_father_name)</span>
+                                        }
+<span class="nc" id="L127">                                    }</span>
+                            )
+<span class="nc" id="L129">                        }</span>
+<span class="nc" id="L130">                    }</span>
+<span class="nc" id="L131">                    user_image_ll.setOnClickListener { _ -&gt;</span>
+<span class="nc" id="L132">                    }</span>
+<span class="nc" id="L133">                }</span>
+<span class="nc" id="L134">            }</span>
+        }
+<span class="nc" id="L136">    }</span>
+
+    private fun onResponse(response: Response&lt;UserDto&gt;, userDto: UserDto?) {
+<span class="nc bnc" id="L139" title="All 2 branches missed.">        when (response.code()) {</span>
+            HttpURLConnection.HTTP_OK -&gt; {
+<span class="nc bnc" id="L141" title="All 2 branches missed.">                userDto?.let {</span>
+<span class="nc" id="L142">                    CurrentUserRepository.currentUser.value = it.toUserInfo()</span>
+<span class="nc" id="L143">                    last_name_header.text = it.lastName</span>
+<span class="nc" id="L144">                    first_name_header.text = it.firstName</span>
+<span class="nc" id="L145">                    father_name_header.text = it.fatherName</span>
+<span class="nc" id="L146">                    user_image.setImageURI(it.pictureUrlStr)</span>
+<span class="nc" id="L147">                }</span>
+<span class="nc" id="L148">                Logger.d(this, &quot;successfully changed user data with code ${response.code()}&quot;)</span>
+            }
+            else -&gt; {
+<span class="nc bnc" id="L151" title="All 2 branches missed.">                context?.let {</span>
+<span class="nc" id="L152">                    ToastUtils.showLongToast(it, R.string.server_not_available)</span>
+<span class="nc" id="L153">                }</span>
+<span class="nc" id="L154">                Logger.d(this, &quot;unsuccessfully changed user data with code ${response.code()}&quot;)</span>
+            }
+        }
+<span class="nc" id="L157">    }</span>
+
+    private fun onFail(throwable: Throwable) {
+<span class="nc bnc" id="L160" title="All 2 branches missed.">        context?.let {</span>
+<span class="nc" id="L161">            ToastUtils.showLongToast(it, R.string.failed_change_user_data)</span>
+<span class="nc" id="L162">        }</span>
+<span class="nc" id="L163">        Logger.e(this, &quot;Login failed : ${throwable.message}&quot;)</span>
+<span class="nc" id="L164">    }</span>
+
+<span class="nc" id="L166">    override fun getFragmentLayoutId(): Int = R.layout.fragment_account_settings</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span>Generated by the Android Gradle plugin 3.6.1</div></body></html>

@@ -1,0 +1,249 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>WorkoutFragment.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">ru.ok.technopolis.training.personal.fragments</a> &gt; <span class="el_source">WorkoutFragment.kt</span></div><h1>WorkoutFragment.kt</h1><pre class="source lang-java linenums">package ru.ok.technopolis.training.personal.fragments
+
+import android.app.TimePickerDialog
+import android.graphics.Color
+import android.os.Bundle
+import android.text.Editable
+import android.text.TextWatcher
+import android.view.ContextMenu
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
+import android.view.View
+import android.widget.Button
+import android.widget.CheckBox
+import android.widget.EditText
+import android.widget.ImageView
+import android.widget.LinearLayout
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.fragment_workout.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import ru.ok.technopolis.training.personal.R
+import ru.ok.technopolis.training.personal.db.entity.ExerciseEntity
+import ru.ok.technopolis.training.personal.db.entity.WorkoutEntity
+import ru.ok.technopolis.training.personal.db.entity.WorkoutExerciseEntity
+import ru.ok.technopolis.training.personal.items.ItemsList
+import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.WORKOUT_ID_KEY
+import ru.ok.technopolis.training.personal.utils.logger.Logger
+import ru.ok.technopolis.training.personal.utils.recycler.adapters.ExerciseListAdapter
+import ru.ok.technopolis.training.personal.viewholders.ExerciseViewHolder
+
+<span class="fc" id="L36">class WorkoutFragment : BaseFragment() {</span>
+
+    private var workoutNameEditText: EditText? = null
+    private var recyclerView: RecyclerView? = null
+    private var addExerciseButton: ImageView? = null
+    private var workout: WorkoutEntity? = null
+    private var chooseTimeButton: Button? = null
+    private var weekdayCheckboxes: Array&lt;CheckBox&gt;? = null
+    private var elements: ItemsList&lt;ExerciseEntity&gt;? = null
+    private var workoutId: Long? = null
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+<span class="fc" id="L48">        super.onViewCreated(view, savedInstanceState)</span>
+
+<span class="fc" id="L50">        workoutNameEditText = workout_name</span>
+<span class="fc" id="L51">        recyclerView = elements_list</span>
+<span class="fc" id="L52">        chooseTimeButton = choose_workout_time</span>
+<span class="fc" id="L53">        weekdayCheckboxes = arrayOf(day1, day2, day3, day4, day5, day6, day7)</span>
+
+<span class="fc" id="L55">        addExerciseButton = add_exercise_button</span>
+<span class="pc bpc" id="L56" title="1 of 2 branches missed.">        addExerciseButton?.let { registerForContextMenu(it) }</span>
+
+<span class="pc bpc" id="L58" title="1 of 3 branches missed.">        GlobalScope.launch(Dispatchers.IO) {</span>
+<span class="pc bpc" id="L59" title="4 of 8 branches missed.">            workoutId = (activity?.intent?.extras?.get(WORKOUT_ID_KEY)) as Long</span>
+<span class="pc bpc" id="L60" title="4 of 8 branches missed.">            val exerciseList = database?.workoutExerciseDao()?.getExercisesForWorkout(workoutId!!)!!</span>
+<span class="pc bpc" id="L61" title="3 of 6 branches missed.">            workout = database?.workoutDao()?.getById(workoutId!!)</span>
+
+<span class="pc bpc" id="L63" title="2 of 4 branches missed.">            withContext(Dispatchers.Main) {</span>
+<span class="pc bpc" id="L64" title="2 of 4 branches missed.">                workoutNameEditText?.setText(workout?.name)</span>
+<span class="fc" id="L65">                elements = ItemsList(exerciseList)</span>
+
+<span class="fc" id="L67">                val exerciseAdapter = ExerciseListAdapter(</span>
+<span class="fc" id="L68">                    holderType = ExerciseViewHolder::class,</span>
+<span class="fc" id="L69">                    layoutId = R.layout.item_workout_element,</span>
+<span class="pc bpc" id="L70" title="1 of 2 branches missed.">                    dataSource = elements!!,</span>
+<span class="fc" id="L71">                    onClick = {</span>
+<span class="nc" id="L72">                        showExercisePage(it.id)</span>
+<span class="nc" id="L73">                    },</span>
+<span class="fc" id="L74">                    onDeleteExerciseClick = {</span>
+<span class="nc bnc" id="L75" title="All 3 branches missed.">                        GlobalScope.launch(Dispatchers.IO) {</span>
+<span class="nc bnc" id="L76" title="All 6 branches missed.">                            database?.workoutExerciseDao()?.delete(workoutId!!, it.id)</span>
+<span class="nc bnc" id="L77" title="All 4 branches missed.">                            withContext(Dispatchers.Main) {</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">                                elements!!.remove(it)</span>
+<span class="nc" id="L79">                            }</span>
+<span class="nc" id="L80">                        }</span>
+<span class="nc" id="L81">                    }</span>
+                )
+
+<span class="pc bpc" id="L84" title="1 of 2 branches missed.">                recyclerView?.adapter = exerciseAdapter</span>
+<span class="pc bpc" id="L85" title="1 of 2 branches missed.">                recyclerView?.layoutManager = LinearLayoutManager(activity)</span>
+<span class="pc bpc" id="L86" title="1 of 2 branches missed.">                recyclerView?.addItemDecoration(DividerItemDecoration(activity, LinearLayout.VERTICAL))</span>
+
+<span class="pc bpc" id="L88" title="1 of 2 branches missed.">                addExerciseButton?.setOnClickListener {</span>
+<span class="pc bpc" id="L89" title="1 of 2 branches missed.">                    addExerciseButton?.showContextMenu()</span>
+<span class="fc" id="L90">                }</span>
+<span class="pc bpc" id="L91" title="1 of 2 branches missed.">                workoutNameEditText!!.addTextChangedListener(object : TextWatcher {</span>
+                    override fun afterTextChanged(s: Editable?) {
+<span class="pc bpc" id="L93" title="3 of 6 branches missed.">                        if (s != null &amp;&amp; s.isNotEmpty()) {</span>
+<span class="pc bpc" id="L94" title="1 of 2 branches missed.">                            workoutNameEditText!!.setBackgroundColor(Color.WHITE)</span>
+<span class="pc bpc" id="L95" title="1 of 2 branches missed.">                            workout?.name = s.toString()</span>
+                        }
+<span class="fc" id="L97">                    }</span>
+<span class="fc" id="L98">                    override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}</span>
+<span class="fc" id="L99">                    override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}</span>
+                })
+<span class="pc bpc" id="L101" title="2 of 4 branches missed.">                chooseTimeButton?.text = workout!!.plannedTime</span>
+<span class="pc bpc" id="L102" title="1 of 2 branches missed.">                chooseTimeButton?.setOnClickListener {</span>
+<span class="fc" id="L103">                    TimePickerDialog(</span>
+<span class="fc" id="L104">                        it.context,</span>
+<span class="fc" id="L105">                        TimePickerDialog.OnTimeSetListener { _, hourOfDay, minute -&gt;</span>
+<span class="fc" id="L106">                            run {</span>
+<span class="pc bpc" id="L107" title="1 of 2 branches missed.">                                val timeStr = if (minute &lt; 10) &quot;$hourOfDay:0$minute&quot; else &quot;$hourOfDay:$minute&quot;</span>
+<span class="pc bpc" id="L108" title="1 of 2 branches missed.">                                chooseTimeButton?.text = timeStr</span>
+<span class="fc" id="L109">                            }</span>
+<span class="fc" id="L110">                        },</span>
+<span class="fc" id="L111">                        12, 0, true</span>
+<span class="fc" id="L112">                    ).show()</span>
+<span class="fc" id="L113">                }</span>
+<span class="pc bpc" id="L114" title="1 of 4 branches missed.">                for (i in weekdayCheckboxes!!.indices) {</span>
+<span class="fc" id="L115">                    val bit = 1 shl i</span>
+<span class="pc bpc" id="L116" title="1 of 2 branches missed.">                    val checkBox = weekdayCheckboxes!![i]</span>
+<span class="pc bpc" id="L117" title="1 of 4 branches missed.">                    if (bit and workout!!.weekdaysMask != 0) {</span>
+<span class="fc" id="L118">                        checkBox.isChecked = true</span>
+                    }
+<span class="fc" id="L120">                    checkBox.setOnCheckedChangeListener { v, checked -&gt;</span>
+<span class="fc bfc" id="L121" title="All 2 branches covered.">                        if (checked) {</span>
+<span class="pc bpc" id="L122" title="1 of 4 branches missed.">                            for (ii in weekdayCheckboxes!!.indices) {</span>
+<span class="pc bpc" id="L123" title="1 of 2 branches missed.">                                weekdayCheckboxes!![ii].setBackgroundColor(Color.WHITE)</span>
+                            }
+                        }
+<span class="fc" id="L126">                    }</span>
+                }
+<span class="pc" id="L128">            }</span>
+<span class="pc" id="L129">        }</span>
+
+<span class="fc" id="L131">        setHasOptionsMenu(true)</span>
+<span class="fc" id="L132">    }</span>
+
+    private fun createNewExercise() {
+<span class="pc bpc" id="L135" title="1 of 3 branches missed.">        GlobalScope.launch(Dispatchers.IO) {</span>
+<span class="fc" id="L136">            val exerciseEntity = ExerciseEntity(&quot;&quot;, &quot;&quot;, 1)</span>
+<span class="pc bpc" id="L137" title="3 of 6 branches missed.">            exerciseEntity.id = database?.exerciseDao()?.insert(exerciseEntity)!!</span>
+<span class="pc bpc" id="L138" title="2 of 4 branches missed.">            database?.workoutExerciseDao()?.insert(WorkoutExerciseEntity(</span>
+<span class="pc bpc" id="L139" title="1 of 2 branches missed.">                workoutId!!,</span>
+<span class="fc" id="L140">                exerciseEntity.id</span>
+            ))
+<span class="pc bpc" id="L142" title="2 of 4 branches missed.">            withContext(Dispatchers.Main) {</span>
+<span class="pc bpc" id="L143" title="1 of 2 branches missed.">                elements!!.add(exerciseEntity)</span>
+<span class="fc" id="L144">                showExercisePage(exerciseEntity.id)</span>
+<span class="pc" id="L145">            }</span>
+<span class="pc" id="L146">        }</span>
+<span class="fc" id="L147">    }</span>
+
+    private fun addExercise(exercise: ExerciseEntity) {
+<span class="pc bpc" id="L150" title="1 of 3 branches missed.">        GlobalScope.launch(Dispatchers.IO) {</span>
+<span class="pc bpc" id="L151" title="2 of 4 branches missed.">            database?.workoutExerciseDao()?.insert(WorkoutExerciseEntity(</span>
+<span class="pc bpc" id="L152" title="1 of 2 branches missed.">                workoutId!!,</span>
+<span class="fc" id="L153">                exercise.id</span>
+            ))
+<span class="pc bpc" id="L155" title="2 of 4 branches missed.">            withContext(Dispatchers.Main) {</span>
+<span class="pc bpc" id="L156" title="1 of 2 branches missed.">                elements!!.add(exercise)</span>
+<span class="fc" id="L157">                showExercisePage(exercise.id)</span>
+<span class="pc" id="L158">            }</span>
+<span class="pc" id="L159">        }</span>
+<span class="fc" id="L160">    }</span>
+
+    override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
+<span class="fc" id="L163">        super.onCreateContextMenu(menu, v, menuInfo)</span>
+<span class="pc bpc" id="L164" title="1 of 2 branches missed.">        if (v.id == add_exercise_button.id) {</span>
+<span class="fc" id="L165">            menu.add(0, 0, 0, v.resources.getString(R.string.create_new)).setOnMenuItemClickListener {</span>
+<span class="fc" id="L166">                createNewExercise()</span>
+<span class="fc" id="L167">                true</span>
+            }
+<span class="pc bpc" id="L169" title="1 of 3 branches missed.">            GlobalScope.launch(Dispatchers.IO) {</span>
+<span class="pc bpc" id="L170" title="1 of 2 branches missed.">                database?.let {</span>
+<span class="fc" id="L171">                    val exercises = it.exerciseDao().getAll()</span>
+<span class="pc bpc" id="L172" title="2 of 4 branches missed.">                    withContext(Dispatchers.Main) {</span>
+<span class="fc bfc" id="L173" title="All 2 branches covered.">                        for (exercise in exercises) {</span>
+<span class="fc" id="L174">                            menu.add(1, exercise.id.toInt(), 0, exercise.name).setOnMenuItemClickListener {</span>
+<span class="fc" id="L175">                                addExercise(exercise)</span>
+<span class="fc" id="L176">                                true</span>
+                            }
+                        }
+<span class="pc" id="L179">                    }</span>
+<span class="fc" id="L180">                }</span>
+<span class="pc" id="L181">            }</span>
+        }
+<span class="fc" id="L183">    }</span>
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+<span class="fc" id="L186">        Logger.d(this, &quot;onCreateOptionsMenu&quot;)</span>
+<span class="fc" id="L187">        inflater.inflate(R.menu.apply_reject_menu, menu)</span>
+
+<span class="fc" id="L189">        val saveButton: MenuItem = menu.findItem(R.id.apply_changes)</span>
+<span class="fc" id="L190">        saveButton.setOnMenuItemClickListener {</span>
+<span class="pc bpc" id="L191" title="1 of 2 branches missed.">            saveWorkoutData { router?.goToPrevFragment() }</span>
+<span class="fc" id="L192">            true</span>
+        }
+
+<span class="fc" id="L195">        val cancelButton: MenuItem = menu.findItem(R.id.reject_changes)</span>
+<span class="fc" id="L196">        cancelButton.setOnMenuItemClickListener {</span>
+<span class="nc bnc" id="L197" title="All 2 branches missed.">            val workoutName = workoutNameEditText?.text.toString()</span>
+<span class="nc bnc" id="L198" title="All 3 branches missed.">            GlobalScope.launch(Dispatchers.IO) {</span>
+<span class="nc bnc" id="L199" title="All 2 branches missed.">                if (workoutName == &quot;&quot;) {</span>
+<span class="nc bnc" id="L200" title="All 6 branches missed.">                        database?.workoutDao()?.delete(workout!!)</span>
+                }
+<span class="nc bnc" id="L202" title="All 4 branches missed.">                withContext(Dispatchers.Main) {</span>
+<span class="nc bnc" id="L203" title="All 2 branches missed.">                    router?.goToPrevFragment()</span>
+                }
+<span class="nc" id="L205">            }</span>
+<span class="nc" id="L206">            true</span>
+        }
+<span class="fc" id="L208">    }</span>
+
+    private fun showExercisePage(exerciseId: Long) {
+<span class="pc bpc" id="L211" title="1 of 2 branches missed.">        saveWorkoutData { router?.showExercisePage(exerciseId) }</span>
+<span class="fc" id="L212">    }</span>
+
+    private fun saveWorkoutData(doAfter: () -&gt; Unit?) {
+<span class="pc bpc" id="L215" title="1 of 2 branches missed.">        val workoutTime = chooseTimeButton?.text.toString()</span>
+<span class="fc" id="L216">        var weekdaysMask = 0</span>
+<span class="pc bpc" id="L217" title="1 of 4 branches missed.">        for (i in weekdayCheckboxes!!.indices) {</span>
+<span class="pc bpc" id="L218" title="1 of 4 branches missed.">            if (weekdayCheckboxes!![i].isChecked) {</span>
+<span class="fc" id="L219">                weekdaysMask = weekdaysMask or (1 shl i)</span>
+            }
+        }
+
+<span class="pc bpc" id="L223" title="1 of 2 branches missed.">        var workoutName = workoutNameEditText?.text.toString()</span>
+<span class="fc bfc" id="L224" title="All 2 branches covered.">        if (workoutName == &quot;&quot;) {</span>
+<span class="fc" id="L225">            workoutName = String.format(resources.getString(R.string.default_workout_name), workoutId)</span>
+        }
+<span class="pc bpc" id="L227" title="1 of 2 branches missed.">        when (weekdaysMask) {</span>
+            0 -&gt; {
+<span class="nc bnc" id="L229" title="All 2 branches missed.">                weekdayCheckboxes?.forEach {</span>
+<span class="nc" id="L230">                    it.setBackgroundColor(Color.RED)</span>
+<span class="nc" id="L231">                }</span>
+            }
+            else -&gt; {
+<span class="pc bpc" id="L234" title="1 of 3 branches missed.">                GlobalScope.launch(Dispatchers.IO) {</span>
+<span class="pc bpc" id="L235" title="1 of 2 branches missed.">                    workout?.name = workoutName</span>
+<span class="pc bpc" id="L236" title="1 of 2 branches missed.">                    workout?.plannedTime = workoutTime</span>
+<span class="pc bpc" id="L237" title="1 of 2 branches missed.">                    workout?.weekdaysMask = weekdaysMask</span>
+<span class="pc bpc" id="L238" title="3 of 6 branches missed.">                    database?.workoutDao()?.update(workout!!)</span>
+<span class="pc bpc" id="L239" title="2 of 4 branches missed.">                    withContext(Dispatchers.Main) {</span>
+<span class="pc" id="L240">                        doAfter()</span>
+                    }
+<span class="pc" id="L242">                }</span>
+            }
+        }
+<span class="fc" id="L245">    }</span>
+
+<span class="fc" id="L247">    override fun getFragmentLayoutId(): Int = R.layout.fragment_workout</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span>Generated by the Android Gradle plugin 3.6.1</div></body></html>

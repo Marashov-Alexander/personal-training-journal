@@ -2,17 +2,13 @@ package ru.ok.technopolis.training.personal.fragments
 
 import android.os.Bundle
 import android.view.View
-import android.widget.CalendarView
-import android.widget.ImageView
-import android.widget.LinearLayout
-import android.widget.ProgressBar
+import android.widget.*
 import androidx.recyclerview.widget.DividerItemDecoration
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.afollestad.date.dayOfMonth
 import com.afollestad.date.month
 import com.afollestad.date.year
-import kotlinx.android.synthetic.main.fragment_calendar.*
 import kotlinx.android.synthetic.main.fragment_calendar.view.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
@@ -33,7 +29,7 @@ class CalendarFragment : BaseFragment() {
     private var recyclerView: RecyclerView? = null
     private var userId: Long? = null
 
-    private var calendar: CalendarView? = null
+    private var calendar: DatePicker? = null
     private var progressBar: ProgressBar? = null
     private val systemCalendar = Calendar.getInstance()
     private var selectedWeekdayIndex: Int = 0
@@ -69,6 +65,7 @@ class CalendarFragment : BaseFragment() {
                     systemCalendar.month,
                     systemCalendar.dayOfMonth
                 )
+                filteredList.reverse()
                 elements = ItemsList(filteredList)
 
                 val workoutAdapter = CalendarWorkoutListAdapter(
@@ -121,7 +118,7 @@ class CalendarFragment : BaseFragment() {
                     }
                 }
 
-                calendar?.setOnDateChangeListener { _, year, month, dayOfMonth ->
+                calendar?.setOnDateChangedListener { _, year, month, dayOfMonth ->
                     selectedWeekdayIndex = getDatOfWeekIndex(year, month, dayOfMonth)
                     val filtered = filterWorkouts(year, month, dayOfMonth)
                     elements!!.setData(filtered)
@@ -164,4 +161,6 @@ class CalendarFragment : BaseFragment() {
     }
 
     override fun getFragmentLayoutId(): Int = R.layout.fragment_calendar
+
+    override fun isBottomNavVisible(): Boolean = false
 }

@@ -2,20 +2,26 @@ apply plugin: 'com.android.application'
 apply plugin: 'kotlin-android'
 apply plugin: 'kotlin-android-extensions'
 apply plugin: 'kotlin-kapt'
+/**/
+apply plugin: 'jacoco'
+/**/
 
 android {
-    compileSdkVersion 29
+    compileSdkVersion 30
     buildToolsVersion "29.0.2"
 
     compileOptions {
         sourceCompatibility JavaVersion.VERSION_1_8
         targetCompatibility JavaVersion.VERSION_1_8
     }
+    kotlinOptions {
+        jvmTarget = JavaVersion.VERSION_1_8.toString()
+    }
 
     defaultConfig {
         applicationId "ru.ok.technopolis.training.personal"
-        minSdkVersion 21
-        targetSdkVersion 29
+        minSdkVersion 26
+        targetSdkVersion 30
         versionCode 1
         versionName "1.0"
 
@@ -27,11 +33,19 @@ android {
             minifyEnabled false
             proguardFiles getDefaultProguardFile('proguard-android-optimize.txt'), 'proguard-rules.pro'
         }
-    }
+/**/
+         debug {
+            testCoverageEnabled = true
+        }
+ /**/
+ }
 
 }
 
 dependencies {
+    implementation 'androidx.lifecycle:lifecycle-livedata-ktx:2.2.0'
+    implementation 'androidx.lifecycle:lifecycle-viewmodel-ktx:2.2.0'
+    implementation 'androidx.legacy:legacy-support-v4:1.0.0'
     def room_version = "2.2.5"
     def preference_version = "1.1.1"
     def materialDrawerRelease = "8.0.1"
@@ -69,6 +83,8 @@ dependencies {
     kapt 'com.google.dagger:dagger-android-processor:2.27'
 
     implementation 'com.google.android.material:material:1.1.0'
+    //noinspection GradleCompatible
+    implementation 'com.android.support:design:28.0.0'
 
     implementation 'com.freeletics.rxredux:rxredux:1.0.1'
     implementation 'com.tbuonomo:creative-viewpager:1.0.1'
@@ -91,6 +107,9 @@ dependencies {
     implementation 'com.afollestad.material-dialogs:datetime:3.3.0'
     implementation 'com.afollestad.material-dialogs:input:3.3.0'
 
+    implementation 'androidx.navigation:navigation-fragment-ktx:2.3.3'
+    implementation 'androidx.navigation:navigation-ui-ktx:2.3.3'
+
     implementation "com.mikepenz:materialdrawer-nav:${materialDrawerRelease}"
     implementation "com.mikepenz:materialdrawer:${materialDrawerRelease}"
     implementation "com.mikepenz:materialdrawer-iconics:${materialDrawerRelease}"
@@ -103,8 +122,23 @@ dependencies {
 
     implementation 'com.jjoe64:graphview:4.2.2'
 
+    testImplementation 'org.hamcrest:hamcrest:2.2'
+    testImplementation 'org.hamcrest:hamcrest-library:2.2'
     androidTestImplementation 'androidx.test.ext:junit:1.1.1'
     androidTestImplementation 'androidx.test.espresso:espresso-core:3.2.0'
+    androidTestImplementation 'androidx.test.espresso:espresso-contrib:3.2.0'
 
     testImplementation 'junit:junit:4.12'
 }
+
+//jacoco {
+//    toolVersion = '0.7.5.201505241946'
+//}
+//
+//jacocoTestReport {
+//    reports {
+//        html.enalbed = true
+//        xml.enabled = true
+//        csv.enabled = true
+//    }
+//}

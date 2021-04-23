@@ -37,7 +37,7 @@ object AuthRepository {
                         getSharedPreferences(TRAINING_PREFERENCE, Context.MODE_PRIVATE).edit().putString(USER_TOKEN, token).apply()
                         getSharedPreferences(TRAINING_PREFERENCE, Context.MODE_PRIVATE).edit().putString(USER_INFO_KEY, Gson().toJson(user)).apply()
                     }
-                    router?.showCalendarPage()
+                    router?.showWorkoutPlanPage()
                     finish()
                 }
             }

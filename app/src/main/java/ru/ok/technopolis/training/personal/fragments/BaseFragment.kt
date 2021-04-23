@@ -22,10 +22,17 @@ abstract class BaseFragment : Fragment() {
         return inflater.inflate(getFragmentLayoutId(), container, false) as ViewGroup
     }
 
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+        super.onViewCreated(view, savedInstanceState)
+        (activity as BaseActivity).configureNav(isBottomNavVisible())
+    }
+
     override fun onDestroy() {
         super.onDestroy()
         taskContainer.dispose()
     }
 
     abstract fun getFragmentLayoutId(): Int
+
+    protected open fun isBottomNavVisible(): Boolean = true
 }

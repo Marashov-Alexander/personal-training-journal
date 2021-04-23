@@ -1,0 +1,109 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AppDatabase.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">ru.ok.technopolis.training.personal.db</a> &gt; <span class="el_source">AppDatabase.kt</span></div><h1>AppDatabase.kt</h1><pre class="source lang-java linenums">package ru.ok.technopolis.training.personal.db
+
+import android.content.Context
+import androidx.room.Database
+import androidx.room.Room
+import androidx.room.RoomDatabase
+import androidx.room.TypeConverters
+import androidx.sqlite.db.SupportSQLiteDatabase
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import ru.ok.technopolis.training.personal.db.converter.DateConverter
+import ru.ok.technopolis.training.personal.db.dao.DoneExerciseDao
+import ru.ok.technopolis.training.personal.db.dao.ExerciseDao
+import ru.ok.technopolis.training.personal.db.dao.ExerciseParameterDao
+import ru.ok.technopolis.training.personal.db.dao.ExerciseTypeDao
+import ru.ok.technopolis.training.personal.db.dao.MeasureUnitDao
+import ru.ok.technopolis.training.personal.db.dao.ParameterDao
+import ru.ok.technopolis.training.personal.db.dao.ParameterResultDao
+import ru.ok.technopolis.training.personal.db.dao.ParameterTypeDao
+import ru.ok.technopolis.training.personal.db.dao.UserDao
+import ru.ok.technopolis.training.personal.db.dao.UserWorkoutDao
+import ru.ok.technopolis.training.personal.db.dao.WorkoutDao
+import ru.ok.technopolis.training.personal.db.dao.WorkoutExerciseDao
+import ru.ok.technopolis.training.personal.db.entity.DoneExerciseEntity
+import ru.ok.technopolis.training.personal.db.entity.ExerciseEntity
+import ru.ok.technopolis.training.personal.db.entity.ExerciseParameterEntity
+import ru.ok.technopolis.training.personal.db.entity.ExerciseTypeEntity
+import ru.ok.technopolis.training.personal.db.entity.MeasureUnitEntity
+import ru.ok.technopolis.training.personal.db.entity.ParameterEntity
+import ru.ok.technopolis.training.personal.db.entity.ParameterResultEntity
+import ru.ok.technopolis.training.personal.db.entity.ParameterTypeEntity
+import ru.ok.technopolis.training.personal.db.entity.UserEntity
+import ru.ok.technopolis.training.personal.db.entity.UserWorkoutEntity
+import ru.ok.technopolis.training.personal.db.entity.WorkoutEntity
+import ru.ok.technopolis.training.personal.db.entity.WorkoutExerciseEntity
+import ru.ok.technopolis.training.personal.db.generators.InitialDataGenerator
+
+@Database(
+    entities = [
+        ExerciseEntity::class,
+        ExerciseParameterEntity::class,
+        ExerciseTypeEntity::class,
+        MeasureUnitEntity::class,
+        ParameterEntity::class,
+        ParameterTypeEntity::class,
+        UserEntity::class,
+        UserWorkoutEntity::class,
+        WorkoutEntity::class,
+        WorkoutExerciseEntity::class,
+        DoneExerciseEntity::class,
+        ParameterResultEntity::class
+    ],
+    version = 1
+)
+@TypeConverters(DateConverter::class)
+<span class="fc" id="L57">abstract class AppDatabase : RoomDatabase() {</span>
+
+<span class="fc" id="L59">    companion object {</span>
+        private const val DATABASE_NAME: String = &quot;workoutJournalDB&quot;
+
+        private var instance: AppDatabase? = null
+        fun getInstance(context: Context): AppDatabase? {
+<span class="fc bfc" id="L64" title="All 2 branches covered.">            if (instance != null) {</span>
+<span class="fc" id="L65">                return instance</span>
+            }
+
+<span class="pc" id="L68">            return synchronized(this) {</span>
+<span class="pc bpc" id="L69" title="1 of 2 branches missed.">                if (instance != null) {</span>
+<span class="nc" id="L70">                    instance</span>
+                } else {
+<span class="fc" id="L72">                    instance = Room.databaseBuilder(</span>
+<span class="fc" id="L73">                        context.applicationContext,</span>
+<span class="fc" id="L74">                        AppDatabase::class.java,</span>
+<span class="fc" id="L75">                        DATABASE_NAME</span>
+<span class="fc" id="L76">                    ).addCallback(object : RoomDatabase.Callback() {</span>
+                        override fun onCreate(db: SupportSQLiteDatabase) {
+<span class="fc" id="L78">                            super.onCreate(db)</span>
+<span class="pc bpc" id="L79" title="1 of 2 branches missed.">                            GlobalScope.launch(Dispatchers.IO) {</span>
+<span class="pc bpc" id="L80" title="1 of 2 branches missed.">                                instance?.let {</span>
+<span class="fc" id="L81">                                    it.exerciseTypeDao().insert(InitialDataGenerator.getExerciseTypes())</span>
+<span class="fc" id="L82">                                    it.parameterTypeDao().insert(InitialDataGenerator.getParameterTypes())</span>
+<span class="fc" id="L83">                                    it.measureUnitDao().insert(InitialDataGenerator.getMeasureUnits())</span>
+<span class="fc" id="L84">                                    it.parameterDao().insert(InitialDataGenerator.getParameters())</span>
+                                }
+<span class="pc" id="L86">                            }</span>
+<span class="fc" id="L87">                        }</span>
+                    })
+<span class="fc" id="L89">                        .build()</span>
+<span class="fc" id="L90">                    instance</span>
+<span class="fc" id="L91">                }</span>
+            }
+        }
+    }
+
+    abstract fun exerciseDao(): ExerciseDao
+    abstract fun exerciseParameterDao(): ExerciseParameterDao
+    abstract fun exerciseTypeDao(): ExerciseTypeDao
+    abstract fun measureUnitDao(): MeasureUnitDao
+    abstract fun parameterDao(): ParameterDao
+    abstract fun parameterTypeDao(): ParameterTypeDao
+    abstract fun userDao(): UserDao
+    abstract fun userWorkoutDao(): UserWorkoutDao
+    abstract fun workoutDao(): WorkoutDao
+    abstract fun workoutExerciseDao(): WorkoutExerciseDao
+    abstract fun doneExerciseDao(): DoneExerciseDao
+    abstract fun parameterResultDao(): ParameterResultDao
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span>Generated by the Android Gradle plugin 3.6.1</div></body></html>

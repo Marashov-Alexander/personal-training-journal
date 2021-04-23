@@ -1,0 +1,161 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ActiveExerciseFragment.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">ru.ok.technopolis.training.personal.fragments</a> &gt; <span class="el_source">ActiveExerciseFragment.kt</span></div><h1>ActiveExerciseFragment.kt</h1><pre class="source lang-java linenums">package ru.ok.technopolis.training.personal.fragments
+
+import android.os.Bundle
+import android.view.View
+import android.widget.Button
+import android.widget.LinearLayout
+import android.widget.ProgressBar
+import android.widget.TextView
+import android.widget.Toast
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.frgment_active_exercise.*
+import kotlinx.android.synthetic.main.frgment_active_exercise.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import ru.ok.technopolis.training.personal.R
+import ru.ok.technopolis.training.personal.db.entity.DoneExerciseEntity
+import ru.ok.technopolis.training.personal.db.entity.ExerciseEntity
+import ru.ok.technopolis.training.personal.db.entity.MeasureUnitEntity
+import ru.ok.technopolis.training.personal.db.entity.ParameterResultEntity
+import ru.ok.technopolis.training.personal.db.entity.ParameterTypeEntity
+import ru.ok.technopolis.training.personal.db.entity.WorkoutEntity
+import ru.ok.technopolis.training.personal.db.model.ParameterModel
+import ru.ok.technopolis.training.personal.items.ItemsList
+import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.USER_ID_KEY
+import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.WORKOUT_ID_KEY
+import ru.ok.technopolis.training.personal.utils.recycler.adapters.BaseListAdapter
+import ru.ok.technopolis.training.personal.viewholders.ActiveExerciseViewHolder
+import java.util.Calendar
+
+<span class="nc" id="L34">class ActiveExerciseFragment : BaseFragment() {</span>
+
+    private var doneButton: Button? = null
+    private var recyclerView: RecyclerView? = null
+    private var workoutProgressBar: ProgressBar? = null
+    private var workoutProgressText: TextView? = null
+    private var exerciseName: TextView? = null
+    private var progressBar: ProgressBar? = null
+
+    private var workout: WorkoutEntity? = null
+    private var exerciseList: List&lt;ExerciseEntity&gt;? = null
+<span class="nc" id="L45">    private var exerciseIndex: Int = -1</span>
+
+<span class="nc" id="L47">    private var elements: ItemsList&lt;ParameterModel&gt; = ItemsList(mutableListOf())</span>
+
+    private var measureUnitChoices: MutableList&lt;MeasureUnitEntity&gt;? = null
+    private var parameterTypeChoices: MutableList&lt;ParameterTypeEntity&gt;? = null
+
+    private var userId: Long? = null
+<span class="nc" id="L53">    private var calendar = Calendar.getInstance()</span>
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+<span class="nc" id="L56">        super.onViewCreated(view, savedInstanceState)</span>
+
+<span class="nc" id="L58">        recyclerView = view.parameters_view</span>
+<span class="nc" id="L59">        doneButton = view.done_button</span>
+<span class="nc" id="L60">        progressBar = view.progress_bar</span>
+<span class="nc" id="L61">        workoutProgressBar = workout_progress_bar</span>
+<span class="nc" id="L62">        workoutProgressText = workout_progress_text</span>
+<span class="nc" id="L63">        exerciseName = name</span>
+
+<span class="nc" id="L65">        val activeExerciseAdapter = BaseListAdapter(</span>
+<span class="nc" id="L66">            holderType = ActiveExerciseViewHolder::class,</span>
+<span class="nc" id="L67">            layoutId = R.layout.item_active_exercise_element,</span>
+<span class="nc" id="L68">            dataSource = elements,</span>
+<span class="nc" id="L69">            onClick = {}</span>
+        )
+<span class="nc bnc" id="L71" title="All 2 branches missed.">        recyclerView?.adapter = activeExerciseAdapter</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">        recyclerView?.layoutManager = LinearLayoutManager(activity)</span>
+<span class="nc bnc" id="L73" title="All 2 branches missed.">        recyclerView?.addItemDecoration(DividerItemDecoration(activity, LinearLayout.VERTICAL))</span>
+<span class="nc bnc" id="L74" title="All 2 branches missed.">        progressBar?.visibility = View.VISIBLE</span>
+
+<span class="nc bnc" id="L76" title="All 3 branches missed.">        GlobalScope.launch(Dispatchers.IO) {</span>
+<span class="nc bnc" id="L77" title="All 8 branches missed.">            userId = (activity?.intent?.extras?.get(USER_ID_KEY)) as Long</span>
+<span class="nc bnc" id="L78" title="All 8 branches missed.">            val workoutId = (activity?.intent?.extras?.get(WORKOUT_ID_KEY)) as Long</span>
+<span class="nc bnc" id="L79" title="All 2 branches missed.">            database?.let { appDatabase -&gt;</span>
+<span class="nc" id="L80">                exerciseList = appDatabase.workoutExerciseDao().getExercisesForWorkout(workoutId)</span>
+<span class="nc" id="L81">                workout = appDatabase.workoutDao().getById(workoutId)</span>
+<span class="nc" id="L82">                measureUnitChoices = appDatabase.measureUnitDao().getAll().toMutableList()</span>
+<span class="nc" id="L83">                parameterTypeChoices = appDatabase.parameterTypeDao().getAll().toMutableList()</span>
+<span class="nc" id="L84">            }</span>
+<span class="nc bnc" id="L85" title="All 4 branches missed.">            withContext(Dispatchers.Main) {</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">                progressBar?.visibility = View.GONE</span>
+<span class="nc" id="L87">                loadNextExercise()</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">                doneButton?.setOnClickListener {</span>
+<span class="nc" id="L89">                    processResults()</span>
+<span class="nc" id="L90">                }</span>
+            }
+<span class="nc" id="L92">        }</span>
+<span class="nc" id="L93">    }</span>
+
+    private fun processResults() {
+<span class="nc bnc" id="L96" title="All 3 branches missed.">        GlobalScope.launch(Dispatchers.IO) {</span>
+<span class="nc bnc" id="L97" title="All 2 branches missed.">            val exercise = exerciseList?.get(exerciseIndex)</span>
+<span class="nc" id="L98">            val doneExercise = DoneExerciseEntity(</span>
+<span class="nc bnc" id="L99" title="All 2 branches missed.">                exercise!!.id,</span>
+<span class="nc bnc" id="L100" title="All 2 branches missed.">                userId!!,</span>
+<span class="nc" id="L101">                calendar.time</span>
+            )
+<span class="nc bnc" id="L103" title="All 6 branches missed.">            doneExercise.id = database?.doneExerciseDao()?.insert(doneExercise)!!</span>
+<span class="nc bnc" id="L104" title="All 2 branches missed.">            for (parameterModel in elements.items) {</span>
+<span class="nc" id="L105">                val paramTypeId = parameterModel.parameter.parameterTypeId</span>
+<span class="nc" id="L106">                val isFilledWorkout = parameterModel.parameterTypeChoices[paramTypeId.toInt() - 1].onCreateFilling</span>
+<span class="nc bnc" id="L107" title="All 2 branches missed.">                if (isFilledWorkout) {</span>
+<span class="nc" id="L108">                    continue</span>
+                }
+<span class="nc" id="L110">                val resultEntity = ParameterResultEntity(</span>
+<span class="nc" id="L111">                    doneExercise.id,</span>
+<span class="nc" id="L112">                    parameterModel.parameter.id,</span>
+<span class="nc" id="L113">                    parameterModel.parameter.value</span>
+                )
+<span class="nc" id="L115">                println(&quot;saving parameter: &quot; + resultEntity.parameterId + &quot; =&gt; &quot; + resultEntity.value)</span>
+<span class="nc bnc" id="L116" title="All 6 branches missed.">                resultEntity.id = database?.parameterResultDao()?.insert(resultEntity)!!</span>
+            }
+<span class="nc bnc" id="L118" title="All 4 branches missed.">            withContext(Dispatchers.Main) {</span>
+<span class="nc" id="L119">                loadNextExercise()</span>
+<span class="nc" id="L120">            }</span>
+<span class="nc" id="L121">        }</span>
+<span class="nc" id="L122">    }</span>
+
+    private fun loadNextExercise() {
+<span class="nc" id="L125">        ++exerciseIndex</span>
+<span class="nc bnc" id="L126" title="All 2 branches missed.">        exerciseList?.let { list -&gt;</span>
+<span class="nc bnc" id="L127" title="All 2 branches missed.">            if (exerciseIndex &lt; list.size) {</span>
+<span class="nc" id="L128">                val exercise = list[exerciseIndex]</span>
+<span class="nc bnc" id="L129" title="All 3 branches missed.">                GlobalScope.launch(Dispatchers.IO) {</span>
+<span class="nc bnc" id="L130" title="All 2 branches missed.">                    activity?.runOnUiThread {</span>
+<span class="nc bnc" id="L131" title="All 2 branches missed.">                        progressBar?.visibility = View.VISIBLE</span>
+<span class="nc" id="L132">                    }</span>
+                    // load parameters for exercise
+<span class="nc" id="L134">                    var parameterModelList: MutableList&lt;ParameterModel&gt;? = null</span>
+<span class="nc bnc" id="L135" title="All 2 branches missed.">                    database?.let { appDatabase -&gt;</span>
+<span class="nc" id="L136">                        val parameterList = appDatabase.exerciseParameterDao().getParametersForExercise(exercise.id)</span>
+<span class="nc" id="L137">                        parameterModelList = parameterList.map {</span>
+<span class="nc bnc" id="L138" title="All 4 branches missed.">                            ParameterModel(it, measureUnitChoices!!, parameterTypeChoices!!)</span>
+<span class="nc" id="L139">                        }.toMutableList()</span>
+<span class="nc" id="L140">                    }</span>
+<span class="nc bnc" id="L141" title="All 4 branches missed.">                    withContext(Dispatchers.Main) {</span>
+<span class="nc bnc" id="L142" title="All 2 branches missed.">                        parameterModelList?.let { elements.setData(it) }</span>
+<span class="nc bnc" id="L143" title="All 2 branches missed.">                        exerciseName?.text = exercise.name</span>
+<span class="nc" id="L144">                        val progressValue = (exerciseIndex * 100 / list.size)</span>
+<span class="nc bnc" id="L145" title="All 2 branches missed.">                        workoutProgressBar?.setProgress(progressValue)</span>
+                    }
+<span class="nc bnc" id="L147" title="All 2 branches missed.">                    activity?.runOnUiThread {</span>
+<span class="nc bnc" id="L148" title="All 2 branches missed.">                        progressBar?.visibility = View.GONE</span>
+<span class="nc" id="L149">                    }</span>
+<span class="nc" id="L150">                }</span>
+            } else {
+                // workout is end
+<span class="nc" id="L153">                Toast.makeText(context, &quot;Workout done!&quot;, Toast.LENGTH_LONG).show()</span>
+<span class="nc bnc" id="L154" title="All 2 branches missed.">                router?.showCalendarPage()</span>
+<span class="nc" id="L155">            }</span>
+        }
+<span class="nc" id="L157">    }</span>
+
+<span class="nc" id="L159">    override fun getFragmentLayoutId(): Int = R.layout.frgment_active_exercise</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span>Generated by the Android Gradle plugin 3.6.1</div></body></html>

@@ -1,0 +1,165 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>CalendarFragment.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">ru.ok.technopolis.training.personal.fragments</a> &gt; <span class="el_source">CalendarFragment.kt</span></div><h1>CalendarFragment.kt</h1><pre class="source lang-java linenums">package ru.ok.technopolis.training.personal.fragments
+
+import android.os.Bundle
+import android.view.View
+import android.widget.*
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import com.afollestad.date.dayOfMonth
+import com.afollestad.date.month
+import com.afollestad.date.year
+import kotlinx.android.synthetic.main.fragment_calendar.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import ru.ok.technopolis.training.personal.R
+import ru.ok.technopolis.training.personal.db.entity.UserWorkoutEntity
+import ru.ok.technopolis.training.personal.db.entity.WorkoutEntity
+import ru.ok.technopolis.training.personal.items.ItemsList
+import ru.ok.technopolis.training.personal.repository.CurrentUserRepository
+import ru.ok.technopolis.training.personal.utils.recycler.adapters.CalendarWorkoutListAdapter
+import ru.ok.technopolis.training.personal.viewholders.WorkoutViewHolder
+import java.util.Calendar
+
+<span class="fc" id="L26">class CalendarFragment : BaseFragment() {</span>
+
+    private var addWorkoutButton: ImageView? = null
+    private var recyclerView: RecyclerView? = null
+    private var userId: Long? = null
+
+    private var calendar: DatePicker? = null
+    private var progressBar: ProgressBar? = null
+<span class="fc" id="L34">    private val systemCalendar = Calendar.getInstance()</span>
+    private var selectedWeekdayIndex: Int = 0
+
+    private var workoutList: MutableList&lt;WorkoutEntity&gt;? = null
+    private var elements: ItemsList&lt;WorkoutEntity&gt;? = null
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+<span class="fc" id="L41">        super.onViewCreated(view, savedInstanceState)</span>
+<span class="fc" id="L42">        calendar = view.calendar</span>
+
+<span class="fc" id="L44">        addWorkoutButton = view.add_workout_button</span>
+<span class="fc" id="L45">        recyclerView = view.workout_list</span>
+<span class="fc" id="L46">        progressBar = view.progress_bar</span>
+
+<span class="pc bpc" id="L48" title="1 of 3 branches missed.">        GlobalScope.launch(Dispatchers.IO) {</span>
+<span class="pc bpc" id="L49" title="1 of 2 branches missed.">            activity?.runOnUiThread {</span>
+<span class="pc bpc" id="L50" title="1 of 2 branches missed.">                progressBar?.visibility = View.VISIBLE</span>
+<span class="fc" id="L51">            }</span>
+<span class="pc bpc" id="L52" title="1 of 2 branches missed.">            val email = CurrentUserRepository.currentUser.value!!.email</span>
+<span class="pc bpc" id="L53" title="1 of 2 branches missed.">            val user = database!!.userDao().getByEmail(email)</span>
+<span class="fc" id="L54">            userId = user.id</span>
+<span class="pc bpc" id="L55" title="2 of 4 branches missed.">            workoutList = database!!.userWorkoutDao().getWorkoutsForUser(userId!!)</span>
+
+<span class="pc bpc" id="L57" title="2 of 4 branches missed.">            withContext(Dispatchers.Main) {</span>
+<span class="fc" id="L58">                selectedWeekdayIndex = getDatOfWeekIndex(</span>
+<span class="fc" id="L59">                    systemCalendar.year,</span>
+<span class="fc" id="L60">                    systemCalendar.month,</span>
+<span class="fc" id="L61">                    systemCalendar.dayOfMonth</span>
+                )
+<span class="fc" id="L63">                val filteredList = filterWorkouts(</span>
+<span class="fc" id="L64">                    systemCalendar.year,</span>
+<span class="fc" id="L65">                    systemCalendar.month,</span>
+<span class="fc" id="L66">                    systemCalendar.dayOfMonth</span>
+                )
+<span class="fc" id="L68">                filteredList.reverse()</span>
+<span class="fc" id="L69">                elements = ItemsList(filteredList)</span>
+
+<span class="fc" id="L71">                val workoutAdapter = CalendarWorkoutListAdapter(</span>
+<span class="fc" id="L72">                    holderType = WorkoutViewHolder::class,</span>
+<span class="fc" id="L73">                    layoutId = R.layout.item_workout,</span>
+<span class="pc bpc" id="L74" title="1 of 2 branches missed.">                    dataSource = elements!!,</span>
+<span class="fc" id="L75">                    onClick = {</span>
+<span class="pc bpc" id="L76" title="1 of 2 branches missed.">                        router?.showWorkoutPage(it.id)</span>
+<span class="fc" id="L77">                    },</span>
+<span class="fc" id="L78">                    onStartWorkoutClick = {</span>
+<span class="nc bnc" id="L79" title="All 4 branches missed.">                        router?.showActiveExercisePage(userId!!, it.id)</span>
+<span class="nc" id="L80">                    },</span>
+<span class="fc" id="L81">                    onDeleteWorkoutClick = {</span>
+<span class="nc bnc" id="L82" title="All 3 branches missed.">                        GlobalScope.launch(Dispatchers.IO) {</span>
+<span class="nc bnc" id="L83" title="All 4 branches missed.">                            database?.workoutDao()?.delete(it)</span>
+<span class="nc bnc" id="L84" title="All 4 branches missed.">                            withContext(Dispatchers.Main) {</span>
+<span class="nc bnc" id="L85" title="All 2 branches missed.">                                workoutList!!.remove(it)</span>
+<span class="nc bnc" id="L86" title="All 2 branches missed.">                                elements!!.remove(it)</span>
+<span class="nc" id="L87">                            }</span>
+<span class="nc" id="L88">                        }</span>
+<span class="nc" id="L89">                    }</span>
+                )
+
+<span class="pc bpc" id="L92" title="1 of 2 branches missed.">                recyclerView?.adapter = workoutAdapter</span>
+<span class="pc bpc" id="L93" title="1 of 2 branches missed.">                recyclerView?.layoutManager = LinearLayoutManager(activity)</span>
+<span class="pc bpc" id="L94" title="1 of 2 branches missed.">                recyclerView?.addItemDecoration(DividerItemDecoration(activity, LinearLayout.VERTICAL))</span>
+
+<span class="pc bpc" id="L96" title="1 of 2 branches missed.">                addWorkoutButton?.setOnClickListener {</span>
+<span class="pc bpc" id="L97" title="1 of 3 branches missed.">                    GlobalScope.launch(Dispatchers.IO) {</span>
+<span class="fc" id="L98">                        val workoutEntity = WorkoutEntity(</span>
+<span class="fc" id="L99">                            &quot;&quot;,</span>
+<span class="fc" id="L100">                            &quot;12:00&quot;,</span>
+<span class="fc" id="L101">                            1 shl selectedWeekdayIndex,</span>
+<span class="fc" id="L102">                            &quot;&quot;</span>
+                        )
+<span class="pc bpc" id="L104" title="3 of 6 branches missed.">                        workoutEntity.id = database?.workoutDao()?.insert(workoutEntity)!!</span>
+
+<span class="fc" id="L106">                        val userWorkoutEntity = UserWorkoutEntity(</span>
+<span class="pc bpc" id="L107" title="1 of 2 branches missed.">                            userId!!,</span>
+<span class="fc" id="L108">                            workoutEntity.id,</span>
+<span class="fc" id="L109">                            &quot;&quot;</span>
+                        )
+<span class="pc bpc" id="L111" title="1 of 2 branches missed.">                        database!!.userWorkoutDao().insert(userWorkoutEntity)</span>
+<span class="pc bpc" id="L112" title="2 of 4 branches missed.">                        withContext(Dispatchers.Main) {</span>
+<span class="pc bpc" id="L113" title="1 of 2 branches missed.">                            elements!!.add(</span>
+<span class="fc" id="L114">                                workoutEntity</span>
+                            )
+<span class="pc bpc" id="L116" title="1 of 2 branches missed.">                            router?.showWorkoutPage(workoutEntity.id)</span>
+                        }
+<span class="pc" id="L118">                    }</span>
+<span class="fc" id="L119">                }</span>
+
+<span class="pc bpc" id="L121" title="1 of 2 branches missed.">                calendar?.setOnDateChangedListener { _, year, month, dayOfMonth -&gt;</span>
+<span class="fc" id="L122">                    selectedWeekdayIndex = getDatOfWeekIndex(year, month, dayOfMonth)</span>
+<span class="fc" id="L123">                    val filtered = filterWorkouts(year, month, dayOfMonth)</span>
+<span class="pc bpc" id="L124" title="1 of 2 branches missed.">                    elements!!.setData(filtered)</span>
+<span class="pc" id="L125">                }</span>
+            }
+<span class="pc bpc" id="L127" title="1 of 2 branches missed.">            activity?.runOnUiThread {</span>
+<span class="pc bpc" id="L128" title="1 of 2 branches missed.">                progressBar?.visibility = View.GONE</span>
+<span class="fc" id="L129">            }</span>
+<span class="pc" id="L130">        }</span>
+<span class="fc" id="L131">    }</span>
+
+    override fun onResume() {
+<span class="fc bfc" id="L134" title="All 2 branches covered.">        if (elements != null) {</span>
+<span class="fc" id="L135">            val filteredList = filterWorkouts(</span>
+<span class="fc" id="L136">                systemCalendar.year,</span>
+<span class="fc" id="L137">                systemCalendar.month,</span>
+<span class="fc" id="L138">                systemCalendar.dayOfMonth</span>
+            )
+<span class="pc bpc" id="L140" title="1 of 2 branches missed.">            elements!!.setData(filteredList)</span>
+        }
+<span class="fc" id="L142">        super.onResume()</span>
+<span class="fc" id="L143">    }</span>
+
+    private fun filterWorkouts(year: Int, month: Int, dayOfMonth: Int): MutableList&lt;WorkoutEntity&gt; {
+<span class="fc" id="L146">        val dayOfWeekIndex: Int = getDatOfWeekIndex(year, month, dayOfMonth)</span>
+<span class="pc bpc" id="L147" title="1 of 2 branches missed.">        return workoutList!!.filter {</span>
+<span class="fc" id="L148">            println(&quot;&quot; + (1 shl dayOfWeekIndex) + &quot; | &quot; + it.weekdaysMask)</span>
+<span class="fc bfc" id="L149" title="All 4 branches covered.">            ((1 shl dayOfWeekIndex) and it.weekdaysMask) != 0</span>
+<span class="fc" id="L150">        }.toMutableList()</span>
+    }
+
+    private fun getDatOfWeekIndex(year: Int, month: Int, dayOfMonth: Int): Int {
+<span class="fc" id="L154">        val tmpYear = systemCalendar.year</span>
+<span class="fc" id="L155">        val tmpMonth = systemCalendar.month</span>
+<span class="fc" id="L156">        val tmpDay = systemCalendar.dayOfMonth</span>
+<span class="fc" id="L157">        systemCalendar.set(year, month, dayOfMonth)</span>
+<span class="fc" id="L158">        val result = (systemCalendar.get(Calendar.DAY_OF_WEEK) - 1 + 6) % 7</span>
+<span class="fc" id="L159">        systemCalendar.set(tmpYear, tmpMonth, tmpDay)</span>
+<span class="fc" id="L160">        return result</span>
+    }
+
+<span class="fc" id="L163">    override fun getFragmentLayoutId(): Int = R.layout.fragment_calendar</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span>Generated by the Android Gradle plugin 3.6.1</div></body></html>

@@ -120,6 +120,15 @@
     <string name="choose_the_exercise">Choose the exercise</string>
     <string name="results">Results</string>
     <string name="drawer_item_calendar">Workouts calendar</string>
+    <string name="workout_info_string">Workout info</string>
+    <string name="workout_duration">Workout duration</string>
+    <string name="start_workout">Start workout</string>
+    <string name="start">Start</string>
+    <string name="share_workout">Share workout</string>
+    <string name="share">Share</string>
+    <string name="share_public">Public access</string>
+    <string name="choose_groups">Choose groups</string>
+    <string name="choose_all">Select all</string>
 
     <string-array name="exercise_types">
         <item>Strength</item>
@@ -148,5 +157,12 @@
         <item>Male</item>
         <item>Female</item>
     </string-array>
+    <!-- TODO: Remove or change this placeholder text -->
+    <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
+    <string name="navigation">Navigation</string>
+    <string name="statistics">Statistics</string>
+    <string name="home">Home</string>
+    <string name="messages">Messages</string>
+    <string name="profile">Profile</string>
 
 </resources>

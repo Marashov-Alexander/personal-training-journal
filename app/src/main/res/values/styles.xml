@@ -111,4 +111,9 @@
         <item name="android:layout_gravity">end</item>
         <item name="android:layout_marginTop">@dimen/dimens_8dp</item>
     </style>
+
+    <style name="ShapeAppearanceOverlay.MyApp.Button.Circle" parent="">
+        <item name="cornerFamily">rounded</item>
+        <item name="cornerSize">50%</item>
+    </style>
 </resources>

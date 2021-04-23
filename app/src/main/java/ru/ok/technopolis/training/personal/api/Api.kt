@@ -6,6 +6,7 @@ import io.reactivex.schedulers.Schedulers
 import retrofit2.Response
 import ru.ok.technopolis.training.personal.dto.UserDto
 import ru.ok.technopolis.training.personal.dto.UserSignUpDto
+import java.util.*
 
 /**
  *
@@ -50,6 +51,22 @@ object Api {
             api.loginRequest(token)
                     .subscribeOn(Schedulers.io())
                     .observeOn(AndroidSchedulers.mainThread())
+
+    fun fakeLogin(token: String): Single<Response<UserDto>> {
+        val testUser = UserDto(
+                1,
+                "uuid",
+                "Testov",
+                "Tester",
+                "Testerovich",
+                "test@test.test",
+                Date(System.currentTimeMillis()),
+                "Male",
+                null
+        )
+        val response = Response.success(200, testUser)
+        return Single.just(response)
+    }
 
     fun changeUserData(id: Long, nameDto: Any, token: String): Single<Response<UserDto>> =
             api.changeUserData(id, token, nameDto)

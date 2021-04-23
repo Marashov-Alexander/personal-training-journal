@@ -1,0 +1,105 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>RegistrationActivity.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">ru.ok.technopolis.training.personal.activities.auth</a> &gt; <span class="el_source">RegistrationActivity.kt</span></div><h1>RegistrationActivity.kt</h1><pre class="source lang-java linenums">package ru.ok.technopolis.training.personal.activities.auth
+
+import android.graphics.Color
+import android.os.Bundle
+import com.afollestad.materialdialogs.MaterialDialog
+import kotlinx.android.synthetic.main.activity_registration.*
+import retrofit2.Response
+import ru.ok.technopolis.training.personal.R
+import ru.ok.technopolis.training.personal.activities.BaseActivity
+import ru.ok.technopolis.training.personal.api.Api
+import ru.ok.technopolis.training.personal.dto.UserDto
+import ru.ok.technopolis.training.personal.model.UserSignUpInfo
+import ru.ok.technopolis.training.personal.utils.auth.AuthorizationHelper
+import ru.ok.technopolis.training.personal.utils.auth.SignUpDataCorrectType
+import ru.ok.technopolis.training.personal.utils.logger.Logger
+import ru.ok.technopolis.training.personal.utils.toast.ToastUtils
+import java.net.HttpURLConnection
+
+<span class="nc" id="L19">class RegistrationActivity : BaseActivity() {</span>
+
+    override fun onCreate(savedInstanceState: Bundle?) {
+<span class="nc" id="L22">        super.onCreate(savedInstanceState)</span>
+<span class="nc" id="L23">        cancel_button.setOnClickListener { finish() }</span>
+<span class="nc" id="L24">        confirm_button.setOnClickListener {</span>
+<span class="nc" id="L25">            resetRequiredTips()</span>
+<span class="nc" id="L26">            val userSignUpInfo = UserSignUpInfo(</span>
+<span class="nc" id="L27">                    email_et.text.toString(),</span>
+<span class="nc" id="L28">                    password_et.text.toString(),</span>
+<span class="nc" id="L29">                    confirm_password_et.text.toString(),</span>
+<span class="nc" id="L30">                    last_name_et.text.toString(),</span>
+<span class="nc" id="L31">                    first_name_et.text.toString(),</span>
+<span class="nc bnc" id="L32" title="All 2 branches missed.">                    user_gender.selectedItem as? String</span>
+            )
+<span class="nc bnc" id="L34" title="All 7 branches missed.">            when (AuthorizationHelper.checkCorrectnessInputData(userSignUpInfo)) {</span>
+                SignUpDataCorrectType.INCORRECT_EMAIL -&gt; {
+<span class="nc" id="L36">                    email_required.setTextColor(Color.RED)</span>
+<span class="nc" id="L37">                    ToastUtils.showShortToast(this, R.string.incorrect_email)</span>
+                }
+                SignUpDataCorrectType.INCORRECT_PASSWORD -&gt; {
+<span class="nc" id="L40">                    password_required.setTextColor(Color.RED)</span>
+<span class="nc" id="L41">                    ToastUtils.showShortToast(this, R.string.incorrect_password)</span>
+                }
+                SignUpDataCorrectType.INCORRECT_CONFIRM_PASSWORD -&gt; {
+<span class="nc" id="L44">                    confirm_password_required.setTextColor(Color.RED)</span>
+<span class="nc" id="L45">                    ToastUtils.showShortToast(this, R.string.incorrect_confirm_passowrd)</span>
+                }
+                SignUpDataCorrectType.INCORRECT_LAST_NAME -&gt; {
+<span class="nc" id="L48">                    last_name_required.setTextColor(Color.RED)</span>
+<span class="nc" id="L49">                    ToastUtils.showShortToast(this, R.string.incorrect_last_name)</span>
+                }
+                SignUpDataCorrectType.INCORRECT_FIRST_NAME -&gt; {
+<span class="nc" id="L52">                    first_name_required.setTextColor(Color.RED)</span>
+<span class="nc" id="L53">                    ToastUtils.showShortToast(this, R.string.incorrect_first_name)</span>
+                }
+<span class="nc" id="L55">                SignUpDataCorrectType.CORRECT -&gt; taskContainer.add(</span>
+<span class="nc" id="L56">                        Api.createUser(userSignUpInfo.toUserSignUpDto()).subscribe(</span>
+<span class="nc" id="L57">                                { onResponse(it) },</span>
+<span class="nc" id="L58">                                { onFail(it) }</span>
+                        )
+                )
+            }
+<span class="nc" id="L62">        }</span>
+<span class="nc" id="L63">    }</span>
+
+    private fun onResponse(response: Response&lt;UserDto&gt;) {
+<span class="nc bnc" id="L66" title="All 3 branches missed.">        when (response.code()) {</span>
+            HttpURLConnection.HTTP_CREATED -&gt; {
+<span class="nc" id="L68">                ToastUtils.showShortToast(this, R.string.successfully)</span>
+<span class="nc" id="L69">                finish()</span>
+<span class="nc" id="L70">                Logger.d(this, &quot;successfully sign up with code ${response.code()}&quot;)</span>
+            }
+            HttpURLConnection.HTTP_BAD_REQUEST -&gt; {
+<span class="nc" id="L73">                MaterialDialog(this).show {</span>
+<span class="nc" id="L74">                    title(R.string.cannot_sign_up)</span>
+<span class="nc" id="L75">                    message(R.string.user_exist)</span>
+<span class="nc" id="L76">                    negativeButton(R.string.close) {</span>
+<span class="nc" id="L77">                        it.cancel()</span>
+<span class="nc" id="L78">                    }</span>
+<span class="nc" id="L79">                }</span>
+<span class="nc" id="L80">                Logger.d(this, &quot;fail registration ${response.code()}&quot;)</span>
+            }
+            else -&gt; {
+<span class="nc" id="L83">                ToastUtils.showShortToast(this, R.string.failed_registr)</span>
+<span class="nc" id="L84">                Logger.d(this, &quot;unsupported code ${response.code()}&quot;)</span>
+            }
+        }
+<span class="nc" id="L87">    }</span>
+
+    private fun onFail(throwable: Throwable) {
+<span class="nc" id="L90">        ToastUtils.showErrorToast(this)</span>
+<span class="nc bnc" id="L91" title="All 2 branches missed.">        Logger.e(this, throwable.message ?: throwable)</span>
+<span class="nc" id="L92">    }</span>
+
+    private fun resetRequiredTips() {
+<span class="nc" id="L95">        email_required.setTextColor(Color.BLACK)</span>
+<span class="nc" id="L96">        password_required.setTextColor(Color.BLACK)</span>
+<span class="nc" id="L97">        confirm_password_required.setTextColor(Color.BLACK)</span>
+<span class="nc" id="L98">        last_name_required.setTextColor(Color.BLACK)</span>
+<span class="nc" id="L99">        first_name_required.setTextColor(Color.BLACK)</span>
+<span class="nc" id="L100">        user_gender_required.setTextColor(Color.BLACK)</span>
+<span class="nc" id="L101">    }</span>
+
+<span class="nc" id="L103">    override fun getActivityLayoutId(): Int = R.layout.activity_registration</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span>Generated by the Android Gradle plugin 3.6.1</div></body></html>

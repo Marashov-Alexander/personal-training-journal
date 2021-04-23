@@ -1,0 +1,103 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>Router.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">ru.ok.technopolis.training.personal.lifecycle</a> &gt; <span class="el_source">Router.kt</span></div><h1>Router.kt</h1><pre class="source lang-java linenums">package ru.ok.technopolis.training.personal.lifecycle
+
+import android.app.Activity
+import android.content.Intent
+import android.os.Bundle
+import ru.ok.technopolis.training.personal.activities.BaseFragmentActivity
+import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.EXERCISE_ID_KEY
+import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.PAGE_KEY
+import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.USER_ID_KEY
+import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.WORKOUT_ID_KEY
+import ru.ok.technopolis.training.personal.utils.logger.Logger
+import kotlin.reflect.full.createInstance
+
+<span class="fc" id="L14">class Router(private val activity: Activity) {</span>
+
+    fun showLoginPage() {
+<span class="nc" id="L17">        showPage(Page.Activity.Login)</span>
+<span class="nc" id="L18">    }</span>
+
+    fun showCalendarPage() {
+<span class="fc" id="L21">        showPage(Page.Fragment.Calendar)</span>
+<span class="fc" id="L22">    }</span>
+
+    fun showWorkoutPage(workoutId: Long) {
+<span class="fc" id="L25">        val workoutIdBundle = Bundle(1)</span>
+<span class="fc" id="L26">        workoutIdBundle.putLong(WORKOUT_ID_KEY, workoutId)</span>
+<span class="fc" id="L27">        showPage(Page.Fragment.Workout, workoutIdBundle)</span>
+<span class="fc" id="L28">    }</span>
+
+    fun showTrainingViewPage() {
+<span class="nc" id="L31">        showPage(Page.Fragment.TrainingView)</span>
+<span class="nc" id="L32">    }</span>
+
+    fun showActiveExercisePage(userId: Long, workoutId: Long) {
+<span class="nc" id="L35">        val workoutIdBundle = Bundle(2)</span>
+<span class="nc" id="L36">        workoutIdBundle.putLong(USER_ID_KEY, userId)</span>
+<span class="nc" id="L37">        workoutIdBundle.putLong(WORKOUT_ID_KEY, workoutId)</span>
+<span class="nc" id="L38">        showPage(Page.Fragment.ActiveExercise, workoutIdBundle)</span>
+<span class="nc" id="L39">    }</span>
+
+    fun showExercisePage(exerciseId: Long) {
+<span class="fc" id="L42">        val exerciseIdBundle = Bundle(1)</span>
+<span class="fc" id="L43">        exerciseIdBundle.putLong(EXERCISE_ID_KEY, exerciseId)</span>
+<span class="fc" id="L44">        showPage(Page.Fragment.Exercise, exerciseIdBundle)</span>
+<span class="fc" id="L45">    }</span>
+
+    fun showResultsPage() {
+<span class="nc" id="L48">        showPage(Page.Fragment.Results)</span>
+<span class="nc" id="L49">    }</span>
+
+    fun showSettingsPage() {
+<span class="nc" id="L52">        showPage(Page.Activity.Settings)</span>
+<span class="nc" id="L53">    }</span>
+
+    fun showAccountSettingsPage() {
+<span class="nc" id="L56">        showPage(Page.Activity.AccountSettings)</span>
+<span class="nc" id="L57">    }</span>
+
+    fun showAccountSettingsSubPage() {
+<span class="nc" id="L60">        showPage(Page.Fragment.AccountSettings)</span>
+<span class="nc" id="L61">    }</span>
+
+    fun showRegistrationPage() {
+<span class="nc" id="L64">        showPage(Page.Activity.Registration)</span>
+<span class="nc" id="L65">    }</span>
+
+    private fun showPage(page: Page, bundle: Bundle? = null) {
+<span class="fc" id="L68">        Logger.d(this, &quot;showPage $page&quot;)</span>
+<span class="fc" id="L69">        when (page) {</span>
+<span class="pc bpc" id="L70" title="1 of 2 branches missed.">            is Page.Activity -&gt; showActivity(page, bundle)</span>
+<span class="pc bpc" id="L71" title="1 of 2 branches missed.">            is Page.Fragment -&gt; {</span>
+<span class="fc bfc" id="L72" title="All 2 branches covered.">                if (activity is BaseFragmentActivity) {</span>
+<span class="fc" id="L73">                    replaceFragment(page, bundle)</span>
+                } else {
+<span class="fc" id="L75">                    showActivityWithFragment(page, bundle)</span>
+                }
+            }
+        }
+<span class="fc" id="L79">    }</span>
+
+    private fun showActivity(page: Page.Activity, bundle: Bundle?) {
+<span class="nc" id="L82">        val intent = Intent(activity, page.clazz.java)</span>
+<span class="nc bnc" id="L83" title="All 2 branches missed.">        bundle?.let { intent.putExtras(it) }</span>
+<span class="nc" id="L84">        activity.startActivity(intent)</span>
+<span class="nc" id="L85">    }</span>
+
+    private fun showActivityWithFragment(page: Page.Fragment, bundle: Bundle?) {
+<span class="fc" id="L88">        val intent = Intent(activity, BaseFragmentActivity::class.java)</span>
+<span class="fc" id="L89">        intent.putExtra(PAGE_KEY, page)</span>
+<span class="pc bpc" id="L90" title="1 of 2 branches missed.">        bundle?.let { intent.putExtras(it) }</span>
+<span class="fc" id="L91">        activity.startActivity(intent)</span>
+<span class="fc" id="L92">    }</span>
+
+    private fun replaceFragment(page: Page.Fragment, bundle: Bundle?) {
+<span class="pc bpc" id="L95" title="1 of 2 branches missed.">        bundle?.let { activity.intent.putExtras(it) }</span>
+<span class="pc bpc" id="L96" title="2 of 4 branches missed.">        (activity as? BaseFragmentActivity)?.setFragment(page.clazz.createInstance())</span>
+<span class="fc" id="L97">    }</span>
+
+    fun goToPrevFragment() {
+<span class="pc bpc" id="L100" title="2 of 4 branches missed.">        (activity as? BaseFragmentActivity)?.setPrevFragment()</span>
+<span class="fc" id="L101">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span>Generated by the Android Gradle plugin 3.6.1</div></body></html>

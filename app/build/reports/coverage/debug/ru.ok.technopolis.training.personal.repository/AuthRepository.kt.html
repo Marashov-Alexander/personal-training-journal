@@ -1,0 +1,57 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>AuthRepository.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">ru.ok.technopolis.training.personal.repository</a> &gt; <span class="el_source">AuthRepository.kt</span></div><h1>AuthRepository.kt</h1><pre class="source lang-java linenums">package ru.ok.technopolis.training.personal.repository
+
+import android.content.Context
+import com.google.gson.Gson
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import ru.ok.technopolis.training.personal.activities.BaseActivity
+import ru.ok.technopolis.training.personal.db.entity.UserEntity
+import ru.ok.technopolis.training.personal.model.UserInfo
+
+<span class="fc" id="L13">object AuthRepository {</span>
+
+    const val TRAINING_PREFERENCE = &quot;Training&quot;
+    const val USER_TOKEN = &quot;user_token_key&quot;
+    const val USER_INFO_KEY = &quot;user_info_key&quot;
+
+    fun doOnLogin(activity: BaseActivity, token: String, needRemember: Boolean, userInfo: UserInfo) {
+<span class="fc" id="L20">        activity.apply {</span>
+<span class="fc" id="L21">            CurrentUserRepository.currentUser.value = userInfo</span>
+<span class="pc bpc" id="L22" title="1 of 3 branches missed.">            GlobalScope.launch(Dispatchers.IO) {</span>
+<span class="pc bpc" id="L23" title="2 of 4 branches missed.">                var user = database?.userDao()?.getByEmail(userInfo.email)</span>
+<span class="fc bfc" id="L24" title="All 2 branches covered.">                if (user == null) {</span>
+<span class="fc" id="L25">                    user = UserEntity(</span>
+<span class="fc" id="L26">                        userInfo.firstName,</span>
+<span class="fc" id="L27">                        userInfo.lastName,</span>
+<span class="fc" id="L28">                        userInfo.fatherName,</span>
+<span class="fc" id="L29">                        userInfo.email,</span>
+<span class="fc" id="L30">                        userInfo.genderType.toApiStr(),</span>
+<span class="fc" id="L31">                        userInfo.pictureUrlStr</span>
+                    )
+<span class="pc bpc" id="L33" title="2 of 4 branches missed.">                    database?.userDao()?.insert(user)</span>
+                }
+<span class="pc bpc" id="L35" title="2 of 4 branches missed.">                withContext(Dispatchers.Main) {</span>
+<span class="pc bpc" id="L36" title="1 of 2 branches missed.">                    if (needRemember) {</span>
+<span class="nc" id="L37">                        getSharedPreferences(TRAINING_PREFERENCE, Context.MODE_PRIVATE).edit().putString(USER_TOKEN, token).apply()</span>
+<span class="nc" id="L38">                        getSharedPreferences(TRAINING_PREFERENCE, Context.MODE_PRIVATE).edit().putString(USER_INFO_KEY, Gson().toJson(user)).apply()</span>
+                    }
+<span class="pc bpc" id="L40" title="1 of 2 branches missed.">                    router?.showCalendarPage()</span>
+<span class="fc" id="L41">                    finish()</span>
+<span class="pc" id="L42">                }</span>
+<span class="pc" id="L43">            }</span>
+<span class="fc" id="L44">        }</span>
+<span class="fc" id="L45">    }</span>
+
+    fun doOnLogout(activity: BaseActivity) {
+<span class="nc" id="L48">        activity.apply {</span>
+<span class="nc" id="L49">            CurrentUserRepository.currentUser.value = null</span>
+<span class="nc" id="L50">            getSharedPreferences(&quot;Training&quot;, Context.MODE_PRIVATE).edit().remove(USER_TOKEN).apply()</span>
+<span class="nc" id="L51">            getSharedPreferences(&quot;Training&quot;, Context.MODE_PRIVATE).edit().remove(USER_INFO_KEY).apply()</span>
+<span class="nc bnc" id="L52" title="All 2 branches missed.">            router?.showLoginPage()</span>
+<span class="nc" id="L53">            finish()</span>
+<span class="nc" id="L54">        }</span>
+<span class="nc" id="L55">    }</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span>Generated by the Android Gradle plugin 3.6.1</div></body></html>

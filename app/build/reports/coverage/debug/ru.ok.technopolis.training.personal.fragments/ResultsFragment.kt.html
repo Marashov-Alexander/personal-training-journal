@@ -1,0 +1,122 @@
+<?xml version="1.0" encoding="UTF-8"?><!DOCTYPE html PUBLIC "-//W3C//DTD XHTML 1.0 Strict//EN" "http://www.w3.org/TR/xhtml1/DTD/xhtml1-strict.dtd"><html xmlns="http://www.w3.org/1999/xhtml" lang="en"><head><meta http-equiv="Content-Type" content="text/html;charset=UTF-8"/><link rel="stylesheet" href="../jacoco-resources/report.css" type="text/css"/><link rel="shortcut icon" href="../jacoco-resources/report.gif" type="image/gif"/><title>ResultsFragment.kt</title><link rel="stylesheet" href="../jacoco-resources/prettify.css" type="text/css"/><script type="text/javascript" src="../jacoco-resources/prettify.js"></script></head><body onload="window['PR_TAB_WIDTH']=0;prettyPrint()"><div class="breadcrumb" id="breadcrumb"><span class="info"><a href="../jacoco-sessions.html" class="el_session">Sessions</a></span><a href="../index.html" class="el_report">debugAndroidTest</a> &gt; <a href="index.source.html" class="el_package">ru.ok.technopolis.training.personal.fragments</a> &gt; <span class="el_source">ResultsFragment.kt</span></div><h1>ResultsFragment.kt</h1><pre class="source lang-java linenums">package ru.ok.technopolis.training.personal.fragments
+
+import android.os.Bundle
+import android.view.ContextMenu
+import android.view.View
+import android.widget.Button
+import android.widget.LinearLayout
+import androidx.recyclerview.widget.DividerItemDecoration
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
+import kotlinx.android.synthetic.main.fragment_results.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
+import ru.ok.technopolis.training.personal.R
+import ru.ok.technopolis.training.personal.db.entity.DoneExerciseEntity
+import ru.ok.technopolis.training.personal.db.entity.ExerciseEntity
+import ru.ok.technopolis.training.personal.db.entity.MeasureUnitEntity
+import ru.ok.technopolis.training.personal.db.entity.ParameterResultEntity
+import ru.ok.technopolis.training.personal.db.entity.ParameterTypeEntity
+import ru.ok.technopolis.training.personal.db.model.ParameterResultModel
+import ru.ok.technopolis.training.personal.items.ItemsList
+import ru.ok.technopolis.training.personal.repository.CurrentUserRepository
+import ru.ok.technopolis.training.personal.utils.recycler.adapters.BaseListAdapter
+import ru.ok.technopolis.training.personal.viewholders.ResultViewHolder
+
+<span class="nc" id="L28">class ResultsFragment : BaseFragment() {</span>
+
+    private var recyclerView: RecyclerView? = null
+    private var exerciseButton: Button? = null
+
+<span class="nc" id="L33">    private var map: MutableMap&lt;ExerciseEntity, MutableList&lt;ParameterResultEntity&gt;&gt; = mutableMapOf()</span>
+    private var doneExercisesList: MutableList&lt;DoneExerciseEntity&gt;? = null
+<span class="nc" id="L35">    private var elements: ItemsList&lt;ParameterResultModel&gt; = ItemsList(mutableListOf())</span>
+
+    private var measureUnitChoices: MutableList&lt;MeasureUnitEntity&gt;? = null
+    private var parameterTypeChoices: MutableList&lt;ParameterTypeEntity&gt;? = null
+
+    private var userId: Long? = null
+
+    override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
+<span class="nc" id="L43">        super.onViewCreated(view, savedInstanceState)</span>
+
+<span class="nc" id="L45">        recyclerView = elements_list</span>
+<span class="nc" id="L46">        exerciseButton = exercise_button</span>
+
+<span class="nc" id="L48">        val activeExerciseAdapter = BaseListAdapter(</span>
+<span class="nc" id="L49">            holderType = ResultViewHolder::class,</span>
+<span class="nc" id="L50">            layoutId = R.layout.item_result,</span>
+<span class="nc" id="L51">            dataSource = elements,</span>
+<span class="nc" id="L52">            onClick = {}</span>
+        )
+<span class="nc bnc" id="L54" title="All 2 branches missed.">        recyclerView?.adapter = activeExerciseAdapter</span>
+<span class="nc bnc" id="L55" title="All 2 branches missed.">        recyclerView?.layoutManager = LinearLayoutManager(activity)</span>
+<span class="nc bnc" id="L56" title="All 2 branches missed.">        recyclerView?.addItemDecoration(DividerItemDecoration(activity, LinearLayout.VERTICAL))</span>
+
+<span class="nc bnc" id="L58" title="All 3 branches missed.">        GlobalScope.launch(Dispatchers.IO) {</span>
+<span class="nc bnc" id="L59" title="All 2 branches missed.">            database?.let { appDatabase -&gt;</span>
+<span class="nc bnc" id="L60" title="All 2 branches missed.">                val email = CurrentUserRepository.currentUser.value?.email</span>
+<span class="nc bnc" id="L61" title="All 2 branches missed.">                val user = appDatabase.userDao().getByEmail(email!!)</span>
+<span class="nc" id="L62">                userId = user.id</span>
+
+<span class="nc bnc" id="L64" title="All 2 branches missed.">                doneExercisesList = appDatabase.doneExerciseDao().getAllByUser(userId!!).toMutableList()</span>
+
+<span class="nc bnc" id="L66" title="All 4 branches missed.">                for (doneExercise in doneExercisesList!!) {</span>
+<span class="nc" id="L67">                    val exercise = appDatabase.exerciseDao().getById(doneExercise.exerciseId)</span>
+<span class="nc bnc" id="L68" title="All 2 branches missed.">                    if (!map.containsKey(exercise)) {</span>
+<span class="nc" id="L69">                        map[exercise] = mutableListOf()</span>
+                    }
+<span class="nc" id="L71">                    val list = map[exercise]</span>
+<span class="nc bnc" id="L72" title="All 2 branches missed.">                    list!!.addAll(appDatabase.parameterResultDao().getAllByDoneExerciseId(doneExercise.id))</span>
+                }
+<span class="nc" id="L74">                measureUnitChoices = appDatabase.measureUnitDao().getAll().toMutableList()</span>
+<span class="nc" id="L75">                parameterTypeChoices = appDatabase.parameterTypeDao().getAll().toMutableList()</span>
+<span class="nc" id="L76">            }</span>
+<span class="nc bnc" id="L77" title="All 4 branches missed.">            withContext(Dispatchers.Main) {</span>
+<span class="nc bnc" id="L78" title="All 2 branches missed.">                exerciseButton?.setOnClickListener {</span>
+<span class="nc" id="L79">                    it.showContextMenu()</span>
+<span class="nc" id="L80">                }</span>
+<span class="nc bnc" id="L81" title="All 2 branches missed.">                registerForContextMenu(exerciseButton!!)</span>
+<span class="nc" id="L82">            }</span>
+<span class="nc" id="L83">        }</span>
+<span class="nc" id="L84">    }</span>
+
+    override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
+<span class="nc" id="L87">        super.onCreateContextMenu(menu, v, menuInfo)</span>
+<span class="nc bnc" id="L88" title="All 2 branches missed.">        if (v.id == exercise_button.id) {</span>
+<span class="nc bnc" id="L89" title="All 2 branches missed.">            for (exercise in map.keys) {</span>
+<span class="nc" id="L90">                menu.add(0, exercise.id.toInt(), 0, exercise.name).setOnMenuItemClickListener {</span>
+<span class="nc" id="L91">                    loadExerciseResult(exercise.id)</span>
+<span class="nc" id="L92">                    true</span>
+                }
+            }
+        }
+<span class="nc" id="L96">    }</span>
+
+    private fun loadExerciseResult(exerciseId: Long) {
+<span class="nc bnc" id="L99" title="All 3 branches missed.">        GlobalScope.launch(Dispatchers.IO) {</span>
+<span class="nc bnc" id="L100" title="All 6 branches missed.">            val exercise = database?.exerciseDao()?.getById(exerciseId)!!</span>
+<span class="nc" id="L101">            val resultsList = map[exercise]</span>
+<span class="nc bnc" id="L102" title="All 6 branches missed.">            val parametersList = database?.exerciseParameterDao()?.getParametersForExercise(exerciseId)!!.filter {</span>
+<span class="nc bnc" id="L103" title="All 4 branches missed.">                it.parameterTypeId.toInt() == 2</span>
+            }
+<span class="nc" id="L105">            val parameterModelList = parametersList.map {</span>
+<span class="nc" id="L106">                ParameterResultModel(</span>
+<span class="nc" id="L107">                    it,</span>
+<span class="nc bnc" id="L108" title="All 6 branches missed.">                    resultsList!!.filter { result -&gt; result.parameterId == it.id }.toMutableList(),</span>
+<span class="nc bnc" id="L109" title="All 2 branches missed.">                    measureUnitChoices!!,</span>
+<span class="nc bnc" id="L110" title="All 2 branches missed.">                    parameterTypeChoices!!</span>
+<span class="nc" id="L111">                )</span>
+<span class="nc" id="L112">            }.toMutableList()</span>
+<span class="nc bnc" id="L113" title="All 4 branches missed.">            withContext(Dispatchers.Main) {</span>
+<span class="nc bnc" id="L114" title="All 2 branches missed.">                exerciseButton?.text = exercise.name</span>
+<span class="nc" id="L115">                elements.setData(parameterModelList)</span>
+<span class="nc" id="L116">            }</span>
+<span class="nc" id="L117">        }</span>
+<span class="nc" id="L118">    }</span>
+
+<span class="nc" id="L120">    override fun getFragmentLayoutId(): Int = R.layout.fragment_results</span>
+}
+</pre><div class="footer"><span class="right">Created with <a href="http://www.jacoco.org/jacoco">JaCoCo</a> 0.7.9.201702052155</span>Generated by the Android Gradle plugin 3.6.1</div></body></html>
