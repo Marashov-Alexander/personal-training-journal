@@ -239,6 +239,8 @@
     <string name="all_filter_text">All</string>
     <string name="shared_filter_text">Shared</string>
     <string name="private_filter_text">Private</string>
+    <string name="author_image">Author image</string>
+    <string name="send_message_icon">Send message icon</string>
     <string name="configure_superset">Configure superset</string>
     <string name="remove">Remove</string>
     <string name="prev">Back</string>

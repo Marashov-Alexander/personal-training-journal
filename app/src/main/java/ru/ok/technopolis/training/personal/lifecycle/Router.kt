@@ -78,6 +78,10 @@ class Router(private val activity: Activity) {
         showPage(Page.Fragment.Results)
     }
 
+    fun showNavigationPage() {
+        showPage(Page.Fragment.Navigation)
+    }
+
     fun showSettingsPage() {
         showPage(Page.Activity.Settings)
     }

@@ -33,7 +33,7 @@ open class BaseFragmentActivity : AppbarActivity() {
                     router?.showResultsPage()
                 }
                 R.id.nav_nav_item -> {
-                    router?.showSettingsPage()
+                    router?.showNavigationPage()
                 }
                 R.id.nav_profile_item -> {
                     router?.showProfilePage()

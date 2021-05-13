@@ -46,6 +46,10 @@ sealed class Page : Serializable {
             override val clazz = StatisticsMainFragment::class
         }
 
+        object Navigation : Fragment() {
+            override val clazz = NavigationFragment::class
+        }
+
         object ActiveExercise : Fragment() {
             override val clazz = ActiveExerciseFragment::class
         }

@@ -1,0 +1,72 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout
+    xmlns:android="http://schemas.android.com/apk/res/android" android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:layout_margin="@dimen/padding_16"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    xmlns:tools="http://schemas.android.com/tools">
+
+
+    <com.facebook.drawee.view.SimpleDraweeView
+        android:id="@+id/author_icon"
+        android:layout_width="48dp"
+        android:layout_height="48dp"
+        android:src="@drawable/ic_exercise_category_bg"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/author_image"
+        />
+
+    <TextView
+        android:id="@+id/author_name"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:layout_marginStart="@dimen/padding_16"
+        app:layout_constraintStart_toEndOf="@id/author_icon"
+        app:layout_constraintTop_toTopOf="@id/author_icon"
+        app:layout_constraintEnd_toStartOf="@id/send_message_icon"
+        android:textAlignment="viewStart"
+        tools:text="Имя пользователя вл"
+        android:textSize="@dimen/text_size_20"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/author_categories"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:orientation="horizontal"
+        android:layout_marginTop="@dimen/padding_20"
+        app:layout_constraintTop_toBottomOf="@id/author_name"
+        app:layout_constraintBottom_toBottomOf="@id/author_icon"
+        app:layout_constraintEnd_toStartOf="@id/send_message_icon"
+        app:layout_constraintStart_toEndOf="@id/author_icon"
+        />
+
+    <ImageButton
+        android:id="@+id/send_message_icon"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:src="@drawable/ic_outline_chat_bubble_outline_24"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/author_icon"
+        app:layout_constraintBottom_toBottomOf="@id/author_icon"
+        android:background="@color/white"
+        android:layout_marginEnd="@dimen/padding_16"
+        android:contentDescription="@string/send_message_icon"
+        />
+
+    <View
+        android:id="@+id/author_separator"
+        android:layout_width="0dp"
+        android:layout_height="1dp"
+        android:background="@color/gray_4"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/author_categories"
+        android:elevation="0dp"
+        android:layout_marginTop="4dp"
+        />
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

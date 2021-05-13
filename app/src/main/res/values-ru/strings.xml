@@ -219,6 +219,8 @@
     <string name="all_filter_text">Все</string>
     <string name="shared_filter_text">Опубликованные</string>
     <string name="private_filter_text">Приватные</string>
+    <string name="author_image">Author image</string>
+    <string name="send_message_icon">Send message icon</string>
     <string name="configure_superset">Суперсет</string>
     <string name="remove">Удалить</string>
     <string name="prev">Назад</string>
