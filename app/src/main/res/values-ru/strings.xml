@@ -23,7 +23,7 @@
     <string name="exercise_type">Тип упражнения</string>
 
     <string name="choose_exercise_type">Выберите тип упражнения</string>
-    <string name="enter_exercise_name">Введите имя упражнения</string>
+    <string name="enter_exercise_name">Название упражнения</string>
     <string name="cancel">Отмена</string>
     <string name="save">Сохранить</string>
     <string name="exercise_elements">Элементы упражнения</string>
@@ -32,7 +32,7 @@
     <string name="value">Значение</string>
     <string name="workout">Тренировка</string>
     <string name="settings">Настройки</string>
-    <string name="enter_workout_name">Введите название тренировки</string>
+    <string name="enter_workout_name">Название тренировки</string>
     <string name="drawer_item_settings">Настройки</string>
     <string name="account_settings">Настройки аакаунта</string>
     <string name="drawer_item_bookmarks">Закладки</string>
@@ -87,7 +87,7 @@
     <string name="star_required_text">* - Обязательные поля</string>
     <string name="scheduled_workouts">Запланированные тренировки</string>
     <string name="choose_time">Выберите время</string>
-    <string name="exercises_list">Список упражнений</string>
+    <string name="exercises_list">Упражнения</string>
     <string name="day1">Пн</string>
     <string name="day2">Вт</string>
     <string name="day3">Ср</string>
@@ -103,6 +103,50 @@
     <string name="drawer_item_results">Результаты</string>
     <string name="choose_the_exercise">Выберите упражнение</string>
     <string name="results">Результаты</string>
+
+    <string-array name="workout_types">
+        <item>Не указано</item>
+        <item>Аэробная</item>
+        <item>Анаэробная</item>
+        <item>Силовая</item>
+        <item>Комплексная</item>
+        <item>Круговая</item>
+        <item>Интервальная</item>
+        <item>Смешанная</item>
+        <item>Сплит</item>
+        <item>Групповая</item>
+        <item>Индивидуальная</item>
+        <item>Тренажёрный зал</item>
+    </string-array>
+
+    <string-array name="sport_types">
+        <item>Не указано</item>
+        <item>Бадминтон</item>
+        <item>Баскетбол</item>
+        <item>Бейсбол</item>
+        <item>Бокс</item>
+        <item>Волейбол</item>
+        <item>Дзюдо</item>
+        <item>Карате</item>
+        <item>Конькобежный спорт</item>
+        <item>Лёгкая атлетика</item>
+        <item>Лыжные гонки</item>
+        <item>Настольный теннис</item>
+        <item>Пауэрлифтинг</item>
+        <item>Плавание</item>
+        <item>Регби</item>
+        <item>Самбо</item>
+        <item>Сноубординг</item>
+        <item>Спортивная гимнастика</item>
+        <item>Теннис</item>
+        <item>Тхэквондо</item>
+        <item>Тяжёлая атлетика</item>
+        <item>Фигурное катание</item>
+        <item>Фитнес</item>
+        <item>Футбол</item>
+        <item>Фристайл</item>
+        <item>Хоккей</item>
+    </string-array>
 
     <string-array name="exercise_types">
         <item>Силовое</item>
@@ -125,6 +169,19 @@
         <item>результат</item>
         <item>секундомер</item>
         <item>таймер</item>
+    </string-array>
+
+    <string-array name="levels_dummy">
+        <item>Уровень 1</item>
+        <item>Уровень 2</item>
+        <item>Уровень 3</item>
+        <item>Уровень 4</item>
+        <item>Уровень 5</item>
+        <item>Уровень 6</item>
+        <item>Уровень 7</item>
+        <item>Уровень 8</item>
+        <item>Уровень 9</item>
+        <item>Уровень 10</item>
     </string-array>
 
     <string-array name="sign_up_user_gender">
@@ -155,6 +212,7 @@
     <string name="subscribers_text">Подписчиков</string>
     <string name="schedule_workout_button">Запланировать тренировку</string>
     <string name="workout_done">Тренировка выполнена</string>
+    <string name="next">Далее</string>
     <string name="workout_image">Картинка тренировки</string>
     <string name="workout_rank">Оценка тренировки</string>
     <string name="workout_downloads">Количество загрузок</string>
@@ -163,4 +221,19 @@
     <string name="private_filter_text">Приватные</string>
     <string name="author_image">Author image</string>
     <string name="send_message_icon">Send message icon</string>
+    <string name="configure_superset">Суперсет</string>
+    <string name="remove">Удалить</string>
+    <string name="prev">Назад</string>
+    <string name="description">Описание</string>
+    <string name="difficulty">Сложность</string>
+    <string name="category">Категория</string>
+    <string name="kind_of_sport">Вид спорта</string>
+    <string name="goal">Цель</string>
+    <string name="evaluation_criteria">Критерий оценивания:</string>
+    <string name="change_parameter">Изменение параметра</string>
+    <string name="stopwatch">Секундомер</string>
+    <string name="timer">Таймер</string>
+    <string name="show_in_short_description">Отображать в кратком описании</string>
+    <string name="parameters_list">Параметры</string>
+    <string name="muscle_groups">Группы мыщц </string>
 </resources>

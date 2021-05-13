@@ -8,6 +8,7 @@ open class ItemsList<Item>(var items: MutableList<Item>) {
     private val addingSubject: PublishSubject<Item> = PublishSubject.create()
     private val removingSubject: PublishSubject<Int> = PublishSubject.create()
     private val updatingSubject: PublishSubject<Int> = PublishSubject.create()
+    private val updatingRangeSubject: PublishSubject<Pair<Int, Int>> = PublishSubject.create()
     private val replacingSubject: PublishSubject<List<Item>> = PublishSubject.create()
 
     fun addingSubject(): Observable<Item> {
@@ -20,6 +21,10 @@ open class ItemsList<Item>(var items: MutableList<Item>) {
 
     fun updatingSubject(): Observable<Int> {
         return updatingSubject
+    }
+
+    fun updatingRangeSubject(): Observable<Pair<Int, Int>> {
+        return updatingRangeSubject
     }
 
     fun replacingSubject(): Observable<List<Item>> {
@@ -37,9 +42,18 @@ open class ItemsList<Item>(var items: MutableList<Item>) {
         removingSubject.onNext(ind)
     }
 
+    open fun remove(position: Int) {
+        items.removeAt(position)
+        removingSubject.onNext(position)
+    }
+
     fun update(position: Int, item: Item) {
         items[position] = item
         updatingSubject.onNext(position)
+    }
+
+    fun rangeUpdate(start: Int, count: Int) {
+        updatingRangeSubject.onNext(Pair(start, count))
     }
 
     fun setData(data: MutableList<Item>) {

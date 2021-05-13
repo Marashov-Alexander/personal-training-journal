@@ -39,25 +39,17 @@
         app:layout_constraintBottom_toBottomOf="parent"
         />
 
-    <androidx.cardview.widget.CardView
-        android:layout_width="@dimen/dimens_72dp"
-        android:layout_height="@dimen/dimens_72dp"
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_workout_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:cardBackgroundColor="@color/light_blue"
-        app:cardCornerRadius="@dimen/dimens_92dp"
-        android:layout_margin="@dimen/dimens_16dp"
-        style="@style/RoundedCornerButton"
-        >
-    <ImageView
-        android:id="@+id/schedule_workout_button"
-        android:layout_width="@dimen/dimens_32dp"
-        android:layout_height="@dimen/dimens_32dp"
-        android:layout_gravity="center"
-        android:src="@drawable/ic_add_black_24dp"
+        android:backgroundTint="@color/light_blue"
         android:tint="@color/white"
-        android:contentDescription="@string/schedule_workout_button"
+        app:srcCompat="@drawable/ic_add_black_24dp"
+        style="@style/RoundedCornerButton"
+        android:layout_margin="16dp"
         />
-    </androidx.cardview.widget.CardView>
 
 </androidx.constraintlayout.widget.ConstraintLayout>

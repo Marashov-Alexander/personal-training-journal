@@ -35,4 +35,5 @@
     <dimen name="shadow">3dp</dimen>
 
     <dimen name="header_icon_size">80dp</dimen>
+    <dimen name="superset_corner_radius">16dp</dimen>
 </resources>

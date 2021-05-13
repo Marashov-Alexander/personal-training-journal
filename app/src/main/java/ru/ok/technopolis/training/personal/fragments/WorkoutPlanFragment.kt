@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.fragment_workout_plan.view.*
 import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.items.*
@@ -21,6 +22,7 @@ class WorkoutPlanFragment : BaseFragment() {
 
     private var recyclerView: RecyclerView? = null
     private var workoutsRecycler: RecyclerView? = null
+    private var addWorkoutButton: FloatingActionButton? = null
 
     private val calendar: Calendar = Calendar.getInstance()
     private val symbols: DateFormatSymbols = DateFormatSymbols()
@@ -36,6 +38,10 @@ class WorkoutPlanFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         recyclerView = view.days_recycler_view
         workoutsRecycler = view.scheduled_workouts_recycler
+        addWorkoutButton = view.add_workout_button
+        addWorkoutButton?.setOnClickListener {
+            router?.showNewWorkoutPage()
+        }
 
         calendar.time = Date(System.currentTimeMillis())
         calendar.add(Calendar.DAY_OF_MONTH, -daysBefore)

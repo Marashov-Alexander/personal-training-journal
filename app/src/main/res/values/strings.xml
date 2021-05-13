@@ -23,7 +23,7 @@
     <string name="add_to_bookmarks">Add to bookmarks</string>
     <string name="choose_exercise_type">Choose exercise type</string>
     <string name="exercise_type">Exercise type</string>
-    <string name="enter_exercise_name">Enter exercise name</string>
+    <string name="enter_exercise_name">Exercise name</string>
     <string name="cancel">Cancel</string>
     <string name="save">Save</string>
     <string name="exercise_elements">Exercise elements</string>
@@ -33,11 +33,11 @@
     <string name="workout">Workout</string>
     <string name="settings">Settings</string>
     <string name="account_settings">Account settings</string>
-    <string name="enter_workout_name">Enter workout name</string>
+    <string name="enter_workout_name">Workout name</string>
 
     <string name="active_exercise_name">Exercise</string>
     <string name="parameter_goal_dummy">34</string>
-    <string name="parameter_text_dummy">parameter1</string>
+    <string name="parameter_text_dummy">parameter 1</string>
     <string name="button_text_dummy">Set 1/1</string>
     <string name="next_exercise_dummy">next exercise</string>
     <string name="drawer_item_settings">Settings</string>
@@ -137,6 +137,50 @@
         <item>Musculoskeletal</item>
     </string-array>
 
+    <string-array name="workout_types">
+        <item>Unspecified</item>
+        <item>Aerobic</item>
+        <item>Anaerobic</item>
+        <item>Power</item>
+        <item>Comprehensive</item>
+        <item>Circular</item>
+        <item>Interval</item>
+        <item>Mixed</item>
+        <item>Split</item>
+        <item>Group</item>
+        <item>Individual</item>
+        <item>Gym</item>
+    </string-array>
+
+    <string-array name="sport_types">
+        <item>Unspecified</item>
+        <item>Badminton</item>
+        <item>Basketball</item>
+        <item>Baseball</item>
+        <item>Box</item>
+        <item>Volleyball</item>
+        <item>Judo</item>
+        <item>Karate</item>
+        <item>Speed skating</item>
+        <item>Athletics</item>
+        <item>Cross-country skiing</item>
+        <item>Table tennis</item>
+        <item>Powerlifting</item>
+        <item>Swimming</item>
+        <item>Rugby</item>
+        <item>Sambo</item>
+        <item>Snowboarding</item>
+        <item>Sports gymnastics</item>
+        <item>Tennis</item>
+        <item>Taekwondo</item>
+        <item>Weightlifting</item>
+        <item>Figure skating</item>
+        <item>Fitness</item>
+        <item>Football</item>
+        <item>Freestyle</item>
+        <item>Hockey</item>
+    </string-array>
+
     <string-array name="exercise_elements_units">
         <item>mm</item>
         <item>cm</item>
@@ -157,6 +201,20 @@
         <item>Male</item>
         <item>Female</item>
     </string-array>
+
+    <string-array name="levels_dummy">
+        <item>Level 1</item>
+        <item>Level 2</item>
+        <item>Level 3</item>
+        <item>Level 4</item>
+        <item>Level 5</item>
+        <item>Level 6</item>
+        <item>Level 7</item>
+        <item>Level 8</item>
+        <item>Level 9</item>
+        <item>Level 10</item>
+    </string-array>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="navigation">Navigation</string>
@@ -172,6 +230,9 @@
     <string name="subscribers_text">Subscribers</string>
     <string name="schedule_workout_button">Schedule workout button</string>
     <string name="workout_done">workout done</string>
+    <string name="exercise_icon" translatable="false">Exercise icon</string>
+    <string name="next">Next</string>
+
     <string name="workout_image">Workout image</string>
     <string name="workout_rank">Workout rank</string>
     <string name="workout_downloads">Workout downloads</string>
@@ -180,4 +241,32 @@
     <string name="private_filter_text">Private</string>
     <string name="author_image">Author image</string>
     <string name="send_message_icon">Send message icon</string>
+    <string name="configure_superset">Configure superset</string>
+    <string name="remove">Remove</string>
+    <string name="prev">Back</string>
+    <string name="description">Description</string>
+    <string name="difficulty">Difficulty</string>
+    <string name="category">Category</string>
+    <string name="kind_of_sport">Kind of sport</string>
+    <string name="edit_content_button" translatable="false">Edit content button</string>
+    <string name="next_image_button" translatable="false">Next image button</string>
+    <string name="previous_image_button" translatable="false">Previous image button</string>
+    <string name="increase_difficulty_button" translatable="false">Increase difficulty button</string>
+    <string name="decrease_difficulty_button" translatable="false">Decrease difficulty button</string>
+    <string name="previous_step_button" translatable="false">Previous step button</string>
+    <string name="next_step_button" translatable="false">Next step button</string>
+    <string name="edit_parameter" translatable="false">Edit parameter</string>
+    <string name="units" translatable="false">units</string>
+    <string name="parameter" translatable="false">Parameter</string>
+    <string name="parameter_icon" translatable="false">Parameter icon</string>
+    <string name="goal">Goal</string>
+    <string name="evaluation_criteria">Evaluation criteria:</string>
+    <string name="change_parameter">Change parameter</string>
+    <string name="stopwatch">Stopwatch</string>
+    <string name="timer">Timer</string>
+    <string name="show_in_short_description">Show in short description</string>
+    <string name="delete_parameter" translatable="false">Delete parameter</string>
+    <string name="parameters_list">Parameters</string>
+    <string name="add_new_parameter" translatable="false">Add new parameter</string>
+    <string name="muscle_groups">Muscle groups </string>
 </resources>

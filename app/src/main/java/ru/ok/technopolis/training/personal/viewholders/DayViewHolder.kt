@@ -23,7 +23,6 @@ class DayViewHolder(
 
     override fun bind(item: DayItem) {
         print("Bind item $item")
-//        dayBackground.setOnClickListener { println("dayBackground") }
         update(item)
     }
 

@@ -1,0 +1,177 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/screen_title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        android:textAlignment="center"
+        android:textColor="@color/black"
+        android:textSize="@dimen/text_size_25"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="@string/change_parameter"
+        />
+    <ImageView
+        android:id="@+id/icon"
+        android:layout_width="52dp"
+        android:layout_height="52dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/screen_title"
+        android:src="@drawable/day_circle"
+        android:padding="@dimen/dimens_8dp"
+        android:contentDescription="@string/parameter_icon" />
+    <EditText
+        android:id="@+id/title"
+        style="@style/Input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/icon"
+        app:layout_constraintEnd_toStartOf="@id/delete_parameter_button"
+        app:layout_constraintTop_toBottomOf="@id/screen_title"
+        app:layout_constraintBottom_toTopOf="@id/value"
+        android:hint="@string/parameter_name"
+        android:importantForAutofill="no"
+        android:inputType="text" />
+
+    <ImageView
+        android:id="@+id/delete_parameter_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/title"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="@id/title"
+        app:layout_constraintBottom_toBottomOf="@id/title"
+        android:src="@drawable/ic_delete_black_24dp"
+        android:padding="@dimen/dimens_8dp"
+        android:contentDescription="@string/delete_parameter" />
+
+    <TextView
+        android:id="@+id/goal_text_view"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:text="@string/goal"
+        android:textSize="@dimen/text_size_18"
+        android:textColor="@color/black"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintStart_toEndOf="@id/icon"
+        app:layout_constraintEnd_toStartOf="@id/value"
+        app:layout_constraintBottom_toBottomOf="@id/value"
+        app:layout_constraintHorizontal_weight="1"
+        android:labelFor="@id/value"
+        />
+
+    <EditText
+        android:id="@+id/value"
+        style="@style/Input"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/goal_text_view"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintEnd_toStartOf="@id/units"
+        app:layout_constraintHorizontal_weight="3"
+        android:layout_marginBottom="@dimen/dimens_16dp"
+        android:importantForAutofill="no"
+        android:inputType="text" />
+
+    <Spinner
+        android:id="@+id/units"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintStart_toEndOf="@id/value"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="@id/value"
+        app:layout_constraintHorizontal_weight="3"
+        android:entries="@array/exercise_elements_units"
+        />
+
+    <TextView
+        android:id="@+id/criteria_text_view"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/evaluation_criteria"
+        android:textSize="@dimen/text_size_18"
+        android:textColor="@color/black"
+        android:textStyle="italic"
+        android:layout_marginTop="@dimen/dimens_16dp"
+        app:layout_constraintTop_toBottomOf="@id/value"
+        app:layout_constraintStart_toEndOf="@id/icon"
+        app:layout_constraintEnd_toStartOf="@id/input_type"
+        />
+
+    <Spinner
+        android:id="@+id/input_type"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/criteria_text_view"
+        app:layout_constraintStart_toEndOf="@id/criteria_text_view"
+        app:layout_constraintEnd_toStartOf="@id/delete_parameter_button"
+        app:layout_constraintBottom_toBottomOf="@id/criteria_text_view"
+        android:layout_marginStart="@dimen/dimens_16dp"
+        android:entries="@array/exercise_elements_input_type"
+        />
+
+    <Switch
+        android:id="@+id/stopwatch_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/stopwatch"
+        app:layout_constraintTop_toBottomOf="@id/criteria_text_view"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/timer_switch"
+        android:layout_marginVertical="@dimen/dimens_16dp"
+        />
+
+    <Switch
+        android:id="@+id/timer_switch"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/timer"
+        app:layout_constraintTop_toBottomOf="@id/criteria_text_view"
+        app:layout_constraintStart_toEndOf="@id/stopwatch_switch"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:layout_marginVertical="@dimen/dimens_16dp"
+        />
+
+    <com.google.android.material.checkbox.MaterialCheckBox
+        android:id="@+id/show_in_description_checkbox"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/show_in_short_description"
+        app:layout_constraintTop_toBottomOf="@id/stopwatch_switch"
+        app:layout_constraintStart_toEndOf="@id/icon"
+        android:layout_marginTop="@dimen/dimens_16dp"
+        />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/next_step_card"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/show_in_description_checkbox"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:strokeColor="@color/black"
+        app:strokeWidth="1dp"
+        app:cardCornerRadius="@dimen/dimens_16dp"
+        android:theme="@style/AppTheme"
+        android:clickable="true"
+        android:layout_marginTop="@dimen/dimens_8dp"
+        >
+
+        <TextView
+            android:id="@+id/next_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/save"
+            android:textColor="@color/black"
+            android:textSize="@dimen/text_size_20"
+            android:drawableEnd="@drawable/ic_baseline_check_24"
+            android:layout_marginHorizontal="@dimen/dimens_16dp"
+            android:layout_marginVertical="@dimen/dimens_4dp"
+            />
+
+    </com.google.android.material.card.MaterialCardView>
+
+</androidx.constraintlayout.widget.ConstraintLayout>
