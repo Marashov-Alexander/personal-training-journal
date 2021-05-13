@@ -51,8 +51,8 @@ class ProfileFragment : BaseFragment() {
         val exSwitchLine = view.ex_switch_line
 
         //TODO: change to real
-        val list = listOf("a", "b", "c")
-        val prof = ProfileItem("1234", "lfldf", list, true, null, 5, 10, 23,6)
+        val list = listOf("Легкая атлетика", "Бейсбол", "Теннис")
+        val prof = ProfileItem("1234", "Иванов Иван", list, true, null, 5, 10, 23,6)
 
         profileNameAndIcon!!.profile_name.text = prof.name
         profileNameAndIcon!!.complaint.visibility = View.GONE
@@ -222,8 +222,11 @@ class ProfileFragment : BaseFragment() {
     }
 
     private fun exDummyToRecView() {
-        for (i in 1..3) pushWorkout(i, 123, 3.7)
-        for (i in 4..5) pushWorkout(i, 0, 0.0)
+        pushWorkout(0, "Тренировка 1", "Кардио", "", "Легкая атлетика", 123, 4.0)
+        pushWorkout(1, "Тренировка 2", "Силовая", "", "Легкая атлетика", 200, 3.5)
+        pushWorkout(1, "Тренировка 3", "Силовая", "", "Легкая атлетика", 240, 4.5)
+        pushWorkout(0, "Любимая тренировка", "Кардио", "", "Легкая атлетика", 0, 0.0)
+        pushWorkout(1, "Тренировка 1", "Силовая", "", "Легкая атлетика", 0, 0.0)
         val workoutsList = ItemsList(workoutsMutableList)
         val workoutsAdapter = ShortWorkoutListAdapter(
                 holderType = ShortWorkoutViewHolder::class,
@@ -240,7 +243,9 @@ class ProfileFragment : BaseFragment() {
     }
 
     private fun exDummyShared() {
-        for (i in 1..3) pushWorkout(i, 123, 3.7)
+        pushWorkout(0, "Тренировка 1", "Кардио", "", "Легкая атлетика", 123, 4.0)
+        pushWorkout(1, "Тренировка 2", "Силовая", "", "Легкая атлетика", 200, 3.5)
+        pushWorkout(1, "Тренировка 3", "Силовая", "", "Легкая атлетика", 240, 4.5)
         val workoutsList = ItemsList(workoutsMutableList)
         val workoutsAdapter = ShortWorkoutListAdapter(
                 holderType = ShortWorkoutViewHolder::class,
@@ -257,7 +262,8 @@ class ProfileFragment : BaseFragment() {
     }
 
     private fun exDummyPrivate() {
-        for (i in 1..2) pushWorkout(i, 0, 0.0)
+        pushWorkout(0, "Любимая тренировка", "Кардио", "", "Легкая атлетика", 0, 0.0)
+        pushWorkout(1, "Тренировка 1", "Силовая", "", "Легкая атлетика", 0, 0.0)
         val workoutsList = ItemsList(workoutsMutableList)
         val workoutsAdapter = ShortWorkoutListAdapter(
                 holderType = ShortWorkoutViewHolder::class,
@@ -274,7 +280,8 @@ class ProfileFragment : BaseFragment() {
     }
 
     private fun exerciseDummyPrivate() {
-        for (i in 1..2) pushExercise(i, 0, 0.0)
+        pushExercise(0, "Мое упражнение", "Кардио", "Офп", 0, 0.0)
+        pushExercise(1, "Бег на месте", "Кардио", "Офп", 0, 0.0)
         val exList = ItemsList(exerciseMutableList)
         val exAdapter = ShortExerciseListAdapter(
                 holderType = ShortExerciseViewHolder::class,
@@ -291,7 +298,7 @@ class ProfileFragment : BaseFragment() {
     }
 
     private fun exerciseDummyShared() {
-        for (i in 1..2) pushExercise(i, 123, 3.0)
+        pushExercise(2, "Приседания", "Силовые", "Базовые", 3, 5.0)
         val exList = ItemsList(exerciseMutableList)
         val exAdapter = ShortExerciseListAdapter(
                 holderType = ShortExerciseViewHolder::class,
@@ -307,8 +314,9 @@ class ProfileFragment : BaseFragment() {
         recyclerView?.layoutManager = exLayoutManager
     }
     private fun exerciseDummyAll() {
-        for (i in 1..2) pushExercise(i, 0, 0.0)
-        for (i in 3..4) pushExercise(i, 123, 3.0)
+        pushExercise(0, "Мое упражнение", "Кардио", "Офп", 0, 0.0)
+        pushExercise(1, "Бег на месте", "Кардио", "Офп", 0, 0.0)
+        pushExercise(2, "Приседания", "Силовые", "Базовые", 3, 5.0)
         val exList = ItemsList(exerciseMutableList)
         val exAdapter = ShortExerciseListAdapter(
                 holderType = ShortExerciseViewHolder::class,
@@ -324,15 +332,15 @@ class ProfileFragment : BaseFragment() {
         recyclerView?.layoutManager = exLayoutManager
     }
 
-    private fun pushWorkout(id: Int, sharedNumber: Int, rank: Double) {
+    private fun pushWorkout(id: Int, name: String, category: String, description: String, sport: String, sharedNumber: Int, rank: Double) {
         workoutsMutableList.add(
-                ShortWorkoutItem(id.toString(), Time(System.currentTimeMillis()), "MYвшпвшпвкпиквпшкивпквпвпквпивчмпч MY", "kardio", "ofp", "40 min", true, sharedNumber, rank, false)
+                ShortWorkoutItem(id.toString(), Time(System.currentTimeMillis()), name, category, sport, "40 min", true, sharedNumber, rank, false)
         )
     }
 
-    private fun pushExercise(id: Int, sharedNumber: Int, rank: Double) {
+    private fun pushExercise(id: Int, name: String, category: String, description: String,  sharedNumber: Int, rank: Double) {
         exerciseMutableList.add(
-                ShortExerciseItem(id.toString(), Time(System.currentTimeMillis()), "dljgd hdrh rhre", "kardio", "ofp", true, sharedNumber, rank)
+                ShortExerciseItem(id.toString(), Time(System.currentTimeMillis()), name, category, description, true, sharedNumber, rank)
         )
     }
 

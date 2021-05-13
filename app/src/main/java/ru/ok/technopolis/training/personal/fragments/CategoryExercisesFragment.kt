@@ -19,6 +19,8 @@ import java.sql.Time
 class CategoryExercisesFragment : Fragment() {
     private var recycler: RecyclerView? = null
     private var workoutsMutableList = mutableListOf<ShortExerciseItem>()
+    private var workoutsMutableList2 = mutableListOf<ShortExerciseItem>()
+    private var workoutsMutableList3 = mutableListOf<ShortExerciseItem>()
     private var categoyElem = mutableListOf<CategoryExerciseItem>()
 
     override fun onCreateView(
@@ -33,20 +35,25 @@ class CategoryExercisesFragment : Fragment() {
         recycler = view.navigation_view_main_block
         exDummyToRecView()
         arguments?.takeIf { it.containsKey(ARG_OBJECT) }?.apply {
-//            if (getInt(ARG_OBJECT) == 1){
-//                exDummyToRecView()
-//            } else {
-//                exDummyToRecView2()
-//            }
         }
     }
 
     private fun exDummyToRecView() {
-        for (i in 1..5) pushWorkout(i)
-        pushCategory(0,"ssfkgkgkgkgksf", workoutsMutableList)
-        pushCategory(1,"ssfbdbfdfsf", workoutsMutableList)
-        pushCategory(2,"ssfsdfdfdf", workoutsMutableList)
-        pushCategory(3,"ssfsgdfdfdff", workoutsMutableList)
+        pushExercise(0, "Мое упражнение", "Кардио", "Офп", 0, 0.0)
+
+        pushExercise2(3, "Мое упражнение", "Кардио", "Офп", 0, 0.0)
+        pushExercise2(4, "Бег на месте", "Кардио", "Офп", 0, 0.0)
+        pushExercise2(5, "Бег на месте 2", "Кардио", "Офп", 0, 0.0)
+        pushExercise2(6, "Бег на месте 3", "Кардио", "Офп", 0, 0.0)
+
+
+        pushExercise3(5, "Приседания", "Силовые", "Базовые", 0, 0.0)
+        pushExercise3(6, "Приседания 2", "Силовые", "Базовые", 0, 0.0)
+
+        pushCategory(0,"Популярное", workoutsMutableList)
+        pushCategory(1,"Кардио", workoutsMutableList2)
+        pushCategory(2,"Силовые", workoutsMutableList3)
+
         val categories = ItemsList(categoyElem)
         val catAdapter = CategoryExercisesAdapter(
                 holderType = CategoryExerciseViewHolder::class,
@@ -61,15 +68,25 @@ class CategoryExercisesFragment : Fragment() {
         val workoutsLayoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         recycler?.layoutManager = workoutsLayoutManager
     }
-
-    private fun pushWorkout(id: Int) {
+    private fun pushExercise(id: Int, name: String, category: String, description: String,  sharedNumber: Int, rank: Double) {
         workoutsMutableList.add(
-                ShortExerciseItem(id.toString(), Time(System.currentTimeMillis()), "MYвшпвшпвкпиквпшкивпквпвпквпивчмпч MY", "kardio", "ofp", false, 0,0.0)
+                ShortExerciseItem(id.toString(), Time(System.currentTimeMillis()), name, category, description, true, sharedNumber, rank)
         )
     }
+
+    private fun pushExercise2(id: Int, name: String, category: String, description: String,  sharedNumber: Int, rank: Double) {
+        workoutsMutableList2.add(
+                ShortExerciseItem(id.toString(), Time(System.currentTimeMillis()), name, category, description, true, sharedNumber, rank)
+        )
+    }
+    private fun pushExercise3(id: Int, name: String, category: String, description: String,  sharedNumber: Int, rank: Double) {
+        workoutsMutableList3.add(
+                ShortExerciseItem(id.toString(), Time(System.currentTimeMillis()), name, category, description, true, sharedNumber, rank)
+        )
+    }
+
     private fun pushCategory(id: Int, name: String, workouts: List<ShortExerciseItem>) {
         categoyElem.add(CategoryExerciseItem(id.toString(), name, workouts))
     }
-
 
 }

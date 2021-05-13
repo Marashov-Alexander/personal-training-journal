@@ -21,6 +21,8 @@ const val ARG_OBJECT = "object"
 class LibraryExercisesFragment : Fragment() {
     private var recycler: RecyclerView? = null
     private var workoutsMutableList = mutableListOf<ShortExerciseItem>()
+    private var workoutsMutableList2 = mutableListOf<ShortExerciseItem>()
+    private var workoutsMutableList3 = mutableListOf<ShortExerciseItem>()
     private var categoyElem = mutableListOf<CategoryExerciseItem>()
 
     override fun onCreateView(
@@ -39,11 +41,23 @@ class LibraryExercisesFragment : Fragment() {
     }
 
     private fun exDummyToRecView() {
-        for (i in 1..5) pushWorkout(i)
-        pushCategory(0,"ssfkgkgkgkgksf", workoutsMutableList)
-        pushCategory(1,"ssfbdbfdfsf", workoutsMutableList)
-        pushCategory(2,"ssfsdfdfdf", workoutsMutableList)
-        pushCategory(3,"ssfsgdfdfdff", workoutsMutableList)
+        pushExercise(0, "Мое упражнение", "Кардио", "Офп", 200, 4.8)
+        pushExercise(1, "Бег на месте", "Кардио", "Офп", 100, 4.5)
+        pushExercise(2, "Приседания", "Силовые", "Базовые", 30, 5.0)
+
+        pushExercise2(3, "Мое упражнение", "Кардио", "Офп", 8, 3.0)
+        pushExercise2(4, "Бег на месте", "Кардио", "Офп", 6, 5.0)
+        pushExercise2(5, "Бег на месте 2", "Кардио", "Офп", 7, 5.0)
+        pushExercise2(6, "Бег на месте 3", "Кардио", "Офп", 6, 4.0)
+
+
+        pushExercise3(5, "Приседания", "Силовые", "Базовые", 3, 5.0)
+        pushExercise3(6, "Приседания 2", "Силовые", "Базовые", 6, 4.5)
+
+        pushCategory(0,"Популярное", workoutsMutableList)
+        pushCategory(1,"Кардио", workoutsMutableList2)
+        pushCategory(2,"Силовые", workoutsMutableList3)
+
         val categories = ItemsList(categoyElem)
         val catAdapter = CategoryExercisesAdapter(
                 holderType = CategoryExerciseViewHolder::class,
@@ -58,9 +72,20 @@ class LibraryExercisesFragment : Fragment() {
         val workoutsLayoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         recycler?.layoutManager = workoutsLayoutManager
     }
-    private fun pushWorkout(id: Int) {
+    private fun pushExercise(id: Int, name: String, category: String, description: String,  sharedNumber: Int, rank: Double) {
         workoutsMutableList.add(
-                ShortExerciseItem(id.toString(), Time(System.currentTimeMillis()), "MYвшпвшпвкпиквпшкивпквпвпквпивчмпч MY", "kardio", "ofp", false, 121, 3.0)
+                ShortExerciseItem(id.toString(), Time(System.currentTimeMillis()), name, category, description, true, sharedNumber, rank)
+        )
+    }
+
+    private fun pushExercise2(id: Int, name: String, category: String, description: String,  sharedNumber: Int, rank: Double) {
+        workoutsMutableList2.add(
+                ShortExerciseItem(id.toString(), Time(System.currentTimeMillis()), name, category, description, true, sharedNumber, rank)
+        )
+    }
+    private fun pushExercise3(id: Int, name: String, category: String, description: String,  sharedNumber: Int, rank: Double) {
+        workoutsMutableList3.add(
+                ShortExerciseItem(id.toString(), Time(System.currentTimeMillis()), name, category, description, true, sharedNumber, rank)
         )
     }
 
