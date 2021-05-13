@@ -61,7 +61,7 @@ class LibraryExercisesFragment : Fragment() {
         val categories = ItemsList(categoyElem)
         val catAdapter = CategoryExercisesAdapter(
                 holderType = CategoryExerciseViewHolder::class,
-                layoutId = R.layout.item_category_and_elements,
+                layoutId = R.layout.item_library_elements,
                 dataSource = categories,
                 onClick = {workoutItem -> println("workout ${workoutItem.id} clicked")},
                 onStart = { workoutItem ->

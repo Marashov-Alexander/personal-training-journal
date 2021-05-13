@@ -4,7 +4,7 @@ import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.item_category_and_elements.view.*
+import kotlinx.android.synthetic.main.item_library_elements.view.*
 import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.items.CategoryExerciseItem
 

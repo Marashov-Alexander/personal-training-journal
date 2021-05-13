@@ -7,7 +7,10 @@ import android.view.ViewGroup
 import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.fragment_number.view.*
+import kotlinx.android.synthetic.main.fragment_number.view.navigation_view_main_block
+import kotlinx.android.synthetic.main.item_personal_elements.view.*
 import kotlinx.android.synthetic.main.item_workout.view.*
 import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.items.CategoryWorkoutsItem
@@ -22,6 +25,7 @@ import java.sql.Time
 class CategoryWorkoutsFragment : Fragment() {
 
     private var recycler: RecyclerView? = null
+    private var addButton: FloatingActionButton? = null
     private var workoutsMutableList = mutableListOf<ShortWorkoutItem>()
     private var workoutsMutableList2 = mutableListOf<ShortWorkoutItem>()
     private var workoutsMutableList3 = mutableListOf<ShortWorkoutItem>()
@@ -33,11 +37,12 @@ class CategoryWorkoutsFragment : Fragment() {
             savedInstanceState: Bundle?
     ): View? {
         // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_number, container, false)
+        return inflater.inflate(R.layout.item_personal_elements, container, false)
     }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         recycler = view.navigation_view_main_block
+        addButton = view.add_element_button
         exDummyToRecView()
         arguments?.takeIf { it.containsKey(ARG_OBJECT) }?.apply {
         }
@@ -65,7 +70,7 @@ class CategoryWorkoutsFragment : Fragment() {
         val categories = ItemsList(categoryElem)
         val catAdapter = CategoryWorkoutsAdapter(
                 holderType = CategoryWorkoutsViewHolder::class,
-                layoutId = R.layout.item_category_and_elements,
+                layoutId = R.layout.item_library_elements,
                 dataSource = categories,
                 onClick = {workoutItem -> println("workout ${workoutItem.id} clicked")},
                 onStart = { workoutItem ->
