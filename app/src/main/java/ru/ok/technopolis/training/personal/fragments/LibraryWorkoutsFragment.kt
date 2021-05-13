@@ -59,9 +59,9 @@ class LibraryWorkoutsFragment : Fragment() {
         pushWorkout3(1, "Тренировка 1", "Силовая", "", "Легкая атлетика", 1, 0.0)
 
         pushCategory(0,"Популярное", workoutsMutableList)
-        pushCategory(1,"Кардио", workoutsMutableList)
-        pushCategory(2,"Силовые", workoutsMutableList)
-        pushCategory(3,"Круговые", workoutsMutableList)
+        pushCategory(1,"Кардио", workoutsMutableList2)
+        pushCategory(2,"Силовые", workoutsMutableList3)
+        pushCategory(3,"Круговые", workoutsMutableList4)
 
         val categories = ItemsList(categoryElem)
         val catAdapter = CategoryWorkoutsAdapter(
