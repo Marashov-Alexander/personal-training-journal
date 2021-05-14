@@ -255,6 +255,14 @@
     <string name="shared_tr_text">Shared trainings</string>
     <string name="subscriptions_text">Subscriptions</string>
     <string name="subscribers_text">Subscribers</string>
+    <string name="workouts">Workouts</string>
+    <string name="exercises">Exercises</string>
+    <string name="library">Library</string>
+    <string name="lib_workouts">Workouts
+        \nlibrary</string>
+    <string name="lib_exercises">Exercises
+        \nlibrary</string>
+    <string name="authors">Авторы</string>
     <string name="schedule_workout_button">Schedule workout button</string>
     <string name="workout_done">workout done</string>
     <string name="exercise_icon" translatable="false">Exercise icon</string>

@@ -1,10 +1,7 @@
 package ru.ok.technopolis.training.personal.fragments
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_number.view.*
@@ -18,27 +15,19 @@ import java.sql.Time
 
 const val ARG_OBJECT = "object"
 
-class LibraryExercisesFragment : Fragment() {
+class LibraryExercisesFragment : BaseFragment() {
     private var recycler: RecyclerView? = null
     private var workoutsMutableList = mutableListOf<ShortExerciseItem>()
     private var workoutsMutableList2 = mutableListOf<ShortExerciseItem>()
     private var workoutsMutableList3 = mutableListOf<ShortExerciseItem>()
     private var categoyElem = mutableListOf<CategoryExerciseItem>()
 
-    override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_number, container, false)
-    }
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         recycler = view.navigation_view_main_block
         exDummyToRecView()
-        arguments?.takeIf { it.containsKey(ARG_OBJECT) }?.apply {
-        }
     }
+
+    override fun getFragmentLayoutId() = R.layout.fragment_number
 
     private fun exDummyToRecView() {
         pushExercise(0, "Мое упражнение", "Кардио", "Офп", 200, 4.8)
