@@ -6,8 +6,10 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
+import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.fragment_new_exercise_1.*
 import ru.ok.technopolis.training.personal.R
+import ru.ok.technopolis.training.personal.fragments.dialogs.ParameterDialogFragment
 import ru.ok.technopolis.training.personal.items.ItemsList
 import ru.ok.technopolis.training.personal.items.ShortParameterItem
 import ru.ok.technopolis.training.personal.utils.recycler.adapters.ParameterAdapter
@@ -19,12 +21,18 @@ class CreateExerciseFragment1 : BaseFragment() {
     private var nextStepCard: MaterialCardView? = null
     private var parametersRecycler: RecyclerView? = null
     private var parametersList: ItemsList<ShortParameterItem>? = null
+    private var addParameterBtn: FloatingActionButton? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         nextStepCard = next_step_card
         nextStepCard?.setOnClickListener {
             router?.showNewExercisePage2()
+        }
+        addParameterBtn = add_parameter_button
+        addParameterBtn?.setOnClickListener {
+            ParameterDialogFragment()
+                .show(requireActivity().supportFragmentManager, "ParameterDialogFragment")
         }
 
         val parameters = mutableListOf(
