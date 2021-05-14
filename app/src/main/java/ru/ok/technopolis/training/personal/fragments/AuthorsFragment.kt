@@ -1,9 +1,7 @@
 package ru.ok.technopolis.training.personal.fragments
 
 import android.os.Bundle
-import android.view.LayoutInflater
 import android.view.View
-import android.view.ViewGroup
 import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
 import android.widget.RadioButton
@@ -11,7 +9,6 @@ import android.widget.RadioGroup
 import androidx.core.content.ContextCompat.getColor
 import androidx.core.view.get
 import androidx.core.view.size
-import androidx.fragment.app.Fragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_authors.view.*
@@ -22,20 +19,12 @@ import ru.ok.technopolis.training.personal.utils.recycler.adapters.AuthorsAdapte
 import ru.ok.technopolis.training.personal.viewholders.AuthorViewHolder
 
 
-class AuthorsFragment : Fragment() {
+class AuthorsFragment : BaseFragment() {
     private var buttonsScroll: HorizontalScrollView? = null
     private var buttonsGroup: RadioGroup? = null
 
     private var recycler: RecyclerView? = null
     private var authorsMutableList = mutableListOf<ProfileItem>()
-
-    override fun onCreateView(
-            inflater: LayoutInflater, container: ViewGroup?,
-            savedInstanceState: Bundle?
-    ): View? {
-        // Inflate the layout for this fragment
-        return inflater.inflate(R.layout.fragment_authors, container, false)
-    }
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         recycler = view.authors_list
@@ -43,6 +32,8 @@ class AuthorsFragment : Fragment() {
         buttonsGroup = view.author_categories_buttons
         exDummyToRecView()
     }
+
+    override fun getFragmentLayoutId() = R.layout.fragment_authors
 
     private fun exDummyToRecView() {
         var list = listOf("assss", "sasab", "casada")
@@ -83,7 +74,6 @@ class AuthorsFragment : Fragment() {
             newRB.buttonDrawable = null
             newRB.setBackgroundResource(R.drawable.border_radio_button_selector)
             newRB.setPadding(35,0,35,0)
-//            newRB.setOnClickListener { _ -> println("CLICK CLICK") }
             i ++
             buttonsGroup?.addView(newRB, layoutParams)
         }

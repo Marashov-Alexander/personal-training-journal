@@ -206,6 +206,14 @@
     <string name="share_exercise_template">Поделиться шаблоном тренировки</string>
     <string name="training_switcher_text">Тренировки</string>
     <string name="ex_switcher_text">Упражнения</string>
+    <string name="workouts">Тренировки</string>
+    <string name="exercises">Упражнения</string>
+    <string name="library">Библиотека</string>
+    <string name="lib_workouts">Библиотека
+        \nтренировок</string>
+    <string name="lib_exercises">Библиотека
+        \nупражнений</string>
+    <string name="authors">Авторы</string>
     <string name="shared_ex_text">Публикаций упражнений</string>
     <string name="shared_tr_text">Публикаций тренировок</string>
     <string name="subscriptions_text">Подписок</string>

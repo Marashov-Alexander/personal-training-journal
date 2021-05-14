@@ -9,29 +9,29 @@ import kotlinx.android.synthetic.main.fragment_upper_navigation.view.*
 import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.utils.recycler.adapters.NavigationAdapter
 
-class NavigationFragment: BaseFragment() {
+class NavigationFragment : BaseFragment() {
     private var navigationTabs: TabLayout? = null
     private var search: View? = null
     private var tabView: ViewPager2? = null
-    private val tabNames: Array<String> = arrayOf(
-            "Тренировки",
-            "Упражнения",
-            "Библиотека\nтренировок",
-            "Библиотека\nупражнений",
-            "Авторы"
-    )
-    private var adapter: NavigationAdapter? = null
+    private var tabNames: Array<String>? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        tabNames =  arrayOf(
+                getString(R.string.workouts),
+                getString(R.string.exercises),
+                getString(R.string.lib_workouts),
+                getString(R.string.lib_exercises),
+                getString(R.string.authors)
+        )
         navigationTabs = view.navigation_tabs
-        search = view.search_input
         tabView = view.tab_view
-        adapter = NavigationAdapter(this)
-        tabView?.adapter = adapter
+        tabView?.adapter = NavigationAdapter(this)
+        print(navigationTabs?.tabCount)
         TabLayoutMediator(navigationTabs!!, tabView!!) { tab, position ->
-            tab.text = tabNames[position]
+            tab.text = tabNames!![position]
         }.attach()
+        search = view.search_input
     }
 
 
