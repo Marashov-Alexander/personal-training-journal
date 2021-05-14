@@ -6,6 +6,7 @@ import android.graphics.Color
 import android.graphics.drawable.ColorDrawable
 import android.os.Bundle
 import android.view.View
+import android.widget.AdapterView
 import android.widget.ImageView
 import androidx.fragment.app.DialogFragment
 import com.google.android.material.card.MaterialCardView
@@ -37,6 +38,17 @@ class ParameterDialogFragment(private val item: ParameterEntity, private val lis
                 if (updateParameterEntity(view)) {
                     listener.onSaveClick(item)
                     dialog.dismiss()
+                }
+            }
+
+            val units = view.units
+            val chosenUnit = view.chosen_unit
+            units.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                override fun onNothingSelected(parent: AdapterView<*>?) {}
+                override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
+                    if (units.selectedItem.toString() != "") {
+                        chosenUnit.setText(units.selectedItem.toString())
+                    }
                 }
             }
 
@@ -72,6 +84,8 @@ class ParameterDialogFragment(private val item: ParameterEntity, private val lis
                 }
             }
 
+            bindParameter(view)
+
             dialog
         } ?: throw IllegalStateException("Activity cannot be null")
     }
@@ -84,12 +98,23 @@ class ParameterDialogFragment(private val item: ParameterEntity, private val lis
         }
     }
 
+    private fun bindParameter(view: View?) {
+        view?.let {
+            it.value.setText(item.value.toString())
+            it.title.setText(item.name)
+            it.chosen_unit.setText(item.measureUnit)
+            typeMenuItemClicked(item.resultType)
+            it.show_in_description_checkbox.isChecked = item.showInDescription
+            it.stopwatch_switch.isChecked = (item.input == ParameterEntity.INPUT_STOPWATCH)
+            it.timer_switch.isChecked = (item.input == ParameterEntity.INPUT_TIMER)
+        }
+    }
+
     private fun updateParameterEntity(view: View?): Boolean {
         view?.let {
-
             val value = it.value.text.toString().toFloatOrNull()
             val name = it.title.text.toString()
-            val measureUnit = it.units.selectedItem.toString()
+            val measureUnit = it.chosen_unit.text.toString()
             var error = false
             if (value == null) {
                 error = true

@@ -49,6 +49,10 @@ class CreateExerciseFragment1 : BaseFragment(), ParameterDialogFragment.Paramete
                 holderType = ParameterViewHolder::class,
                 layoutId = R.layout.item_parameter_short,
                 dataSource = parametersList!!,
+                onEdit = {
+                    ParameterDialogFragment(it.parameter!!, this)
+                        .show(requireActivity().supportFragmentManager, "ParameterDialogFragment")
+                },
                 onClick = {
 
                 }
