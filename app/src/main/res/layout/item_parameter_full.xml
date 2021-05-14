@@ -2,6 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="wrap_content"
+    android:padding="12dp"
+    android:background="@drawable/rounded_filled_outline"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
     <TextView
@@ -29,28 +31,16 @@
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintStart_toEndOf="@id/icon"
-        app:layout_constraintEnd_toStartOf="@id/delete_parameter_button"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toBottomOf="@id/screen_title"
         app:layout_constraintBottom_toTopOf="@id/value"
         android:hint="@string/parameter_name"
         android:importantForAutofill="no"
         android:inputType="text" />
 
-    <ImageView
-        android:id="@+id/delete_parameter_button"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintStart_toEndOf="@id/title"
-        app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toTopOf="@id/title"
-        app:layout_constraintBottom_toBottomOf="@id/title"
-        android:src="@drawable/ic_delete_black_24dp"
-        android:padding="@dimen/dimens_8dp"
-        android:contentDescription="@string/delete_parameter" />
-
     <TextView
         android:id="@+id/goal_text_view"
-        android:layout_width="0dp"
+        android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         android:text="@string/goal"
         android:textSize="@dimen/text_size_18"
@@ -108,7 +98,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintTop_toTopOf="@id/criteria_text_view"
         app:layout_constraintStart_toEndOf="@id/criteria_text_view"
-        app:layout_constraintEnd_toStartOf="@id/delete_parameter_button"
+        app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="@id/criteria_text_view"
         android:layout_marginStart="@dimen/dimens_16dp"
         android:entries="@array/exercise_elements_input_type"
