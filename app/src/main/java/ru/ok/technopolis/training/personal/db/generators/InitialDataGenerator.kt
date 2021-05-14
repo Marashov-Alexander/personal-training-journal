@@ -1,50 +1,30 @@
 package ru.ok.technopolis.training.personal.db.generators
 
+import android.content.Context
+import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.db.entity.ExerciseTypeEntity
-import ru.ok.technopolis.training.personal.db.entity.MeasureUnitEntity
 import ru.ok.technopolis.training.personal.db.entity.ParameterEntity
-import ru.ok.technopolis.training.personal.db.entity.ParameterTypeEntity
 
-// TODO: load initial data from the server with current app locale
 class InitialDataGenerator {
     companion object {
-        fun getParameterTypes(): List<ParameterTypeEntity> {
+
+        fun getExerciseTypes(context: Context): List<ExerciseTypeEntity> {
             return listOf(
-                ParameterTypeEntity("Цель", true),
-                ParameterTypeEntity("Результат", false)
+                ExerciseTypeEntity(context.resources.getString(R.string.strength)),
+                ExerciseTypeEntity(context.resources.getString(R.string.dexterity)),
+                ExerciseTypeEntity(context.resources.getString(R.string.coordination)),
+                ExerciseTypeEntity(context.resources.getString(R.string.endurance)),
+                ExerciseTypeEntity(context.resources.getString(R.string.speed)),
+                ExerciseTypeEntity(context.resources.getString(R.string.flexibility)),
+                ExerciseTypeEntity(context.resources.getString(R.string.concentration)),
+                ExerciseTypeEntity(context.resources.getString(R.string.other_type))
             )
         }
-        fun getExerciseTypes(): List<ExerciseTypeEntity> {
+        fun getParameters(context: Context): List<ParameterEntity> {
             return listOf(
-                ExerciseTypeEntity("Силовое"),
-                ExerciseTypeEntity("Кардио"),
-                ExerciseTypeEntity("Координация"),
-                ExerciseTypeEntity("Опорно-двигательное")
-            )
-        }
-        fun getMeasureUnits(): List<MeasureUnitEntity> {
-            return listOf(
-                MeasureUnitEntity("Миллиметры", "мм"),
-                MeasureUnitEntity("Сантиметры", "см"),
-                MeasureUnitEntity("Метры", "м"),
-                MeasureUnitEntity("Километры", "км"),
-                MeasureUnitEntity("Единицы", "ед"),
-                MeasureUnitEntity("Секунды", "сек"),
-                MeasureUnitEntity("Минуты", "мин"),
-                MeasureUnitEntity("Часы", "ч"),
-                MeasureUnitEntity("Килограммы", "кг")
-            )
-        }
-        fun getParameters(): List<ParameterEntity> {
-            return listOf(
-                ParameterEntity("Время (цель)", 6, 1),
-                ParameterEntity("Время (результат)", 6, 2),
-                ParameterEntity("Дистанция (цель)", 3, 1),
-                ParameterEntity("Дистанция (результат)", 3, 2),
-                ParameterEntity("Повторения (цель)", 5, 1),
-                ParameterEntity("Повторения (результат)", 5, 2),
-                ParameterEntity("Вес (цель)", 9, 1),
-                ParameterEntity("Вес (результат)", 9, 2)
+                ParameterEntity(context.resources.getString(R.string.time), context.resources.getString(R.string.sec)),
+                ParameterEntity(context.resources.getString(R.string.distance), context.resources.getString(R.string.m)),
+                ParameterEntity(context.resources.getString(R.string.weight), context.resources.getString(R.string.kg))
             )
         }
     }

@@ -19,11 +19,9 @@ import kotlinx.coroutines.withContext
 import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.db.entity.DoneExerciseEntity
 import ru.ok.technopolis.training.personal.db.entity.ExerciseEntity
-import ru.ok.technopolis.training.personal.db.entity.MeasureUnitEntity
+import ru.ok.technopolis.training.personal.db.entity.ParameterEntity
 import ru.ok.technopolis.training.personal.db.entity.ParameterResultEntity
-import ru.ok.technopolis.training.personal.db.entity.ParameterTypeEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutEntity
-import ru.ok.technopolis.training.personal.db.model.ParameterModel
 import ru.ok.technopolis.training.personal.items.ItemsList
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.USER_ID_KEY
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.WORKOUT_ID_KEY
@@ -44,10 +42,7 @@ class ActiveExerciseFragment : BaseFragment() {
     private var exerciseList: List<ExerciseEntity>? = null
     private var exerciseIndex: Int = -1
 
-    private var elements: ItemsList<ParameterModel> = ItemsList(mutableListOf())
-
-    private var measureUnitChoices: MutableList<MeasureUnitEntity>? = null
-    private var parameterTypeChoices: MutableList<ParameterTypeEntity>? = null
+    private var elements: ItemsList<ParameterEntity> = ItemsList(mutableListOf())
 
     private var userId: Long? = null
     private var calendar = Calendar.getInstance()
@@ -79,8 +74,6 @@ class ActiveExerciseFragment : BaseFragment() {
             database?.let { appDatabase ->
                 exerciseList = appDatabase.workoutExerciseDao().getExercisesForWorkout(workoutId)
                 workout = appDatabase.workoutDao().getById(workoutId)
-                measureUnitChoices = appDatabase.measureUnitDao().getAll().toMutableList()
-                parameterTypeChoices = appDatabase.parameterTypeDao().getAll().toMutableList()
             }
             withContext(Dispatchers.Main) {
                 progressBar?.visibility = View.GONE
@@ -102,15 +95,10 @@ class ActiveExerciseFragment : BaseFragment() {
             )
             doneExercise.id = database?.doneExerciseDao()?.insert(doneExercise)!!
             for (parameterModel in elements.items) {
-                val paramTypeId = parameterModel.parameter.parameterTypeId
-                val isFilledWorkout = parameterModel.parameterTypeChoices[paramTypeId.toInt() - 1].onCreateFilling
-                if (isFilledWorkout) {
-                    continue
-                }
                 val resultEntity = ParameterResultEntity(
                     doneExercise.id,
-                    parameterModel.parameter.id,
-                    parameterModel.parameter.value
+                    parameterModel.id,
+                    parameterModel.value
                 )
                 println("saving parameter: " + resultEntity.parameterId + " => " + resultEntity.value)
                 resultEntity.id = database?.parameterResultDao()?.insert(resultEntity)!!
@@ -131,15 +119,12 @@ class ActiveExerciseFragment : BaseFragment() {
                         progressBar?.visibility = View.VISIBLE
                     }
                     // load parameters for exercise
-                    var parameterModelList: MutableList<ParameterModel>? = null
+                    var parameterList: MutableList<ParameterEntity>? = null
                     database?.let { appDatabase ->
-                        val parameterList = appDatabase.exerciseParameterDao().getParametersForExercise(exercise.id)
-                        parameterModelList = parameterList.map {
-                            ParameterModel(it, measureUnitChoices!!, parameterTypeChoices!!)
-                        }.toMutableList()
+                        parameterList = appDatabase.exerciseParameterDao().getParametersForExercise(exercise.id).toMutableList()
                     }
                     withContext(Dispatchers.Main) {
-                        parameterModelList?.let { elements.setData(it) }
+                        parameterList?.let { elements.setData(it) }
                         exerciseName?.text = exercise.name
                         val progressValue = (exerciseIndex * 100 / list.size)
                         workoutProgressBar?.setProgress(progressValue)

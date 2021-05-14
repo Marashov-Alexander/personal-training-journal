@@ -23,6 +23,10 @@ class Router(private val activity: Activity) {
         showPage(Page.Activity.Login)
     }
 
+    fun showUploadPage() {
+        showPage(Page.Fragment.Upload)
+    }
+
     fun showCalendarPage() {
         showPage(Page.Fragment.Calendar)
     }

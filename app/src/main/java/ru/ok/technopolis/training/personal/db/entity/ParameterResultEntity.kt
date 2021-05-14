@@ -23,6 +23,10 @@ data class ParameterResultEntity(
     @ColumnInfo var doneExerciseId: Long,
     @ColumnInfo var parameterId: Long,
     @ColumnInfo var value: Float,
-    @ColumnInfo var serverId: Long = -1,
+    @ColumnInfo var serverId: Long = -1L,
     @PrimaryKey(autoGenerate = true) var id: Long = 0
-)
+) : WithServerId {
+    override fun serverId(newId: Long) {
+        serverId = newId
+    }
+}

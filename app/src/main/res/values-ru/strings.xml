@@ -29,7 +29,7 @@
     <string name="exercise_elements">Элементы упражнения</string>
     <string name="exercise">Упражнение</string>
     <string name="parameter_name">Имя параметра</string>
-    <string name="value">Значение</string>
+    <string name="goal">Цель</string>
     <string name="workout">Тренировка</string>
     <string name="settings">Настройки</string>
     <string name="enter_workout_name">Название тренировки</string>
@@ -156,19 +156,16 @@
     </string-array>
 
     <string-array name="exercise_elements_units">
+        <item />
         <item>мм</item>
         <item>см</item>
-        <item>д</item>
         <item>м</item>
         <item>км</item>
-        <item>миля</item>
-    </string-array>
-
-    <string-array name="exercise_elements_input_type">
-        <item>цель</item>
-        <item>результат</item>
-        <item>секундомер</item>
-        <item>таймер</item>
+        <item>ед</item>
+        <item>сек</item>
+        <item>мин</item>
+        <item>ч</item>
+        <item>кг</item>
     </string-array>
 
     <string-array name="levels_dummy">
@@ -236,4 +233,34 @@
     <string name="show_in_short_description">Отображать в кратком описании</string>
     <string name="parameters_list">Параметры</string>
     <string name="muscle_groups">Группы мыщц </string>
+    <string name="result">Результат</string>
+    <string name="parameter_progress">Цель выполнена на %.1f%%</string>
+    <string name="greater_better">Чем больше, тем лучше</string>
+    <string name="less_better">Чем меньше, тем лучше</string>
+    <string name="equals_better">Чем ближе, тем лучше</string>
+    <string name="strength">На силу</string>
+    <string name="dexterity">На ловкость</string>
+    <string name="coordination">На координацию</string>
+    <string name="endurance">На выносливость</string>
+    <string name="speed">На скорость</string>
+    <string name="flexibility">На гибкость</string>
+    <string name="concentration">На внимание</string>
+    <string name="other_type">Другое</string>
+
+    <string name="mm">мм</string>
+    <string name="sm">см</string>
+    <string name="m">м</string>
+    <string name="km">км</string>
+    <string name="ue">ед</string>
+    <string name="sec">сек</string>
+    <string name="min">мин</string>
+    <string name="h">ч</string>
+    <string name="kg">кг</string>
+    <string name="time">Время</string>
+    <string name="distance">Дистанция</string>
+    <string name="weight">Вес</string>
+
+    <string name="drawer_item_save">Сохранить данные</string>
+    <string name="data_saving">Сохранение данных…</string>
+    <string name="measure_unit">ед. изм.</string>
 </resources>

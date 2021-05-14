@@ -17,12 +17,9 @@ class ResultViewHolder(
 
     override fun bind(item: ParameterResultModel) {
         graph.series.clear()
-        val unitId = item.parameter.measureUnitId
-        val unitText = item.measureUnitChoices[unitId.toInt() - 1]
-        graphTitle.text = String.format("%s (%s)", item.parameter.name, unitText)
+        graphTitle.text = String.format("%s (%s)", item.parameter.name, item.parameter.measureUnit)
         var x = 1.0
         val data = item.resultsParameterList.map {
-            println(it.value)
             x += 1.0
             DataPoint(x, it.value.toDouble())
         }.toTypedArray()

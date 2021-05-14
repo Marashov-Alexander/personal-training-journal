@@ -16,6 +16,9 @@ interface WorkoutDao {
     @Query("SELECT * FROM WorkoutEntity WHERE id = :id")
     fun getById(id: Long): WorkoutEntity
 
+    @Query("SELECT * FROM WorkoutEntity WHERE serverId = :id")
+    fun getByServerId(id: Long): WorkoutEntity
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(workoutEntity: WorkoutEntity): Long
 

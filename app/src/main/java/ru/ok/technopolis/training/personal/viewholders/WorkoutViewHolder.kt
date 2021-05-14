@@ -17,8 +17,7 @@ class WorkoutViewHolder(
     private var title: TextView = itemView.title
 
     override fun bind(item: WorkoutEntity) {
-//        time.text = item.time
-        time.text = "8:00"
+        time.text = item.plannedTime
         title.text = item.name
     }
 

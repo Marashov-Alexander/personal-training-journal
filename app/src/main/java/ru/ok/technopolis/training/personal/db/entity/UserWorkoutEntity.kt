@@ -26,5 +26,10 @@ data class UserWorkoutEntity(
     @ColumnInfo var userId: Long,
     @ColumnInfo var workoutId: Long,
     @ColumnInfo var comments: String?,
-    @ColumnInfo var serverId: Long = -1
-)
+    @ColumnInfo var serverId: Long = -1L,
+    @ColumnInfo var deleted: Boolean = false
+) : WithServerId {
+    override fun serverId(newId: Long) {
+        serverId = newId
+    }
+}

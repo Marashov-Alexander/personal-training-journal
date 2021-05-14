@@ -15,6 +15,9 @@ interface ExerciseTypeDao {
     @Query("SELECT * FROM ExerciseTypeEntity WHERE id = :id")
     fun getById(id: Long): ExerciseTypeEntity
 
+    @Query("SELECT * FROM ExerciseTypeEntity WHERE serverId = :id")
+    fun getByServerId(id: Long): ExerciseTypeEntity
+
     @Insert
     fun insert(exerciseTypeEntity: ExerciseTypeEntity): Long
 

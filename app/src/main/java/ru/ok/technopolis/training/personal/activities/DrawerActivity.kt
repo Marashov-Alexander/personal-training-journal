@@ -29,6 +29,7 @@ abstract class DrawerActivity : BaseActivity() {
         const val EXIT_ITEM_ID = 5L
         const val RESULTS_ITEM_ID = 6L
         const val CALENDAR_ITEM_ID = 7L
+        const val SAVE_TO_SERVER_ITEM_ID = 8L
     }
 
     private val profile: ProfileDrawerItem = ProfileDrawerItem()
@@ -42,6 +43,9 @@ abstract class DrawerActivity : BaseActivity() {
         slider.apply {
             onDrawerItemClickListener = { _, item, _ ->
                 when (item.identifier) {
+                    SAVE_TO_SERVER_ITEM_ID -> {
+                        router?.showUploadPage()
+                    }
                     CALENDAR_ITEM_ID -> {
                         router?.showCalendarPage()
                     }
@@ -96,11 +100,10 @@ abstract class DrawerActivity : BaseActivity() {
             isSelectable = false
         }
 
-        val favouritesItem = PrimaryDrawerItem().apply {
-            name = StringHolder(R.string.drawer_item_favourites)
-            // todo set icon later
-//        icon = ImageHolder()
-            identifier = FAVOURITE_ITEM_ID
+        val saveItem = PrimaryDrawerItem().apply {
+            name = StringHolder(R.string.drawer_item_save)
+            icon = ImageHolder(R.drawable.ic_upload)
+            identifier = SAVE_TO_SERVER_ITEM_ID
             isSelectable = false
         }
 
@@ -120,8 +123,8 @@ abstract class DrawerActivity : BaseActivity() {
         slider.addItems(
                 calendarItem,
                 resultsItem,
-                favouritesItem,
                 DividerDrawerItem(),
+                saveItem,
                 settingsItem,
                 exitItem
         )

@@ -17,9 +17,17 @@ interface UserWorkoutDao {
     @Query("SELECT * FROM UserWorkoutEntity WHERE userId=:userId AND workoutId=:workoutId")
     fun getById(userId: Long, workoutId: Long): UserWorkoutEntity
 
+    @Query("SELECT * FROM UserWorkoutEntity WHERE serverId=:serverId")
+    fun getByServerId(serverId: Long): UserWorkoutEntity
+
     @Query("SELECT * FROM WorkoutEntity AS we " +
         "INNER JOIN UserWorkoutEntity AS uwe ON we.id=uwe.workoutId " +
-        "WHERE uwe.userId = :userId")
+        "WHERE uwe.userId = :userId AND we.serverId=-1")
+    fun getUnsavedWorkoutsForUser(userId: Long): MutableList<WorkoutEntity>
+
+    @Query("SELECT * FROM WorkoutEntity AS we " +
+        "INNER JOIN UserWorkoutEntity AS uwe ON we.id=uwe.workoutId " +
+        "WHERE uwe.userId = :userId AND deleted=0")
     fun getWorkoutsForUser(userId: Long): MutableList<WorkoutEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

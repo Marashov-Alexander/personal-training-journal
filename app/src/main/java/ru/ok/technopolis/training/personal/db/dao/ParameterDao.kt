@@ -16,6 +16,9 @@ interface ParameterDao {
     @Query("SELECT * FROM ParameterEntity WHERE id = :id")
     fun getById(id: Long): ParameterEntity
 
+    @Query("SELECT * FROM ParameterEntity WHERE serverId = :id")
+    fun getByServerId(id: Long): ParameterEntity
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(parameterEntity: ParameterEntity): Long
 
