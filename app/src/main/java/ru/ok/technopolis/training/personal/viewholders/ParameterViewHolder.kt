@@ -21,9 +21,9 @@ class ParameterViewHolder(
     private val edit: ImageView = itemView.edit
 
     override fun bind(item: ShortParameterItem) {
-        title.text = item.name
-        units.text = item.unitName
-        value.setText(item.value.toString())
+        title.text = item.parameter?.name
+        units.text = item.parameter?.measureUnit
+        value.setText(item.parameter?.value.toString())
         value.isEnabled = item.editable
         edit.visibility = if (item.editable) VISIBLE else INVISIBLE
         itemView.visibility = if (item.invisible) INVISIBLE else VISIBLE

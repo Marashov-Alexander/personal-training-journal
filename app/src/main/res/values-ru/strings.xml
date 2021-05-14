@@ -225,7 +225,6 @@
     <string name="difficulty">Сложность</string>
     <string name="category">Категория</string>
     <string name="kind_of_sport">Вид спорта</string>
-    <string name="goal">Цель</string>
     <string name="evaluation_criteria">Критерий оценивания:</string>
     <string name="change_parameter">Изменение параметра</string>
     <string name="stopwatch">Секундомер</string>

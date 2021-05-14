@@ -9,6 +9,7 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.fragment_new_exercise_1.*
 import ru.ok.technopolis.training.personal.R
+import ru.ok.technopolis.training.personal.db.entity.ParameterEntity
 import ru.ok.technopolis.training.personal.fragments.dialogs.ParameterDialogFragment
 import ru.ok.technopolis.training.personal.items.ItemsList
 import ru.ok.technopolis.training.personal.items.ShortParameterItem
@@ -16,7 +17,7 @@ import ru.ok.technopolis.training.personal.utils.recycler.adapters.ParameterAdap
 import ru.ok.technopolis.training.personal.viewholders.ParameterViewHolder
 
 
-class CreateExerciseFragment1 : BaseFragment() {
+class CreateExerciseFragment1 : BaseFragment(), ParameterDialogFragment.ParameterDialogListener {
 
     private var nextStepCard: MaterialCardView? = null
     private var parametersRecycler: RecyclerView? = null
@@ -31,18 +32,16 @@ class CreateExerciseFragment1 : BaseFragment() {
         }
         addParameterBtn = add_parameter_button
         addParameterBtn?.setOnClickListener {
-            ParameterDialogFragment()
+            ParameterDialogFragment(ParameterEntity("", ""), this)
                 .show(requireActivity().supportFragmentManager, "ParameterDialogFragment")
         }
 
-        val parameters = mutableListOf(
-                ShortParameterItem("1", "Подходы", "раз", 10, 0, false),
-                ShortParameterItem("2", "Повторения", "раз", 20, 0, false),
-                ShortParameterItem("3", "Отдых", "сек", 30, 0, true),
-                ShortParameterItem("4", "Parameter 4", "Units 4", 40, 0, true),
-                ShortParameterItem("5", "Parameter 5", "Units 5", 50, 0, true),
-                ShortParameterItem("6", "Невидимый айтем", "???", 0, 0, editable = true, invisible = true)
-        )
+        val parameters = mutableListOf<ShortParameterItem>()
+        for (i in 1..7) {
+            parameters.add(ShortParameterItem(i.toString(), ParameterEntity("Параметр $i", "ед. изм."), true))
+        }
+        parameters.add(ShortParameterItem("0", null, editable = false, invisible = true))
+
         parametersList = ItemsList(parameters)
 
         parametersRecycler = parameters_recycler
@@ -75,5 +74,9 @@ class CreateExerciseFragment1 : BaseFragment() {
     }
 
     override fun getFragmentLayoutId(): Int = R.layout.fragment_new_exercise_1
+
+    override fun onSaveClick(item: ParameterEntity) {
+        println(item.toString())
+    }
 
 }
