@@ -3,7 +3,19 @@
     android:layout_width="match_parent"
     android:layout_height="match_parent"
     xmlns:app="http://schemas.android.com/apk/res-auto"
-    android:padding="@dimen/dimens_32dp">
+    android:padding="@dimen/dimens_8dp">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        android:text="@string/workout"
+        android:gravity="center"
+        android:textSize="@dimen/text_size_25"
+        android:textStyle="bold"
+        android:textColor="@color/black"
+        />
 
     <ru.ok.technopolis.training.personal.views.ProgressChartView
         android:layout_width="match_parent"
@@ -13,7 +25,8 @@
         app:badColor="@color/red_transparent"
         app:goodColor="@color/green_progress"
         app:goalLineColor="@color/blackbird_edge"
-        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        android:padding="@dimen/dimens_16dp"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
