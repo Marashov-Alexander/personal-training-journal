@@ -61,6 +61,10 @@ class Router(private val activity: Activity) {
         showPage(Page.Fragment.Workout, workoutIdBundle)
     }
 
+    fun showWorkoutProgressPage() {
+        showPage(Page.Fragment.WorkoutProgress)
+    }
+
     fun showTrainingViewPage() {
         showPage(Page.Fragment.TrainingView)
     }

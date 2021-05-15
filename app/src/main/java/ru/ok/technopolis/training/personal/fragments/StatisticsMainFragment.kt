@@ -129,9 +129,13 @@ class StatisticsMainFragment : BaseFragment() {
                 holderType = ShortWorkoutViewHolder::class,
                 layoutId = R.layout.item_short_workout,
                 dataSource = workoutsList,
-                onClick = {workoutItem -> println("workout ${workoutItem.id} clicked")},
+                onClick = {workoutItem ->
+                    println("workout ${workoutItem.id} clicked")
+
+                },
                 onStart = { workoutItem ->
                     println("workout ${workoutItem.id} started")
+                    router?.showWorkoutProgressPage()
                 }
         )
         recyclerView?.adapter = workoutsAdapter

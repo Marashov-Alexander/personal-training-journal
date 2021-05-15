@@ -2,6 +2,7 @@
 <resources>
     <color name="black">#000000</color>
     <color name="red">#FF0000</color>
+    <color name="red_transparent">#4DFF0000</color>
     <color name="orange">#EE8208</color>
 
     <color name="magic_mint">#A5EFDD</color>
@@ -18,9 +19,11 @@
 
     <color name="green">#27AA66</color>
     <color name="bright_green">#66FF1F</color>
+    <color name="green_progress">#00E35B</color>
     <color name="white">#FFFFFF</color>
 
 
+    <color name="blackbird_edge">#bf00d0bd</color>
     <color name="periwinkle">#CCCCFF</color>
     <color name="light_mallow">#F2D4FD</color>
 
@@ -30,6 +33,7 @@
     <color name="gray_2">#666666</color>
     <color name="gray_3">#999999</color>
     <color name="gray_4">#C4C4C4</color>
+    <color name="gray_5">#E7E6E6</color>
 
     <color name="light_black">#282828</color>
 

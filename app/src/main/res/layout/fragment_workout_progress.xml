@@ -1,0 +1,19 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto"
+    android:padding="@dimen/dimens_32dp">
+
+    <ru.ok.technopolis.training.personal.views.ProgressChartView
+        android:layout_width="match_parent"
+        android:layout_height="256dp"
+        app:itemWidth="30dp"
+        app:itemColor="@color/gray_5"
+        app:badColor="@color/red_transparent"
+        app:goodColor="@color/green_progress"
+        app:goalLineColor="@color/blackbird_edge"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>
