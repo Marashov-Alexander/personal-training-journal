@@ -112,43 +112,6 @@ class ViewAuthorFragment : BaseFragment() {
         pushExercise(2, "Приседания", "Силовые", "Базовые", 3, 5.0)
         val text = getString(R.string.ex_switcher_text) + " (" + exerciseMutableList.size + ")"
         trainSwitcher?.ex_switch_button?.text = text
-//        switcher = view.switcher.elements_switcher
-//        workoutsSwitcher = switcher?.workout_switcher
-//        exercisesSwitcher = switcher?.exercises_switcher
-//
-//
-//        workoutsSwitcher?.buttonDrawable  = null
-//        workoutsSwitcher?.isSelected = true
-//        workoutsSwitcher?.setTextColor(ContextCompat.getColor(requireContext(), R.color.design_default_color_secondary_variant))
-//        exercisesSwitcher?.buttonDrawable = null
-//        exercisesSwitcher?.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_4))
-//        val trSwLine = view.train_switch_line
-//        val exSwitchLine = view.ex_switch_line
-//
-//        workoutsSwitcher?.setOnClickListener { compoundButton ->
-//            print("jjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjjj")
-//        }
-//
-//        switcher?.setOnCheckedChangeListener { radioGroup, index ->
-//            print("skiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiiii")
-//            for (j in 0 until radioGroup.size)  {
-//                val but = radioGroup[j] as RadioButton
-//                but.setTextColor(ContextCompat.getColor(requireContext(), R.color.gray_4))
-//            }
-//            val button = radioGroup[radioGroup.checkedRadioButtonId] as RadioButton
-//            button.setTextColor(ContextCompat.getColor(requireContext(), R.color.design_default_color_secondary_variant))
-//            if(index == 0) {
-//                trSwLine.setBackgroundResource(R.color.design_default_color_secondary_variant)
-//                exSwitchLine.setBackgroundResource(R.color.gray_4)
-//                //workouts
-//            } else {
-//                exSwitchLine.setBackgroundResource(R.color.design_default_color_secondary_variant)
-//                trSwLine.setBackgroundResource(R.color.gray_4)
-//                //exercises
-//            }
-//        }
-
-
 
         val list = listOf("Легкая атлетика", "Бейсбол", "Теннис")
         val authorId = (activity?.intent?.extras?.get(Page.AUTHOR_ID_KEY)) as Long
