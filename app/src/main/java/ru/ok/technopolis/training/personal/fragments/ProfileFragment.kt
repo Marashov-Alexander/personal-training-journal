@@ -52,19 +52,28 @@ class ProfileFragment : BaseFragment() {
 
         //TODO: change to real
         val list = listOf("Легкая атлетика", "Бейсбол", "Теннис")
-        val prof = ProfileItem("1234", "Иванов Иван", list, true, null, 5, 10, 23,6)
-
+        val prof = ProfileItem("1234", 123,"Иванов Иван", list, true, null, 5, 10, 23,6)
+        var sportsList = ""
+        for (sport in prof.sports!!) {
+            sportsList += if (sport != prof.sports.last()) {
+                "$sport, "
+            } else {
+                "$sport "
+            }
+        }
         profileNameAndIcon!!.profile_name.text = prof.name
-        profileNameAndIcon!!.complaint.visibility = View.GONE
-        //TODO:rewrite to make good list
-        profileNameAndIcon!!.profile_description.text = prof.sports.toString()
+        profileNameAndIcon!!.complaint.visibility = View.INVISIBLE
+        profileNameAndIcon!!.profile_description.text = sportsList
         subscribersNumber!!.text= prof.subscribersNumber.toString()
         subscriptionsNumber!!.text = prof.subscriptionsNumber.toString()
         sharedTrainingsNumber!!.text = prof.sharedTrainingsNumber.toString()
         sharedExercisesNumber!!.text = prof.sharedExercisesNumber.toString()
-        exDummyToRecView()
-        var flag = true
 
+
+
+        var flag = true
+        putNumbers(flag)
+        exDummyToRecView()
         var sharedFlag = false
         var privateFlag = false
         val allCl = View.OnClickListener {
@@ -141,6 +150,7 @@ class ProfileFragment : BaseFragment() {
 
                 }
             }
+            putNumbers(flag)
             loadItems(flag, privateFlag, sharedFlag)
         }
 
@@ -162,6 +172,7 @@ class ProfileFragment : BaseFragment() {
                     train_switch_line.setBackgroundResource(R.color.design_default_color_secondary_variant)
                 }
             }
+            putNumbers(flag)
             loadItems(flag, privateFlag, sharedFlag)
         }
 
@@ -222,11 +233,8 @@ class ProfileFragment : BaseFragment() {
     }
 
     private fun exDummyToRecView() {
-        pushWorkout(0, "Тренировка 1", "Кардио", "", "Легкая атлетика", 123, 4.0)
-        pushWorkout(1, "Тренировка 2", "Силовая", "", "Легкая атлетика", 200, 3.5)
-        pushWorkout(1, "Тренировка 3", "Силовая", "", "Легкая атлетика", 240, 4.5)
-        pushWorkout(0, "Любимая тренировка", "Кардио", "", "Легкая атлетика", 0, 0.0)
-        pushWorkout(1, "Тренировка 1", "Силовая", "", "Легкая атлетика", 0, 0.0)
+        pushWorkoutShared()
+        pushWorkoutPrivate()
         val workoutsList = ItemsList(workoutsMutableList)
         val workoutsAdapter = ShortWorkoutListAdapter(
                 holderType = ShortWorkoutViewHolder::class,
@@ -243,27 +251,31 @@ class ProfileFragment : BaseFragment() {
     }
 
     private fun exDummyShared() {
+        pushWorkoutShared()
+        val workoutsList = ItemsList(workoutsMutableList)
+        val workoutsAdapter = ShortWorkoutListAdapter(
+                holderType = ShortWorkoutViewHolder::class,
+                layoutId = R.layout.item_short_workout,
+                dataSource = workoutsList,
+                onClick = {workoutItem -> println("workout ${workoutItem.id} clicked")},
+                onStart = { workoutItem ->
+                    println("workout ${workoutItem.id} started")
+                }
+        )
+        recyclerView?.adapter = workoutsAdapter
+        val workoutsLayoutManager = LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false)
+        recyclerView?.layoutManager = workoutsLayoutManager
+    }
+
+    private fun pushWorkoutShared(): Int {
         pushWorkout(0, "Тренировка 1", "Кардио", "", "Легкая атлетика", 123, 4.0)
         pushWorkout(1, "Тренировка 2", "Силовая", "", "Легкая атлетика", 200, 3.5)
         pushWorkout(1, "Тренировка 3", "Силовая", "", "Легкая атлетика", 240, 4.5)
-        val workoutsList = ItemsList(workoutsMutableList)
-        val workoutsAdapter = ShortWorkoutListAdapter(
-                holderType = ShortWorkoutViewHolder::class,
-                layoutId = R.layout.item_short_workout,
-                dataSource = workoutsList,
-                onClick = {workoutItem -> println("workout ${workoutItem.id} clicked")},
-                onStart = { workoutItem ->
-                    println("workout ${workoutItem.id} started")
-                }
-        )
-        recyclerView?.adapter = workoutsAdapter
-        val workoutsLayoutManager = LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false)
-        recyclerView?.layoutManager = workoutsLayoutManager
+        return workoutsMutableList.size
     }
 
     private fun exDummyPrivate() {
-        pushWorkout(0, "Любимая тренировка", "Кардио", "", "Легкая атлетика", 0, 0.0)
-        pushWorkout(1, "Тренировка 1", "Силовая", "", "Легкая атлетика", 0, 0.0)
+        pushWorkoutPrivate()
         val workoutsList = ItemsList(workoutsMutableList)
         val workoutsAdapter = ShortWorkoutListAdapter(
                 holderType = ShortWorkoutViewHolder::class,
@@ -279,9 +291,14 @@ class ProfileFragment : BaseFragment() {
         recyclerView?.layoutManager = workoutsLayoutManager
     }
 
+    private fun pushWorkoutPrivate():Int {
+        pushWorkout(0, "Любимая тренировка", "Кардио", "", "Легкая атлетика", 0, 0.0)
+        pushWorkout(1, "Тренировка 1", "Силовая", "", "Легкая атлетика", 0, 0.0)
+        return workoutsMutableList.size
+    }
+
     private fun exerciseDummyPrivate() {
-        pushExercise(0, "Мое упражнение", "Кардио", "Офп", 0, 0.0)
-        pushExercise(1, "Бег на месте", "Кардио", "Офп", 0, 0.0)
+        pushExPrivate()
         val exList = ItemsList(exerciseMutableList)
         val exAdapter = ShortExerciseListAdapter(
                 holderType = ShortExerciseViewHolder::class,
@@ -298,7 +315,7 @@ class ProfileFragment : BaseFragment() {
     }
 
     private fun exerciseDummyShared() {
-        pushExercise(2, "Приседания", "Силовые", "Базовые", 3, 5.0)
+        pushExShared()
         val exList = ItemsList(exerciseMutableList)
         val exAdapter = ShortExerciseListAdapter(
                 holderType = ShortExerciseViewHolder::class,
@@ -314,9 +331,8 @@ class ProfileFragment : BaseFragment() {
         recyclerView?.layoutManager = exLayoutManager
     }
     private fun exerciseDummyAll() {
-        pushExercise(0, "Мое упражнение", "Кардио", "Офп", 0, 0.0)
-        pushExercise(1, "Бег на месте", "Кардио", "Офп", 0, 0.0)
-        pushExercise(2, "Приседания", "Силовые", "Базовые", 3, 5.0)
+        pushExPrivate()
+        pushExShared()
         val exList = ItemsList(exerciseMutableList)
         val exAdapter = ShortExerciseListAdapter(
                 holderType = ShortExerciseViewHolder::class,
@@ -330,6 +346,47 @@ class ProfileFragment : BaseFragment() {
         recyclerView?.adapter = exAdapter
         val exLayoutManager = LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false)
         recyclerView?.layoutManager = exLayoutManager
+    }
+
+    private fun putNumbers(flag: Boolean) {
+        if (flag) {
+            workoutsMutableList.clear()
+            val private = pushWorkoutPrivate()
+            var text = getString(R.string.private_filter_text) + "(" + private + ")"
+            filterButtons?.private_filter_button?.text = text
+            workoutsMutableList.clear()
+            val shared = pushWorkoutShared()
+            workoutsMutableList.clear()
+            text = getString(R.string.shared_filter_text) + "(" + shared + ")"
+            filterButtons?.shared_filter_button?.text = text
+            val all = private + shared
+            text = getString(R.string.all_filter_text) + "(" + all + ")"
+            filterButtons?.all_filter_button?.text = text
+        } else {
+            exerciseMutableList.clear()
+            val private = pushExPrivate()
+            var text = getString(R.string.private_filter_text) + "(" + private + ")"
+            filterButtons?.private_filter_button?.text = text
+            exerciseMutableList.clear()
+            val shared = pushExShared()
+            exerciseMutableList.clear()
+            text = getString(R.string.shared_filter_text) + "(" + shared + ")"
+            filterButtons?.shared_filter_button?.text = text
+            val all = private + shared
+            text = getString(R.string.all_filter_text) + "(" + all + ")"
+            filterButtons?.all_filter_button?.text = text
+        }
+    }
+
+    private fun pushExPrivate(): Int {
+        pushExercise(0, "Мое упражнение", "Кардио", "Офп", 0, 0.0)
+        pushExercise(1, "Бег на месте", "Кардио", "Офп", 0, 0.0)
+        return exerciseMutableList.size
+    }
+
+    private fun pushExShared() :Int {
+        pushExercise(2, "Приседания", "Силовые", "Базовые", 3, 5.0)
+        return exerciseMutableList.size
     }
 
     private fun pushWorkout(id: Int, name: String, category: String, description: String, sport: String, sharedNumber: Int, rank: Double) {
