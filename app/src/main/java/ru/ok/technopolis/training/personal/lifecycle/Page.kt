@@ -50,6 +50,10 @@ sealed class Page : Serializable {
             override val clazz = NavigationFragment::class
         }
 
+        object Upload : Fragment() {
+            override val clazz = UploadFragment::class
+        }
+
         object ActiveExercise : Fragment() {
             override val clazz = ActiveExerciseFragment::class
         }

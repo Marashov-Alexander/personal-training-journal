@@ -14,10 +14,8 @@ import ru.ok.technopolis.training.personal.db.dao.DoneExerciseDao
 import ru.ok.technopolis.training.personal.db.dao.ExerciseDao
 import ru.ok.technopolis.training.personal.db.dao.ExerciseParameterDao
 import ru.ok.technopolis.training.personal.db.dao.ExerciseTypeDao
-import ru.ok.technopolis.training.personal.db.dao.MeasureUnitDao
 import ru.ok.technopolis.training.personal.db.dao.ParameterDao
 import ru.ok.technopolis.training.personal.db.dao.ParameterResultDao
-import ru.ok.technopolis.training.personal.db.dao.ParameterTypeDao
 import ru.ok.technopolis.training.personal.db.dao.UserDao
 import ru.ok.technopolis.training.personal.db.dao.UserWorkoutDao
 import ru.ok.technopolis.training.personal.db.dao.WorkoutDao
@@ -26,10 +24,8 @@ import ru.ok.technopolis.training.personal.db.entity.DoneExerciseEntity
 import ru.ok.technopolis.training.personal.db.entity.ExerciseEntity
 import ru.ok.technopolis.training.personal.db.entity.ExerciseParameterEntity
 import ru.ok.technopolis.training.personal.db.entity.ExerciseTypeEntity
-import ru.ok.technopolis.training.personal.db.entity.MeasureUnitEntity
 import ru.ok.technopolis.training.personal.db.entity.ParameterEntity
 import ru.ok.technopolis.training.personal.db.entity.ParameterResultEntity
-import ru.ok.technopolis.training.personal.db.entity.ParameterTypeEntity
 import ru.ok.technopolis.training.personal.db.entity.UserEntity
 import ru.ok.technopolis.training.personal.db.entity.UserWorkoutEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutEntity
@@ -41,9 +37,7 @@ import ru.ok.technopolis.training.personal.db.generators.InitialDataGenerator
         ExerciseEntity::class,
         ExerciseParameterEntity::class,
         ExerciseTypeEntity::class,
-        MeasureUnitEntity::class,
         ParameterEntity::class,
-        ParameterTypeEntity::class,
         UserEntity::class,
         UserWorkoutEntity::class,
         WorkoutEntity::class,
@@ -78,10 +72,8 @@ abstract class AppDatabase : RoomDatabase() {
                             super.onCreate(db)
                             GlobalScope.launch(Dispatchers.IO) {
                                 instance?.let {
-                                    it.exerciseTypeDao().insert(InitialDataGenerator.getExerciseTypes())
-                                    it.parameterTypeDao().insert(InitialDataGenerator.getParameterTypes())
-                                    it.measureUnitDao().insert(InitialDataGenerator.getMeasureUnits())
-                                    it.parameterDao().insert(InitialDataGenerator.getParameters())
+                                    it.exerciseTypeDao().insert(InitialDataGenerator.getExerciseTypes(context))
+                                    it.parameterDao().insert(InitialDataGenerator.getParameters(context))
                                 }
                             }
                         }
@@ -96,9 +88,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun exerciseDao(): ExerciseDao
     abstract fun exerciseParameterDao(): ExerciseParameterDao
     abstract fun exerciseTypeDao(): ExerciseTypeDao
-    abstract fun measureUnitDao(): MeasureUnitDao
     abstract fun parameterDao(): ParameterDao
-    abstract fun parameterTypeDao(): ParameterTypeDao
     abstract fun userDao(): UserDao
     abstract fun userWorkoutDao(): UserWorkoutDao
     abstract fun workoutDao(): WorkoutDao

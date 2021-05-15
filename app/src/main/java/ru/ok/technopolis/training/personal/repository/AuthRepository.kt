@@ -27,10 +27,19 @@ object AuthRepository {
                         userInfo.lastName,
                         userInfo.fatherName,
                         userInfo.email,
-                        userInfo.genderType.toApiStr(),
-                        userInfo.pictureUrlStr
+                        "Male",
+                        userInfo.pictureUrlStr,
+                        userInfo.id
                     )
                     database?.userDao()?.insert(user)
+                } else {
+                    user.firstName = userInfo.firstName
+                    user.lastName = userInfo.lastName
+                    user.fatherName = userInfo.fatherName
+                    user.email = userInfo.email
+                    user.avatarUrl = userInfo.pictureUrlStr
+                    user.serverId = userInfo.id
+                    database?.userDao()?.update(user)
                 }
                 withContext(Dispatchers.Main) {
                     if (needRemember) {

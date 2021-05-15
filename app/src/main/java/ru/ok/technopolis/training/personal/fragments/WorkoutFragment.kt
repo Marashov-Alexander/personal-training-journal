@@ -29,6 +29,7 @@ import ru.ok.technopolis.training.personal.db.entity.WorkoutEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutExerciseEntity
 import ru.ok.technopolis.training.personal.items.ItemsList
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.WORKOUT_ID_KEY
+import ru.ok.technopolis.training.personal.repository.CurrentUserRepository
 import ru.ok.technopolis.training.personal.utils.logger.Logger
 import ru.ok.technopolis.training.personal.utils.recycler.adapters.ExerciseListAdapter
 import ru.ok.technopolis.training.personal.viewholders.ExerciseViewHolder
@@ -73,7 +74,13 @@ class WorkoutFragment : BaseFragment() {
                     },
                     onDeleteExerciseClick = {
                         GlobalScope.launch(Dispatchers.IO) {
-                            database?.workoutExerciseDao()?.delete(workoutId!!, it.id)
+                            val workoutExercise = database?.workoutExerciseDao()?.getById(workoutId!!, it.id)
+                            if (workoutExercise!!.serverId == -1L) {
+                                database?.workoutExerciseDao()?.delete(workoutExercise)
+                            } else {
+                                workoutExercise.deleted = true
+                                database?.workoutExerciseDao()?.update(workoutExercise)
+                            }
                             withContext(Dispatchers.Main) {
                                 elements!!.remove(it)
                             }
@@ -117,7 +124,7 @@ class WorkoutFragment : BaseFragment() {
                     if (bit and workout!!.weekdaysMask != 0) {
                         checkBox.isChecked = true
                     }
-                    checkBox.setOnCheckedChangeListener { v, checked ->
+                    checkBox.setOnCheckedChangeListener { _, checked ->
                         if (checked) {
                             for (ii in weekdayCheckboxes!!.indices) {
                                 weekdayCheckboxes!![ii].setBackgroundColor(Color.WHITE)
@@ -197,7 +204,15 @@ class WorkoutFragment : BaseFragment() {
             val workoutName = workoutNameEditText?.text.toString()
             GlobalScope.launch(Dispatchers.IO) {
                 if (workoutName == "") {
-                        database?.workoutDao()?.delete(workout!!)
+                    val email = CurrentUserRepository.currentUser.value?.email
+                    val userId = database?.userDao()?.getByEmail(email!!)?.id
+                    val userWorkout = database?.userWorkoutDao()?.getById(userId!!, workoutId!!)
+                    if (userWorkout!!.serverId == -1L) {
+                        database?.userWorkoutDao()?.delete(userWorkout)
+                    } else {
+                        userWorkout.deleted = true
+                        database?.userWorkoutDao()?.update(userWorkout)
+                    }
                 }
                 withContext(Dispatchers.Main) {
                     router?.goToPrevFragment()

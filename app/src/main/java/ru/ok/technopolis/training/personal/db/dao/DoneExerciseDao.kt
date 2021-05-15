@@ -16,8 +16,14 @@ interface DoneExerciseDao {
     @Query("SELECT * FROM DoneExerciseEntity WHERE userId=:userId")
     fun getAllByUser(userId: Long): List<DoneExerciseEntity>
 
+    @Query("SELECT * FROM DoneExerciseEntity WHERE userId=:userId AND serverId=-1")
+    fun getAllUnsavedByUser(userId: Long): List<DoneExerciseEntity>
+
     @Query("SELECT * FROM DoneExerciseEntity WHERE id = :id")
     fun getById(id: Long): DoneExerciseEntity
+
+    @Query("SELECT * FROM DoneExerciseEntity WHERE serverId = :serverId")
+    fun getByServerId(serverId: Long): DoneExerciseEntity
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(doneExerciseEntity: DoneExerciseEntity): Long

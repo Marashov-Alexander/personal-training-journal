@@ -18,10 +18,14 @@ data class ExerciseEntity(
     @ColumnInfo var name: String,
     @ColumnInfo var description: String?,
     @ColumnInfo var typeId: Long,
-    @ColumnInfo var serverId: Long = -1,
+    @ColumnInfo var serverId: Long = -1L,
     @PrimaryKey(autoGenerate = true) var id: Long = 0
-) {
+) : WithServerId {
     override fun toString(): String {
         return name
+    }
+
+    override fun serverId(newId: Long) {
+        serverId = newId
     }
 }

@@ -25,5 +25,10 @@ import androidx.room.ForeignKey.CASCADE
 data class ExerciseParameterEntity(
     @ColumnInfo var exerciseId: Long,
     @ColumnInfo var parameterId: Long,
-    @ColumnInfo var serverId: Long = -1
-)
+    @ColumnInfo var serverId: Long = -1L,
+    @ColumnInfo var deleted: Boolean = false
+) : WithServerId {
+    override fun serverId(newId: Long) {
+        serverId = newId
+    }
+}

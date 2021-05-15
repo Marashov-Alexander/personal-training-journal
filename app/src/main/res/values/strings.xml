@@ -19,7 +19,6 @@
     <string name="not_exist_acc"><u>Don’t have an account?</u></string>
     <string name="add_workout">Add workout</string>
     <string name="action_add">Add element</string>
-    <string name="share_exercise_template">Share exercise template</string>
     <string name="add_to_bookmarks">Add to bookmarks</string>
     <string name="choose_exercise_type">Choose exercise type</string>
     <string name="exercise_type">Exercise type</string>
@@ -29,11 +28,12 @@
     <string name="exercise_elements">Exercise elements</string>
     <string name="exercise">Exercise</string>
     <string name="parameter_name">Parameter name</string>
-    <string name="value">Value</string>
+    <string name="goal">Goal</string>
     <string name="workout">Workout</string>
     <string name="settings">Settings</string>
     <string name="account_settings">Account settings</string>
     <string name="enter_workout_name">Workout name</string>
+    <string name="share_exercise_template">Share workout template</string>
 
     <string name="active_exercise_name">Exercise</string>
     <string name="parameter_goal_dummy">34</string>
@@ -129,6 +129,12 @@
     <string name="share_public">Public access</string>
     <string name="choose_groups">Choose groups</string>
     <string name="choose_all">Select all</string>
+    <string name="_0_00" translatable="false">0.00</string>
+    <string name="result">Result</string>
+    <string name="parameter_progress">The goal was completed by %.1f%%</string>
+    <string name="greater_better">The more the better</string>
+    <string name="less_better">The less the better</string>
+    <string name="equals_better">The closer the better</string>
 
     <string-array name="exercise_types">
         <item>Strength</item>
@@ -182,25 +188,46 @@
     </string-array>
 
     <string-array name="exercise_elements_units">
+        <item />
         <item>mm</item>
         <item>cm</item>
-        <item>inch</item>
         <item>m</item>
         <item>km</item>
-        <item>mile</item>
-    </string-array>
-
-    <string-array name="exercise_elements_input_type">
-        <item>target</item>
-        <item>result</item>
-        <item>stopwatch</item>
-        <item>timer</item>
+        <item>u</item>
+        <item>sec</item>
+        <item>min</item>
+        <item>h</item>
+        <item>kg</item>
     </string-array>
 
     <string-array name="sign_up_user_gender">
         <item>Male</item>
         <item>Female</item>
     </string-array>
+    <string name="strength">Strength</string>
+    <string name="dexterity">Dexterity</string>
+    <string name="coordination">Coordination</string>
+    <string name="endurance">Endurance</string>
+    <string name="speed">Speed</string>
+    <string name="flexibility">Flexibility</string>
+    <string name="concentration">Concentration</string>
+    <string name="other_type">Other type</string>
+    <string name="mm">mm</string>
+    <string name="sm">cm</string>
+    <string name="m">m</string>
+    <string name="km">km</string>
+    <string name="ue">u</string>
+    <string name="sec">sec</string>
+    <string name="min">min</string>
+    <string name="h">h</string>
+    <string name="kg">kg</string>
+    <string name="time">Time</string>
+    <string name="distance">Distance</string>
+    <string name="weight">Weight</string>
+    <string name="drawer_item_save">Save the data</string>
+    <string name="data_saving">Saving the data…</string>
+    <string name="measure_unit">Units</string>
+
 
     <string-array name="levels_dummy">
         <item>Level 1</item>
@@ -267,7 +294,6 @@
     <string name="units" translatable="false">units</string>
     <string name="parameter" translatable="false">Parameter</string>
     <string name="parameter_icon" translatable="false">Parameter icon</string>
-    <string name="goal">Goal</string>
     <string name="evaluation_criteria">Evaluation criteria:</string>
     <string name="change_parameter">Change parameter</string>
     <string name="stopwatch">Stopwatch</string>

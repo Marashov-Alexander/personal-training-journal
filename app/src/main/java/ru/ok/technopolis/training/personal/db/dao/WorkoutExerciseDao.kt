@@ -14,9 +14,18 @@ interface WorkoutExerciseDao {
     @Query("SELECT * FROM WorkoutExerciseEntity")
     fun getAll(): List<WorkoutExerciseEntity>
 
+    @Query("SELECT * FROM WorkoutExerciseEntity WHERE workoutId=:workoutId")
+    fun getAllByWorkout(workoutId: Long): List<WorkoutExerciseEntity>
+
+    @Query("SELECT * FROM WorkoutExerciseEntity WHERE workoutId=:workoutId AND exerciseId=:exerciseId")
+    fun getById(workoutId: Long, exerciseId: Long): WorkoutExerciseEntity
+
+    @Query("SELECT * FROM WorkoutExerciseEntity WHERE serverId=:serverId")
+    fun getByServerId(serverId: Long): WorkoutExerciseEntity
+
     @Query("SELECT * FROM ExerciseEntity AS ee " +
         "INNER JOIN WorkoutExerciseEntity AS wee ON ee.id = wee.exerciseId " +
-        "WHERE wee.workoutId = :workoutId")
+        "WHERE wee.workoutId = :workoutId AND wee.deleted=0")
     fun getExercisesForWorkout(workoutId: Long): MutableList<ExerciseEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)

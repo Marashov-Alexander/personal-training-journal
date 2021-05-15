@@ -12,6 +12,10 @@ data class UserEntity(
     @ColumnInfo var email: String,
     @ColumnInfo var gender: String,
     @ColumnInfo var avatarUrl: String?,
-    @ColumnInfo var serverId: Long = -1,
+    @ColumnInfo var serverId: Long = -1L,
     @PrimaryKey(autoGenerate = true) var id: Long = 0
-)
+) : WithServerId {
+    override fun serverId(newId: Long) {
+        serverId = newId
+    }
+}
