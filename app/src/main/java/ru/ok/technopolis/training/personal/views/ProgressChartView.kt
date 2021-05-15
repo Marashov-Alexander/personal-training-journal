@@ -13,8 +13,6 @@ import android.view.MotionEvent
 import android.view.View
 import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.items.ProgressItem
-import java.lang.Float.max
-import kotlin.math.max
 import kotlin.math.max as max1
 
 class ProgressChartView @JvmOverloads constructor(
@@ -90,7 +88,13 @@ class ProgressChartView @JvmOverloads constructor(
             ProgressItem(60f, "17.05"),
             ProgressItem(80f, "18.05", "14:00"),
             ProgressItem(70f, "19.05"),
-            ProgressItem(70f, "20.05")
+            ProgressItem(50f, "20.05"),
+            ProgressItem(80f, "21.05"),
+            ProgressItem(90f, "22.05"),
+            ProgressItem(80f, "23.05"),
+            ProgressItem(85f, "24.05"),
+            ProgressItem(75f, "25.05"),
+            ProgressItem(90f, "26.05")
         )
         goalValue = 100f
         goalMeasureUnit = "%"
