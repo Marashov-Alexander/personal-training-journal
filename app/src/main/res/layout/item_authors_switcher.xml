@@ -1,0 +1,69 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+    <RadioGroup
+        android:id="@+id/elements_switcher"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        >
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/buttons_layout"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            >
+        <RadioButton
+            android:id="@+id/workout_switcher"
+            android:layout_width="0dp"
+            android:layout_height="wrap_content"
+            android:paddingVertical="@dimen/padding_10"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintEnd_toStartOf="@id/exercises_switcher"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="@string/training_switcher_text"
+            android:textSize="20sp"
+            />
+
+        <RadioButton
+            android:id="@+id/exercises_switcher"
+            android:layout_width="0dp"
+            android:paddingVertical="@dimen/padding_10"
+            android:layout_height="wrap_content"
+            app:layout_constraintStart_toEndOf="@id/workout_switcher"
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="parent"
+            android:text="@string/ex_switcher_text"
+            android:textSize="20sp"
+            />
+
+            <View
+                android:id="@+id/authors_train_switch_line"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:background="@color/design_default_color_secondary_variant"
+                app:layout_constraintEnd_toEndOf="@id/workout_switcher"
+                app:layout_constraintStart_toStartOf="parent"
+                app:layout_constraintTop_toBottomOf="@id/workout_switcher"
+                android:elevation="4dp"
+                android:layout_marginBottom="4dp"
+                />
+            <View
+                android:id="@+id/authors_ex_switch_line"
+                android:layout_width="0dp"
+                android:layout_height="2dp"
+                android:background="@color/gray_4"
+                app:layout_constraintEnd_toEndOf="@id/exercises_switcher"
+                app:layout_constraintStart_toStartOf="@id/exercises_switcher"
+                app:layout_constraintTop_toBottomOf="@id/workout_switcher"
+                android:elevation="4dp"
+                android:layout_marginBottom="4dp"
+                />
+        </androidx.constraintlayout.widget.ConstraintLayout>
+    </RadioGroup>
+
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

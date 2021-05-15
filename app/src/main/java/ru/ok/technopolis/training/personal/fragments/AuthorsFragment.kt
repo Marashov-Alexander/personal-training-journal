@@ -37,9 +37,9 @@ class AuthorsFragment : BaseFragment() {
 
     private fun exDummyToRecView() {
         var list = listOf("assss", "sasab", "casada")
-        for (i in 1..5) pushAuthor(i, list)
+        for (i in 1..5) pushAuthor(i.toLong(), list)
         list = listOf("assssk", "sasaba", "casadarr")
-        for (i in 1..5) pushAuthor(i, list)
+        for (i in 1..5) pushAuthor(i.toLong(), list)
         val authorsList = ItemsList(authorsMutableList)
         setAdapter(authorsList)
         val workoutsLayoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
@@ -107,17 +107,20 @@ class AuthorsFragment : BaseFragment() {
                 holderType = AuthorViewHolder::class,
                 layoutId = R.layout.item_authors,
                 dataSource = list,
-                onClick = { workoutItem -> println("workout ${workoutItem.id} clicked") },
+                onClick = { authorItem ->
+                    router?.showAuthorPage(authorItem.userId)
+                    println("workout ${authorItem.id} clicked") },
                 onStart = { workoutItem ->
                     println("workout ${workoutItem.id} started")
+                    router?.showAuthorPage(workoutItem.userId)
                 }
         )
         recycler?.adapter = authorsAdapter
     }
 
-    private fun pushAuthor(id: Int, list: List<String>) {
+    private fun pushAuthor(id: Long, list: List<String>) {
         authorsMutableList.add(
-               ProfileItem(id.toString(), "dfdhf", list, false, null, 123,23,23,2)
+               ProfileItem(id.toString(), id,"dfdhf", list, false, null, 123,23,23,2)
         )
     }
 

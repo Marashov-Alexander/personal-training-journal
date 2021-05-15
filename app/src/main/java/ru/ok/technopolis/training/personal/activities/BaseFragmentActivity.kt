@@ -35,6 +35,9 @@ open class BaseFragmentActivity : AppbarActivity() {
                 R.id.nav_nav_item -> {
                     router?.showNavigationPage()
                 }
+                R.id.nav_message_item -> {
+                    router?.showChatsPage()
+                }
                 R.id.nav_profile_item -> {
                     router?.showProfilePage()
                 }

@@ -9,6 +9,7 @@ import kotlinx.android.synthetic.main.activity_base_fragment.*
 import kotlinx.android.synthetic.main.activity_base_fragment.view.*
 import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.activities.BaseFragmentActivity
+import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.AUTHOR_ID_KEY
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.EXERCISE_ID_KEY
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.PAGE_KEY
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.USER_ID_KEY
@@ -35,6 +36,10 @@ class Router(private val activity: Activity) {
         showPage(Page.Fragment.Profile)
     }
 
+    fun showChatsPage() {
+        showPage(Page.Fragment.Chats)
+    }
+
     fun showNewWorkoutPage() {
         showPage(Page.Fragment.NewWorkout)
     }
@@ -55,6 +60,12 @@ class Router(private val activity: Activity) {
         val workoutIdBundle = Bundle(1)
         workoutIdBundle.putLong(WORKOUT_ID_KEY, workoutId)
         showPage(Page.Fragment.Workout, workoutIdBundle)
+    }
+
+    fun showAuthorPage(authorId: Long){
+        val authorIdBundle = Bundle(1)
+        authorIdBundle.putLong(AUTHOR_ID_KEY, authorId)
+        showPage(Page.Fragment.Author, authorIdBundle)
     }
 
     fun showTrainingViewPage() {

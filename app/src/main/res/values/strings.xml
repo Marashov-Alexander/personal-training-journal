@@ -222,7 +222,7 @@
     <string name="home">Home</string>
     <string name="messages">Messages</string>
     <string name="profile">Profile</string>
-    <string name="training_switcher_text">Trainings</string>
+    <string name="training_switcher_text">Workouts</string>
     <string name="ex_switcher_text">Exercises</string>
     <string name="shared_ex_text">Shared exercises</string>
     <string name="shared_tr_text">Shared trainings</string>
@@ -277,4 +277,5 @@
     <string name="parameters_list">Parameters</string>
     <string name="add_new_parameter" translatable="false">Add new parameter</string>
     <string name="muscle_groups">Muscle groups </string>
+    <string name="send_message_text">Send message</string>
 </resources>

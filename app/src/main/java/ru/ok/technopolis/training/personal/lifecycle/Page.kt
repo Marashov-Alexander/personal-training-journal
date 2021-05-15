@@ -82,12 +82,20 @@ sealed class Page : Serializable {
             override val clazz = ProfileFragment::class
         }
 
+        object Chats: Fragment() {
+            override val clazz = ChatsFragment::class
+        }
+
         object Exercise : Fragment() {
             override val clazz = ExerciseFragment::class
         }
 
         object Workout : Fragment() {
             override val clazz = WorkoutFragment::class
+        }
+
+        object Author : Fragment() {
+            override val clazz = ViewAuthorFragment::class
         }
 
         object TrainingView : Fragment() {
@@ -100,5 +108,6 @@ sealed class Page : Serializable {
         const val USER_ID_KEY = "USER_ID"
         const val WORKOUT_ID_KEY = "WORKOUT_ID"
         const val EXERCISE_ID_KEY = "EXERCISE_ID"
+        const val AUTHOR_ID_KEY = "AUTHOR_ID"
     }
 }

@@ -4,6 +4,7 @@ import ru.ok.technopolis.training.personal.items.interfaces.WithId
 
 data class ProfileItem (
     override val id: String,
+    val userId: Long,
     val name: String,
     val sports: List<String>?,
     val isUser: Boolean,

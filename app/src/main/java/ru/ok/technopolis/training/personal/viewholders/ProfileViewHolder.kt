@@ -21,7 +21,7 @@ class ProfileViewHolder(
         profileName.text = item.name
         profileInfo.text = item.sports.toString()
         if (item.isUser) {
-            complaint.visibility = View.GONE
+            complaint.visibility = View.INVISIBLE
         } else {
            complaint.visibility = View.VISIBLE
         }
