@@ -9,10 +9,13 @@ import android.graphics.Rect
 import android.graphics.Typeface
 import android.util.AttributeSet
 import android.util.TypedValue
+import android.view.MotionEvent
 import android.view.View
 import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.items.ProgressItem
 import java.lang.Float.max
+import kotlin.math.max
+import kotlin.math.max as max1
 
 class ProgressChartView @JvmOverloads constructor(
     context: Context,
@@ -41,6 +44,10 @@ class ProgressChartView @JvmOverloads constructor(
 
     private val path = Path()
     private val textRect = Rect()
+
+    private var startMoveX = 0f
+    private var chartOffset = 0f
+    private var maxOffset = 0f
 
     companion object {
         private const val DEFAULT_ITEM_WIDTH_DP = 20
@@ -83,10 +90,7 @@ class ProgressChartView @JvmOverloads constructor(
             ProgressItem(60f, "17.05"),
             ProgressItem(80f, "18.05", "14:00"),
             ProgressItem(70f, "19.05"),
-            ProgressItem(70f, "20.05"),
-            ProgressItem(90f, "21.05"),
-            ProgressItem(80f, "22.05"),
-            ProgressItem(85f, "23.05")
+            ProgressItem(70f, "20.05")
         )
         goalValue = 100f
         goalMeasureUnit = "%"
@@ -131,6 +135,31 @@ class ProgressChartView @JvmOverloads constructor(
         roundedFillPaint.style = Paint.Style.FILL
         roundedFillPaint.color = Color.WHITE
 
+        setOnTouchListener { _, motion ->
+            val rawX = motion.rawX
+            when (motion.action) {
+                MotionEvent.ACTION_DOWN -> {
+                    startMoveX = rawX
+                    true
+                }
+                MotionEvent.ACTION_MOVE -> {
+                    val delta = rawX - startMoveX
+                    chartOffset -= delta
+                    if (chartOffset < 0f) {
+                        chartOffset = 0f
+                    }
+                    if (chartOffset > maxOffset) {
+                        chartOffset = maxOffset
+                    }
+                    invalidate()
+                    startMoveX = rawX
+                    true
+                }
+                else -> {
+                    false
+                }
+            }
+        }
     }
 
     override fun onMeasure(widthMeasureSpec: Int, heightMeasureSpec: Int) {
@@ -138,7 +167,9 @@ class ProgressChartView @JvmOverloads constructor(
         val height = MeasureSpec.getSize(heightMeasureSpec)
         val rawWidth = (originalData.size * itemWidth * (1f + DEFAULT_SPACE_PROPORTION) - itemWidth + paddingLeft + paddingRight).toInt()
         val width = resolveSize(rawWidth, widthMeasureSpec)
-        val itemCount = ((measuredWidth + itemWidth - paddingLeft - paddingRight) / (itemWidth * (1f + DEFAULT_SPACE_PROPORTION))).toInt()
+        val itemCount = ((measuredWidth + itemWidth - paddingLeft - paddingRight) / (itemWidth * (1f + DEFAULT_SPACE_PROPORTION))).toInt() - 1
+        maxOffset = itemWidth * max1(0, originalData.size - itemCount) * (1f + DEFAULT_SPACE_PROPORTION) + itemWidth / 2f
+        println("itemCount=$itemCount, length=${originalData.size}, maxOffset=$maxOffset")
         setMeasuredDimension(width, height)
     }
 
@@ -147,7 +178,7 @@ class ProgressChartView @JvmOverloads constructor(
             return
         }
 
-        val maxValue: Float = max(originalData.maxBy { it.value }!!.value, goalValue)
+        val maxValue: Float = max1(originalData.maxBy { it.value }!!.value, goalValue)
         val borderValue = maxValue * 1.25f
         val measuredHeight = measuredHeight - paddingTop - paddingBottom
         val chartHeight = measuredHeight * 0.8f
@@ -166,7 +197,7 @@ class ProgressChartView @JvmOverloads constructor(
         canvas.save()
         canvas.clipPath(path)
 
-        var currentX = chartStartX + itemWidth / 2
+        var currentX = chartStartX + itemWidth / 2 - chartOffset
         var prevValueHeight = 0f
         for (data in originalData) {
             val height = data.value / borderValue * chartHeight
