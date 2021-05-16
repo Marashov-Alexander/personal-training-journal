@@ -14,6 +14,7 @@ import ru.ok.technopolis.training.personal.db.dao.DoneExerciseDao
 import ru.ok.technopolis.training.personal.db.dao.ExerciseDao
 import ru.ok.technopolis.training.personal.db.dao.ExerciseParameterDao
 import ru.ok.technopolis.training.personal.db.dao.ExerciseTypeDao
+import ru.ok.technopolis.training.personal.db.dao.MessageDao
 import ru.ok.technopolis.training.personal.db.dao.ParameterDao
 import ru.ok.technopolis.training.personal.db.dao.ParameterResultDao
 import ru.ok.technopolis.training.personal.db.dao.UserDao
@@ -24,6 +25,7 @@ import ru.ok.technopolis.training.personal.db.entity.DoneExerciseEntity
 import ru.ok.technopolis.training.personal.db.entity.ExerciseEntity
 import ru.ok.technopolis.training.personal.db.entity.ExerciseParameterEntity
 import ru.ok.technopolis.training.personal.db.entity.ExerciseTypeEntity
+import ru.ok.technopolis.training.personal.db.entity.MessageEntity
 import ru.ok.technopolis.training.personal.db.entity.ParameterEntity
 import ru.ok.technopolis.training.personal.db.entity.ParameterResultEntity
 import ru.ok.technopolis.training.personal.db.entity.UserEntity
@@ -43,7 +45,8 @@ import ru.ok.technopolis.training.personal.db.generators.InitialDataGenerator
         WorkoutEntity::class,
         WorkoutExerciseEntity::class,
         DoneExerciseEntity::class,
-        ParameterResultEntity::class
+        ParameterResultEntity::class,
+        MessageEntity::class
     ],
     version = 1
 )
@@ -95,4 +98,5 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun workoutExerciseDao(): WorkoutExerciseDao
     abstract fun doneExerciseDao(): DoneExerciseDao
     abstract fun parameterResultDao(): ParameterResultDao
+    abstract fun messageDao(): MessageDao
 }

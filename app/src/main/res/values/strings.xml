@@ -304,6 +304,8 @@
     <string name="add_new_parameter" translatable="false">Add new parameter</string>
     <string name="muscle_groups">Muscle groups </string>
     <string name="send_message_text">Send message</string>
+    <string name="message_input_text">Message</string>
+    <string name="chat">Chat</string>
     <string name="day">Day</string>
     <string name="week">Week</string>
     <string name="month">Month</string>
@@ -313,4 +315,9 @@
     <string name="best_result">The best result</string>
     <string name="date_dummy">29.04.2021</string>
     <string name="dummy_percents">85%</string>
+<!--    TODO:create good trans-->
+    <string name="request_text">Wants to be your subscriber</string>
+    <string name="my_request_text">Want to be your subscriber</string>
+    <string name="decline">Decline</string>
+    <string name="accept">Accept</string>
 </resources>

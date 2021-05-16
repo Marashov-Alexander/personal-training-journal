@@ -10,6 +10,7 @@ import kotlinx.android.synthetic.main.activity_base_fragment.view.*
 import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.activities.BaseFragmentActivity
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.AUTHOR_ID_KEY
+import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.CHAT_ID_KEY
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.EXERCISE_ID_KEY
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.PAGE_KEY
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.USER_ID_KEY
@@ -91,6 +92,12 @@ class Router(private val activity: Activity) {
         val exerciseIdBundle = Bundle(1)
         exerciseIdBundle.putLong(EXERCISE_ID_KEY, exerciseId)
         showPage(Page.Fragment.Exercise, exerciseIdBundle)
+    }
+
+    fun showChatPage(chatId: Long){
+        val chatIdBundle = Bundle(1)
+        chatIdBundle.putLong(CHAT_ID_KEY, chatId)
+        showPage(Page.Fragment.Chat, chatIdBundle)
     }
 
     fun showResultsPage() {

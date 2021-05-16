@@ -50,7 +50,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="@id/author_icon"
         app:layout_constraintBottom_toBottomOf="@id/author_icon"
-        android:background="@color/white"
+        android:background="@color/background"
         android:layout_marginEnd="@dimen/padding_16"
         android:contentDescription="@string/send_message_icon"
         />

@@ -24,6 +24,7 @@ class ChatsFragment : BaseFragment() {
         chatsRecycler = view.chats_list
         val list = listOf("Легкая атлетика", "Бейсбол", "Теннис")
         val prof = ProfileItem("1234", 123,"Иванов Иван", list, true, null, 5, 10, 23,6)
+        chatsMutableList.clear()
         pushChat(0,"Dev", "Null", 5, prof)
         pushChat(1,"Java", "Forever", 0, prof)
         pushChat(2,"Kotlin", "Null", 10, prof)
@@ -32,9 +33,11 @@ class ChatsFragment : BaseFragment() {
                 holderType = ChatViewHolder::class,
                 layoutId = R.layout.item_chat,
                 dataSource = chats,
-                onClick = {item-> println("item ${item.id} clicked")},
+                onClick = {item-> println("item ${item.id} clicked")
+                router?.showChatPage(item.chatId)},
                 onStart = { item ->
                     println("item ${item.id} started")
+                    router?.showChatPage(item.chatId)
                 }
         )
         chatsRecycler?.adapter = chatAdapter

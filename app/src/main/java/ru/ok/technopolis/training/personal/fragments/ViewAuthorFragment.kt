@@ -36,9 +36,6 @@ import java.sql.Time
 
 class ViewAuthorFragment : BaseFragment() {
     private var profileNameAndIcon: View? = null
-    private var switcher: RadioGroup? = null
-    private var workoutsSwitcher: RadioButton? = null
-    private var exercisesSwitcher: RadioButton? = null
     private var subscribersNumber: TextView? = null
     private var subscriptionsNumber: TextView? = null
     private var trainSwitcher: View? = null

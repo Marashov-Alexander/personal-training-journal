@@ -188,6 +188,9 @@
         <item>Male</item>
         <item>Female</item>
     </string-array>
+    <string name="send_message_text">Написать сообщение</string>
+    <string name="message_input_text">Сообщение</string>
+    <string name="chat">Чат</string>
     <string name="drawer_item_calendar">Календарь тренировок</string>
     <string name="workout_info_string">Информация о тренировке</string>
     <string name="workout_duration">Предполагаемая длительность тренировки</string>
@@ -251,4 +254,8 @@
     <string name="more">Подробнее</string>
     <string name="period_dummy">26.04.2021 - 02.05.2021</string>
     <string name="best_result">Лучший результат</string>
+    <string name="request_text">Хочет подписаться на Вас</string>
+    <string name="my_request_text">Хочу подписаться на Вас</string>
+    <string name="decline">Отклонить</string>
+    <string name="accept">Принять</string>
 </resources>
