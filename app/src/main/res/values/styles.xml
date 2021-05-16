@@ -117,6 +117,16 @@
         <item name="cornerSize">50%</item>
     </style>
 
+    <style name="PeriodTextButton" parent="">
+        <item name="android:paddingVertical">@dimen/dimens_4dp</item>
+        <item name="android:maxLines">@integer/integer_1</item>
+        <item name="android:gravity">center</item>
+        <item name="android:textSize">22sp</item>
+        <item name="android:fontFamily">sans-serif-thin</item>
+        <item name="android:textStyle">italic</item>
+        <item name="android:textColor">@color/black</item>
+    </style>
+
     <style name="AppTheme" parent="Theme.MaterialComponents.Light">
         <!-- Customize your theme here. -->
         <item name="colorPrimary">@color/light_blue</item>

@@ -3,8 +3,10 @@ package ru.ok.technopolis.training.personal.views
 import android.content.Context
 import android.graphics.Canvas
 import android.graphics.Color
+import android.graphics.DashPathEffect
 import android.graphics.Paint
 import android.graphics.Path
+import android.graphics.PathEffect
 import android.graphics.Rect
 import android.graphics.Typeface
 import android.util.AttributeSet
@@ -15,6 +17,7 @@ import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.items.ProgressItem
 import kotlin.math.max as max1
 
+
 class ProgressChartView @JvmOverloads constructor(
     context: Context,
     attrs: AttributeSet? = null,
@@ -24,11 +27,12 @@ class ProgressChartView @JvmOverloads constructor(
     private val itemWidth: Int
     private val originalData: List<ProgressItem>
     private val goalValue: Float
-    private val goalMeasureUnit: String
+    private val measureUnit: String
 
     private val roundedFillPaint = Paint()
     private val roundedBorderPaint = Paint()
     private val strokePaint = Paint()
+    private val dashedStrokePaint = Paint()
     private val fillPaint = Paint()
 
     private val redPaint = Paint()
@@ -57,6 +61,7 @@ class ProgressChartView @JvmOverloads constructor(
         private const val DEFAULT_STROKE_WIDTH_DP = 2
         private const val DEFAULT_SPACE_PROPORTION = 0.4f
         private const val DEFAULT_GOAL_LINE_COLOR = Color.BLUE
+        private const val DEFAULT_START_LINE_COLOR = Color.GRAY
     }
 
     init {
@@ -69,6 +74,7 @@ class ProgressChartView @JvmOverloads constructor(
         var itemStrokeColorAttr = DEFAULT_STROKE_COLOR
         var itemStrokeWidthAttr = DEFAULT_STROKE_WIDTH_DP
         var goalLineAttr = DEFAULT_GOAL_LINE_COLOR
+        var startLineAttr = DEFAULT_START_LINE_COLOR
 
         if (attrs != null) {
             val typedArray = context.obtainStyledAttributes(attrs, R.styleable.ProgressChartView)
@@ -80,6 +86,7 @@ class ProgressChartView @JvmOverloads constructor(
             itemStrokeColorAttr = typedArray.getColor(R.styleable.ProgressChartView_strokeColor, itemStrokeColorAttr)
             itemStrokeWidthAttr = typedArray.getColor(R.styleable.ProgressChartView_strokeWidth, itemStrokeWidthAttr)
             goalLineAttr = typedArray.getColor(R.styleable.ProgressChartView_goalLineColor, goalLineAttr)
+            startLineAttr = typedArray.getColor(R.styleable.ProgressChartView_startLineColor, startLineAttr)
             typedArray.recycle()
         }
 
@@ -97,7 +104,7 @@ class ProgressChartView @JvmOverloads constructor(
             ProgressItem(90f, "26.05")
         )
         goalValue = 100f
-        goalMeasureUnit = "%"
+        measureUnit = "%"
 
         fillPaint.style = Paint.Style.FILL
         fillPaint.color = itemColorFromAttr
@@ -111,6 +118,12 @@ class ProgressChartView @JvmOverloads constructor(
         strokePaint.style = Paint.Style.STROKE
         strokePaint.color = itemStrokeColorAttr
         strokePaint.strokeWidth = itemStrokeWidthAttr.toFloat()
+
+        val dashEffect: PathEffect = DashPathEffect(floatArrayOf(10f, 5f), 0f)
+        dashedStrokePaint.style = Paint.Style.STROKE
+        dashedStrokePaint.color = startLineAttr
+        dashedStrokePaint.strokeWidth = itemStrokeWidthAttr * 2f
+        dashedStrokePaint.pathEffect = dashEffect
 
         regularTextPaint.style = Paint.Style.FILL
         regularTextPaint.textSize = itemWidth / context.resources.displayMetrics.scaledDensity
@@ -183,6 +196,7 @@ class ProgressChartView @JvmOverloads constructor(
         }
 
         val maxValue: Float = max1(originalData.maxBy { it.value }!!.value, goalValue)
+        val startValue: Float = originalData.first().value
         val borderValue = maxValue * 1.25f
         val measuredHeight = measuredHeight - paddingTop - paddingBottom
         val chartHeight = measuredHeight * 0.8f
@@ -196,8 +210,9 @@ class ProgressChartView @JvmOverloads constructor(
         canvas.drawRoundRect(chartStartX, strokePaint.strokeWidth, chartEndX, paddingTop + chartHeight, radius, radius, roundedFillPaint)
 
         path.reset()
-        path.addRoundRect(chartStartX, strokePaint.strokeWidth, chartEndX, chartHeight, radius, radius, Path.Direction.CW)
-        path.addRect(chartStartX, chartHeight, chartEndX, measuredHeight.toFloat(), Path.Direction.CW)
+        path.addRoundRect(chartStartX, strokePaint.strokeWidth, chartEndX, chartHeight + paddingTop, radius, radius, Path.Direction.CW)
+
+        path.addRect(chartStartX, chartHeight + paddingTop, chartEndX, measuredHeight.toFloat(), Path.Direction.CW)
         canvas.save()
         canvas.clipPath(path)
 
@@ -236,11 +251,17 @@ class ProgressChartView @JvmOverloads constructor(
         canvas.restore()
 
         // линия цели
-        val startStopY = paddingTop + chartHeight - goalValue / borderValue * chartHeight
-        canvas.drawLine(chartStartX, startStopY, chartEndX, startStopY, goalLinePaint)
+        val goalY = paddingTop + chartHeight - goalValue / borderValue * chartHeight
+        canvas.drawLine(chartStartX, goalY, chartEndX, goalY, goalLinePaint)
         // текст цели
         regularTextPaint.textAlign = Paint.Align.RIGHT
-        canvas.drawText("$goalValue $goalMeasureUnit ", chartEndX, startStopY * 0.99f, regularTextPaint)
+        canvas.drawText("$goalValue $measureUnit ", chartEndX, goalY * 0.99f, regularTextPaint)
+
+        // линия старта
+        val startY = paddingTop + chartHeight - startValue / borderValue * chartHeight
+        canvas.drawLine(chartStartX, startY, chartEndX, startY, dashedStrokePaint)
+        // текст старта
+        canvas.drawText("$startValue $measureUnit ", chartEndX, startY * 0.99f, regularTextPaint)
         regularTextPaint.textAlign = Paint.Align.LEFT
 
         // рамка графика (обводка)

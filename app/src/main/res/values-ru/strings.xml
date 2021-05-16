@@ -244,4 +244,11 @@
     <string name="show_in_short_description">Отображать в кратком описании</string>
     <string name="parameters_list">Параметры</string>
     <string name="muscle_groups">Группы мыщц </string>
+    <string name="day">День</string>
+    <string name="week">Неделя</string>
+    <string name="month">Месяц</string>
+    <string name="year">Год</string>
+    <string name="more">Подробнее</string>
+    <string name="period_dummy">26.04.2021 - 02.05.2021</string>
+    <string name="best_result">Лучший результат</string>
 </resources>
