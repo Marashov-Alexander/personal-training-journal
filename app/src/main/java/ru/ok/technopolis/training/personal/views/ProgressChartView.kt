@@ -173,7 +173,7 @@ class ProgressChartView @JvmOverloads constructor(
                     true
                 }
                 else -> {
-                    false
+                    true
                 }
             }
         }
