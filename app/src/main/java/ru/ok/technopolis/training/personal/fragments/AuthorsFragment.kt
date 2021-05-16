@@ -46,9 +46,9 @@ class AuthorsFragment : BaseFragment() {
         recycler?.layoutManager = workoutsLayoutManager
 
         val layoutParams: LinearLayout.LayoutParams = RadioGroup.LayoutParams(
-                RadioGroup.LayoutParams.WRAP_CONTENT,
-                RadioGroup.LayoutParams.WRAP_CONTENT)
-        layoutParams.setMargins(15, 5, 15, 5)
+                RadioGroup.LayoutParams.MATCH_PARENT,
+                RadioGroup.LayoutParams.MATCH_PARENT)
+        layoutParams.setMargins(15, 0, 15, 0)
         val sports = mutableListOf<String>()
 
         for (author in authorsMutableList) {
@@ -59,21 +59,24 @@ class AuthorsFragment : BaseFragment() {
         newRadioButton.setText(R.string.all_filter_text)
         newRadioButton.id = 0
         newRadioButton.buttonDrawable = null
-        newRadioButton.background.setTint(R.drawable.border_radio_button_selector)
+        newRadioButton.textSize = 20.0F
+        newRadioButton.isChecked = true
         newRadioButton.setBackgroundResource(R.drawable.border_radio_button_selector)
-        newRadioButton.setPadding(35,0,35,0)
+        newRadioButton.setPadding(35,10,35,10)
+        newRadioButton.textAlignment = View.TEXT_ALIGNMENT_CENTER
         newRadioButton.setTextColor(getColor(requireContext(), R.color.design_default_color_secondary_variant))
-        newRadioButton.isSelected = true
         buttonsGroup?.addView(newRadioButton, layoutParams)
         var i = 1
         val categories = sports.distinct()
         for (category in categories) {
             val newRB= RadioButton(activity)
             newRB.text = category
+            newRB.textAlignment = View.TEXT_ALIGNMENT_CENTER
             newRB.id = i
             newRB.buttonDrawable = null
+            newRB.textSize = 20.0F
             newRB.setBackgroundResource(R.drawable.border_radio_button_selector)
-            newRB.setPadding(35,0,35,0)
+            newRB.setPadding(35,10,35,10)
             i ++
             buttonsGroup?.addView(newRB, layoutParams)
         }

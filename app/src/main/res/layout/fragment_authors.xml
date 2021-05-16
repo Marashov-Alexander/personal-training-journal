@@ -6,27 +6,19 @@
     <HorizontalScrollView
         android:id="@+id/scrollview"
         android:layout_width="match_parent"
-        android:layout_height="@dimen/padding_40"
-
+        android:layout_height="@dimen/padding_60"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintBottom_toTopOf="@id/authors_list"
-
         >
-        <LinearLayout
-            android:id="@+id/linearMain"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:orientation="horizontal"
-            >
             <RadioGroup
                 android:id="@+id/author_categories_buttons"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
                 android:orientation="horizontal"
+                android:layout_gravity="center_vertical"
                 >
             </RadioGroup>
-        </LinearLayout>
     </HorizontalScrollView>
 
     <androidx.recyclerview.widget.RecyclerView
