@@ -15,6 +15,7 @@ import android.view.MotionEvent
 import android.view.View
 import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.items.ProgressItem
+import kotlin.math.abs
 import kotlin.math.max as max1
 
 
@@ -47,9 +48,19 @@ class ProgressChartView @JvmOverloads constructor(
     private val path = Path()
     private val textRect = Rect()
 
-    private var startMoveX = 0f
     private var chartOffset = 0f
     private var maxOffset = 0f
+
+    private var lockListener = {}
+    private var unlockListener = {}
+
+    private var startMoveX = 0f
+    private var startMoveY = 0f
+
+    private var scrolling: Boolean? = null
+    private var samplesCounter: Int = 0
+    private var averageDeltaX = 0f
+    private var averageDeltaY = 0f
 
     companion object {
         private const val DEFAULT_ITEM_WIDTH_DP = 20
@@ -62,6 +73,9 @@ class ProgressChartView @JvmOverloads constructor(
         private const val DEFAULT_SPACE_PROPORTION = 0.4f
         private const val DEFAULT_GOAL_LINE_COLOR = Color.BLUE
         private const val DEFAULT_START_LINE_COLOR = Color.GRAY
+
+        private const val NEEDED_SAMPLES_COUNT = 2
+        private const val CATCH_FACTOR = 1
     }
 
     init {
@@ -153,29 +167,71 @@ class ProgressChartView @JvmOverloads constructor(
         roundedFillPaint.color = Color.WHITE
 
         setOnTouchListener { _, motion ->
+            var caught: Boolean = scrolling ?: true
             val rawX = motion.rawX
+            val rawY = motion.rawY
+            val deltaY = rawY - startMoveY
+            val deltaX = rawX - startMoveX
             when (motion.action) {
                 MotionEvent.ACTION_DOWN -> {
+                    averageDeltaX = 0f
+                    averageDeltaY = 0f
+                    samplesCounter = 0
+                    scrolling = null
                     startMoveX = rawX
-                    true
+                    startMoveY = rawY
+                }
+                MotionEvent.ACTION_UP -> {
+                    averageDeltaX = 0f
+                    averageDeltaY = 0f
+                    samplesCounter = 0
+                    scrolling = null
+                    unlockListener()
                 }
                 MotionEvent.ACTION_MOVE -> {
-                    val delta = rawX - startMoveX
-                    chartOffset -= delta
-                    if (chartOffset < 0f) {
-                        chartOffset = 0f
+                    when {
+                        samplesCounter == 0 -> {
+                            averageDeltaX = 0f
+                            averageDeltaY = 0f
+                            samplesCounter = 0
+                            scrolling = null
+                            startMoveX = rawX
+                            startMoveY = rawY
+                            samplesCounter++
+                        }
+                        samplesCounter < NEEDED_SAMPLES_COUNT -> {
+                            samplesCounter++
+                            averageDeltaX += deltaX
+                            averageDeltaY += deltaY
+                        }
+                        samplesCounter == NEEDED_SAMPLES_COUNT -> {
+                            averageDeltaX /= samplesCounter
+                            averageDeltaY /= samplesCounter
+                            caught = abs(averageDeltaX) > abs(averageDeltaY) * CATCH_FACTOR
+                            samplesCounter++
+                            scrolling = caught
+                            if (caught) {
+                                lockListener()
+                            } else {
+                                unlockListener()
+                            }
+                        }
+                        else -> {
+                            chartOffset -= deltaX
+                            if (chartOffset < 0f) {
+                                chartOffset = 0f
+                            }
+                            if (chartOffset > maxOffset) {
+                                chartOffset = maxOffset
+                            }
+                            invalidate()
+                        }
                     }
-                    if (chartOffset > maxOffset) {
-                        chartOffset = maxOffset
-                    }
-                    invalidate()
                     startMoveX = rawX
-                    true
-                }
-                else -> {
-                    true
+                    startMoveY = rawY
                 }
             }
+            caught
         }
     }
 
@@ -186,8 +242,12 @@ class ProgressChartView @JvmOverloads constructor(
         val width = resolveSize(rawWidth, widthMeasureSpec)
         val itemCount = ((measuredWidth + itemWidth - paddingLeft - paddingRight) / (itemWidth * (1f + DEFAULT_SPACE_PROPORTION))).toInt() - 1
         maxOffset = itemWidth * max1(0, originalData.size - itemCount) * (1f + DEFAULT_SPACE_PROPORTION) + itemWidth / 2f
-        println("itemCount=$itemCount, length=${originalData.size}, maxOffset=$maxOffset")
         setMeasuredDimension(width, height)
+    }
+
+    fun setScrollLockListener(lockListener: () -> Unit, unlockListener: () -> Unit) {
+        this.lockListener = lockListener
+        this.unlockListener = unlockListener
     }
 
     override fun onDraw(canvas: Canvas) {
