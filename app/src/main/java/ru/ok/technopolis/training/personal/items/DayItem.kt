@@ -1,16 +1,15 @@
 package ru.ok.technopolis.training.personal.items
 
-import ru.ok.technopolis.training.personal.items.interfaces.WithId
 import java.util.Date
 
 data class DayItem(
     override val id: String,
     var date: Date,
     var name: String,
-    var isChosen: Boolean,
     var isToday: Boolean,
-    var event: EventColor
-) : WithId
+    var event: EventColor,
+    override var isChosen: Boolean = false
+) : SelectableItem(id, isChosen)
 
 enum class EventColor { RED, GREEN, WHITE, NONE }
 

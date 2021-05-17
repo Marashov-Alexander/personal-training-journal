@@ -9,6 +9,7 @@ import io.reactivex.disposables.CompositeDisposable
 import ru.ok.technopolis.training.personal.activities.BaseActivity
 import ru.ok.technopolis.training.personal.db.AppDatabase
 import ru.ok.technopolis.training.personal.lifecycle.Router
+import ru.ok.technopolis.training.personal.views.ProgressChartView
 
 abstract class BaseFragment : Fragment() {
 
@@ -35,4 +36,21 @@ abstract class BaseFragment : Fragment() {
     abstract fun getFragmentLayoutId(): Int
 
     protected open fun isBottomNavVisible(): Boolean = true
+
+    fun switchChartMode(mode: ProgressChartView.ChartMode) {
+        when (mode) {
+            ProgressChartView.ChartMode.DAY -> {
+
+            }
+            ProgressChartView.ChartMode.WEEK -> {
+
+            }
+            ProgressChartView.ChartMode.MONTH -> {
+
+            }
+            ProgressChartView.ChartMode.YEAR -> {
+
+            }
+        }
+    }
 }

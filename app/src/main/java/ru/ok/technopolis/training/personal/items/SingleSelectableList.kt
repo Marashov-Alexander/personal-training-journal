@@ -1,10 +1,10 @@
 package ru.ok.technopolis.training.personal.items
 
-class DaysList(items: MutableList<DayItem>): ItemsList<DayItem>(items) {
+class SingleSelectableList<Item: SelectableItem>(items: MutableList<Item>): ItemsList<Item>(items) {
 
-    var selectedItem: DayItem? = null
+    var selectedItem: Item? = null
 
-    fun select(item: DayItem) {
+    fun select(item: Item) {
         selectedItem?.let {
             val oldPos = items.indexOf(it)
             it.isChosen = false
@@ -14,6 +14,10 @@ class DaysList(items: MutableList<DayItem>): ItemsList<DayItem>(items) {
         item.isChosen = true
         update(position, item)
         selectedItem = item
+    }
+
+    fun select(position: Int) {
+        select(items[position])
     }
 
 }

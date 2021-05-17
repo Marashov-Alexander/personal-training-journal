@@ -51,7 +51,7 @@ class WorkoutPlanFragment : BaseFragment() {
             pushDay(true)
         }
 
-        val itemsList = DaysList(daysMutableList)
+        val itemsList = SingleSelectableList(daysMutableList)
         val dayAdapter = DayListAdapter(
                 holderType = DayViewHolder::class,
                 layoutId = R.layout.day_item,
