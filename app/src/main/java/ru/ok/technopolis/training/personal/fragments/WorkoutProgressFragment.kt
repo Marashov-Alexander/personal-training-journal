@@ -2,13 +2,18 @@ package ru.ok.technopolis.training.personal.fragments
 
 import android.os.Bundle
 import android.view.View
+import androidx.recyclerview.widget.LinearLayoutManager
+import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_workout_progress.*
 import okhttp3.internal.immutableListOf
 import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.controllers.ButtonGroupController
+import ru.ok.technopolis.training.personal.items.BundleItem
 import ru.ok.technopolis.training.personal.items.ProgressItem
 import ru.ok.technopolis.training.personal.items.SelectableItem
 import ru.ok.technopolis.training.personal.items.SingleSelectableList
+import ru.ok.technopolis.training.personal.utils.recycler.adapters.BundleAdapter
+import ru.ok.technopolis.training.personal.viewholders.BundleItemViewHolder
 import ru.ok.technopolis.training.personal.views.CustomScrollView
 import ru.ok.technopolis.training.personal.views.ProgressChartView
 import ru.ok.technopolis.training.personal.views.SelectableButtonWrapper
@@ -18,6 +23,7 @@ class WorkoutProgressFragment : BaseFragment() {
     private var scrollView: CustomScrollView? = null
     private var chart: ProgressChartView? = null
     private var buttonGroup: ButtonGroupController? = null
+    private var exerciseRecycler: RecyclerView? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -31,6 +37,26 @@ class WorkoutProgressFragment : BaseFragment() {
                 scrollView?.isEnableScrolling = true
             }
         )
+
+        exerciseRecycler = exercises_recycler
+        val itemsList = SingleSelectableList(mutableListOf(
+            BundleItem("0", 0, "Все"),
+            BundleItem("1", 1, "Упражнение 1"),
+            BundleItem("2", 2, "Упражнение 2"),
+            BundleItem("3", 3, "Упражнение 3")
+        ))
+        val exerciseAdapter = BundleAdapter(
+            holderType = BundleItemViewHolder::class,
+            layoutId = R.layout.item_bundle,
+            dataSource = itemsList,
+            onBundleClick = { bundleItem, _ ->
+                println("Bundle $bundleItem clicked")
+                itemsList.select(bundleItem)
+            }
+        )
+        exerciseRecycler?.adapter = exerciseAdapter
+        val layoutManager = LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false)
+        exerciseRecycler?.layoutManager = layoutManager
         
         val data = immutableListOf(
             ProgressItem(60f, "17.05"),
