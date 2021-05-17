@@ -52,6 +52,7 @@ class ChatFragment : BaseFragment() {
             print{"WE ARE SENDING//////////////////////////////"}
             performSendMessage()
         }
+        dialog?.scrollToPosition(adapter.itemCount - 1)
     }
 
 
@@ -89,6 +90,7 @@ class ChatFragment : BaseFragment() {
         messageText?.text?.clear()
         val imm = activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
         imm.hideSoftInputFromWindow(view?.windowToken, 0)
+        dialog?.scrollToPosition(adapter.itemCount - 1)
 //        ViewActions.closeSoftKeyboard()
         //Закрыть клаву
     }
