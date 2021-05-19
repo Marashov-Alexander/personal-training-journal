@@ -258,4 +258,9 @@
     <string name="my_request_text">Хочу подписаться на Вас</string>
     <string name="decline">Отклонить</string>
     <string name="accept">Принять</string>
+    <string name="start_in">Начните через</string>
+    <string name="exercise_description"><u>Описание упражнения</u></string>
+    <string name="repeats">Подходы</string>
+    <string name="record_enabled"><u>Запись включена</u></string>
+    <string name="skip">Пропустить</string>
 </resources>

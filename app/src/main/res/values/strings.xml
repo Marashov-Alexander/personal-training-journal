@@ -130,6 +130,7 @@
     <string name="choose_groups">Choose groups</string>
     <string name="choose_all">Select all</string>
     <string name="_0_00" translatable="false">0.00</string>
+    <string name="_000" translatable="false">00:00:00</string>
     <string name="result">Result</string>
     <string name="parameter_progress">The goal was completed by %.1f%%</string>
     <string name="greater_better">The more the better</string>
@@ -320,4 +321,10 @@
     <string name="my_request_text">Want to be your subscriber</string>
     <string name="decline">Decline</string>
     <string name="accept">Accept</string>
+    <string name="start_in">Start in</string>
+    <string name="exercise_description"><u>Exercise description</u></string>
+    <string name="info_btn">info_btn</string>
+    <string name="repeats">Repeats</string>
+    <string name="record_enabled"><u>Record on</u></string>
+    <string name="skip">Skip</string>
 </resources>

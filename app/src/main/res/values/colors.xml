@@ -2,6 +2,7 @@
 <resources>
     <color name="black">#000000</color>
     <color name="red">#FF0000</color>
+    <color name="dark_red">#E70000</color>
     <color name="red_transparent">#4DFF0000</color>
     <color name="orange">#EE8208</color>
 
