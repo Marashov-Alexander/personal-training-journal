@@ -74,6 +74,7 @@
         app:layout_constraintTop_toTopOf="@id/exercise_description_icon"
         app:layout_constraintBottom_toBottomOf="@id/exercise_description_icon"
         app:layout_constraintEnd_toStartOf="@id/exercise_description_icon"
+        android:padding="@dimen/dimens_8dp"
         android:layout_marginEnd="@dimen/dimens_8dp"
         />
 
@@ -86,6 +87,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toTopOf="@id/timer_image"
         android:scaleY="-1"
+        android:padding="12dp"
         android:contentDescription="@string/info_btn" />
 
     <ImageView

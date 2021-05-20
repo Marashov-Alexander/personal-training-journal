@@ -2,12 +2,7 @@ package ru.ok.technopolis.training.personal.lifecycle
 
 import android.app.Activity
 import android.content.Intent
-import android.opengl.Visibility
 import android.os.Bundle
-import android.view.View
-import kotlinx.android.synthetic.main.activity_base_fragment.*
-import kotlinx.android.synthetic.main.activity_base_fragment.view.*
-import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.activities.BaseFragmentActivity
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.AUTHOR_ID_KEY
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.CHAT_ID_KEY
@@ -17,7 +12,6 @@ import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.USER_ID_KEY
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.WORKOUT_ID_KEY
 import ru.ok.technopolis.training.personal.utils.logger.Logger
 import kotlin.reflect.full.createInstance
-import kotlin.reflect.jvm.internal.impl.metadata.ProtoBuf
 
 class Router(private val activity: Activity) {
 
@@ -81,11 +75,25 @@ class Router(private val activity: Activity) {
         showPage(Page.Fragment.TrainingView)
     }
 
+    fun showActiveExerciseOldPage(userId: Long, workoutId: Long) {
+        val workoutIdBundle = Bundle(2)
+        workoutIdBundle.putLong(USER_ID_KEY, userId)
+        workoutIdBundle.putLong(WORKOUT_ID_KEY, workoutId)
+        showPage(Page.Fragment.ActiveExerciseOld, workoutIdBundle)
+    }
+
     fun showActiveExercisePage(userId: Long, workoutId: Long) {
         val workoutIdBundle = Bundle(2)
         workoutIdBundle.putLong(USER_ID_KEY, userId)
         workoutIdBundle.putLong(WORKOUT_ID_KEY, workoutId)
         showPage(Page.Fragment.ActiveExercise, workoutIdBundle)
+    }
+
+    fun showActivePreExercisePage(userId: Long, workoutId: Long) {
+        val workoutIdBundle = Bundle(2)
+        workoutIdBundle.putLong(USER_ID_KEY, userId)
+        workoutIdBundle.putLong(WORKOUT_ID_KEY, workoutId)
+        showPage(Page.Fragment.ActivePreExercise, workoutIdBundle)
     }
 
     fun showExercisePage(exerciseId: Long) {
