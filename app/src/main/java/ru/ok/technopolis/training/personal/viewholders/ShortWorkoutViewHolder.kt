@@ -71,4 +71,5 @@ class ShortWorkoutViewHolder (
             image.setOnClickListener { onStart() }
         }
     }
+
 }

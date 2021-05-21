@@ -103,7 +103,7 @@ sealed class Page : Serializable {
         }
 
         object Exercise : Fragment() {
-            override val clazz = ExerciseFragment::class
+            override val clazz = ExerciseViewFragment::class
         }
 
         object Chat: Fragment() {
@@ -111,7 +111,7 @@ sealed class Page : Serializable {
         }
 
         object Workout : Fragment() {
-            override val clazz = WorkoutFragment::class
+            override val clazz = WorkoutViewFragment::class
         }
 
         object Author : Fragment() {

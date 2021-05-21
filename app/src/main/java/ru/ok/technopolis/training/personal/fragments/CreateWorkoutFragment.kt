@@ -61,6 +61,10 @@ class CreateWorkoutFragment : BaseFragment() {
                 onClick = { exercise ->
                     print("Exercise $exercise clicked")
                 },
+                onStart = {exercise ->
+                    print("Exercise $exercise started")
+                    router?.showExercisePage(exercise.id.toLong())
+                },
                 onLongExerciseClick = { item, itemView ->
                     val popup = PopupMenu(requireContext(), itemView)
                     popup.inflate(R.menu.exercise_menu)

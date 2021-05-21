@@ -328,4 +328,6 @@
     <string name="record_enabled"><u>Record on</u></string>
     <string name="skip">Skip</string>
     <string name="its_clear">All clear!</string>
+    <string name="author">Author:</string>
+    <string name="redactor">Redactor:</string>
 </resources>

@@ -119,6 +119,12 @@ class ExerciseItemViewHolder(
         }
     }
 
+    fun setOnStartClickListener(onClick: () -> Unit) {
+        exerciseBackground.setOnClickListener {
+          onClick()
+        }
+    }
+
     enum class CornerMode {
         ALL, NONE, TOP, BOTTOM
     }

@@ -47,7 +47,7 @@ class ChatsFragment : BaseFragment() {
     }
 
     private fun pushChat(id: Int, name: String, description: String, unreadMessages: Int, profile: ProfileItem) {
-        chatsMutableList.add(ChatItem(id.toString(), id.toLong(), name, null, description, unreadMessages, Time(System.currentTimeMillis()), mutableListOf<ProfileItem>(),profile ))
+        chatsMutableList.add(ChatItem(id.toString(), id.toLong(), name, null, description, unreadMessages, Time(System.currentTimeMillis()), mutableListOf(),profile ))
 
     }
 

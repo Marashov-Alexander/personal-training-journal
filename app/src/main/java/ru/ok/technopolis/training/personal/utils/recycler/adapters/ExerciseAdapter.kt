@@ -14,6 +14,7 @@ class ExerciseAdapter(
         @LayoutRes layoutId: Int,
         dataSource: ItemsList<ExerciseItem>,
         onClick: (ExerciseItem) -> Unit = {},
+        private val onStart: (ExerciseItem) -> Unit = {},
         private val onLongExerciseClick: (ExerciseItem, View) -> Unit = { _, _ -> }
 ) : BaseListAdapter<ExerciseItem>(holderType, layoutId, dataSource, onClick) {
 
@@ -26,6 +27,10 @@ class ExerciseAdapter(
 
         item.cornerMode = item.getCornerMode(prevItem, nextItem)
         item.counterVisibility = item.getCounterMode(item.cornerMode)
+
+        exerciseHolder.setOnStartClickListener {
+            onStart.invoke(item)
+        }
 
         exerciseHolder.setLongClickListener { view ->
             onLongExerciseClick.invoke(item, view)

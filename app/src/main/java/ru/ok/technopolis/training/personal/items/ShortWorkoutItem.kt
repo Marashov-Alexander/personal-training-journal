@@ -13,5 +13,6 @@ data class ShortWorkoutItem(
         val done: Boolean,
         val downloadsNumber: Int,
         val rank: Double,
+        val private: Boolean,
         val invisible: Boolean
 ): WithId

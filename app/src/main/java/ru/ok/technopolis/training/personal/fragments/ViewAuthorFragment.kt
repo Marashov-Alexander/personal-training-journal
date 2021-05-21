@@ -3,22 +3,11 @@ package ru.ok.technopolis.training.personal.fragments
 import android.graphics.Color
 import android.os.Bundle
 import android.view.View
-import android.widget.RadioButton
-import android.widget.RadioGroup
 import android.widget.TextView
-import androidx.core.content.ContextCompat
-import androidx.core.view.get
-import androidx.core.view.size
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.GridLayoutManager
-import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.fragment_profile.view.*
 import kotlinx.android.synthetic.main.fragment_view_author.view.*
-import kotlinx.android.synthetic.main.fragment_view_author.view.profile
-import kotlinx.android.synthetic.main.fragment_view_author.view.subscribers_number
-import kotlinx.android.synthetic.main.fragment_view_author.view.subscriptions_number
-import kotlinx.android.synthetic.main.fragment_view_author.view.switcher
-import kotlinx.android.synthetic.main.item_authors_switcher.view.*
 import kotlinx.android.synthetic.main.item_profile.view.*
 import kotlinx.android.synthetic.main.item_train_ex_switcher.*
 import kotlinx.android.synthetic.main.item_train_ex_switcher.view.*
@@ -39,6 +28,7 @@ class ViewAuthorFragment : BaseFragment() {
     private var subscribersNumber: TextView? = null
     private var subscriptionsNumber: TextView? = null
     private var trainSwitcher: View? = null
+    private var sendMessage: CardView? = null
 
     private var recyclerView: RecyclerView? = null
     private var workoutsMutableList = mutableListOf<ShortWorkoutItem>()
@@ -49,10 +39,16 @@ class ViewAuthorFragment : BaseFragment() {
         profileNameAndIcon = view.profile
         subscribersNumber = view.subscribers_number
         subscriptionsNumber = view.subscriptions_number
+        sendMessage = view.send_author_message
+
         recyclerView = view.author_tr_ex_list
         val trSwLine = view.train_switch_line
         val exSwitchLine = view.ex_switch_line
 
+        //TODO:Get chat id for the author from db of create new one
+        sendMessage?.setOnClickListener {
+            router?.showChatPage(123)
+        }
 
         trainSwitcher = view.switcher
         var flag = true
@@ -167,6 +163,7 @@ class ViewAuthorFragment : BaseFragment() {
                 onClick = {workoutItem -> println("workout ${workoutItem.id} clicked")},
                 onStart = { workoutItem ->
                     println("workout ${workoutItem.id} started")
+                    router?.showWorkoutPage(workoutItem.id.toLong())
                 }
         )
         recyclerView?.adapter = workoutsAdapter
@@ -187,6 +184,7 @@ class ViewAuthorFragment : BaseFragment() {
                 onClick = { exItem -> println("workout ${exItem.id} clicked")},
                 onStart = { exItem ->
                     println("workout ${exItem.id} started")
+                    router?.showExercisePage(exItem.id.toLong())
                 }
         )
         recyclerView?.adapter = exAdapter
@@ -200,7 +198,7 @@ class ViewAuthorFragment : BaseFragment() {
 
     private fun pushWorkout(id: Int, name: String, category: String, description: String, sport: String, sharedNumber: Int, rank: Double) {
         workoutsMutableList.add(
-                ShortWorkoutItem(id.toString(), Time(System.currentTimeMillis()), name, category, sport, "40 min", true, sharedNumber, rank, false)
+                ShortWorkoutItem(id.toString(), Time(System.currentTimeMillis()), name, category, sport, "40 min", true, sharedNumber, rank, false, false)
         )
     }
 

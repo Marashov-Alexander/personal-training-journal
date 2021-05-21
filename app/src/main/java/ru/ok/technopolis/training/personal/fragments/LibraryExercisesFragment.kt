@@ -13,8 +13,6 @@ import ru.ok.technopolis.training.personal.utils.recycler.adapters.CategoryExerc
 import ru.ok.technopolis.training.personal.viewholders.CategoryExerciseViewHolder
 import java.sql.Time
 
-const val ARG_OBJECT = "object"
-
 class LibraryExercisesFragment : BaseFragment() {
     private var recycler: RecyclerView? = null
     private var workoutsMutableList = mutableListOf<ShortExerciseItem>()
@@ -43,36 +41,39 @@ class LibraryExercisesFragment : BaseFragment() {
         pushExercise3(5, "Приседания", "Силовые", "Базовые", 3, 5.0)
         pushExercise3(6, "Приседания 2", "Силовые", "Базовые", 6, 4.5)
 
-        pushCategory(0,"Популярное", workoutsMutableList)
-        pushCategory(1,"Кардио", workoutsMutableList2)
-        pushCategory(2,"Силовые", workoutsMutableList3)
+        pushCategory(0, "Популярное", workoutsMutableList)
+        pushCategory(1, "Кардио", workoutsMutableList2)
+        pushCategory(2, "Силовые", workoutsMutableList3)
 
         val categories = ItemsList(categoyElem)
         val catAdapter = CategoryExercisesAdapter(
                 holderType = CategoryExerciseViewHolder::class,
                 layoutId = R.layout.item_library_elements,
                 dataSource = categories,
-                onClick = {workoutItem -> println("workout ${workoutItem.id} clicked")},
+                onClick = { workoutItem -> println("workout ${workoutItem.id} clicked") },
                 onStart = { workoutItem ->
-                    println("workout ${workoutItem.id} started")
+                    println("workout ${workoutItem} started")
+                    router?.showExercisePage(workoutItem)
                 }
         )
         recycler?.adapter = catAdapter
         val workoutsLayoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         recycler?.layoutManager = workoutsLayoutManager
     }
-    private fun pushExercise(id: Int, name: String, category: String, description: String,  sharedNumber: Int, rank: Double) {
+
+    private fun pushExercise(id: Int, name: String, category: String, description: String, sharedNumber: Int, rank: Double) {
         workoutsMutableList.add(
                 ShortExerciseItem(id.toString(), Time(System.currentTimeMillis()), name, category, description, true, sharedNumber, rank)
         )
     }
 
-    private fun pushExercise2(id: Int, name: String, category: String, description: String,  sharedNumber: Int, rank: Double) {
+    private fun pushExercise2(id: Int, name: String, category: String, description: String, sharedNumber: Int, rank: Double) {
         workoutsMutableList2.add(
                 ShortExerciseItem(id.toString(), Time(System.currentTimeMillis()), name, category, description, true, sharedNumber, rank)
         )
     }
-    private fun pushExercise3(id: Int, name: String, category: String, description: String,  sharedNumber: Int, rank: Double) {
+
+    private fun pushExercise3(id: Int, name: String, category: String, description: String, sharedNumber: Int, rank: Double) {
         workoutsMutableList3.add(
                 ShortExerciseItem(id.toString(), Time(System.currentTimeMillis()), name, category, description, true, sharedNumber, rank)
         )

@@ -78,6 +78,7 @@ class WorkoutPlanFragment : BaseFragment() {
                 dataSource = workoutsList,
                 onClick = { workoutItem ->
                     println("workout ${workoutItem.id} clicked")
+                    router?.showWorkoutPage(workoutItem.id.toLong())
                 },
                 onStart = { workoutItem ->
                     println("workout ${workoutItem.id} started")

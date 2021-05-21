@@ -1,25 +1,22 @@
 package ru.ok.technopolis.training.personal.viewholders
 
-import android.view.TextureView
 import android.view.View
 import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.item_library_elements.view.*
-
 import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.items.CategoryWorkoutsItem
 import ru.ok.technopolis.training.personal.items.ItemsList
-import ru.ok.technopolis.training.personal.items.ShortWorkoutItem
 import ru.ok.technopolis.training.personal.utils.recycler.adapters.ShortWorkoutListAdapter
-import java.sql.Time
 
-class CategoryWorkoutsViewHolder (
+class CategoryWorkoutsViewHolder(
         itemView: View
-) : BaseViewHolder<CategoryWorkoutsItem>(itemView) {
+) :BaseViewHolder<CategoryWorkoutsItem>(itemView){
 
     private var categoryName: TextView = itemView.navigation_category_name
     private var workoutsList: RecyclerView = itemView.navigation_category_elements
+    private var viewWorkout: (Long) -> Unit = {}
 
     override fun bind(item: CategoryWorkoutsItem) {
         update(item)
@@ -34,18 +31,17 @@ class CategoryWorkoutsViewHolder (
                 holderType = ShortWorkoutViewHolder::class,
                 layoutId = R.layout.item_short_workout,
                 dataSource = workouts,
-                onClick = {workoutItem -> println("workout ${workoutItem.id} clicked")},
+                onClick = {},
                 onStart = { workoutItem ->
-                    println("workout ${workoutItem.id} started")
+                    viewWorkout.invoke(workoutItem.id.toLong())
                 }
         )
         workoutsList.adapter = workoutsAdapter
     }
 
 
-    fun setOnStartClickListener(onStart: () -> Unit) {
-        if (itemView.visibility == View.VISIBLE) {
-            workoutsList.setOnClickListener { onStart() }
-        }
+    fun setOnStartClickListener(onStart: (Long) -> Unit) {
+        this.viewWorkout = onStart
     }
+
 }

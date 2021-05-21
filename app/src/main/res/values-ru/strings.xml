@@ -259,6 +259,8 @@
     <string name="my_request_text">Хочу подписаться на Вас</string>
     <string name="decline">Отклонить</string>
     <string name="accept">Принять</string>
+    <string name="author">Автор: </string>
+    <string name="redactor">Редактор: </string>
     <string name="start_in">Начните через</string>
     <string name="exercise_description"><u>Описание упражнения</u></string>
     <string name="repeats">Подходы: %d/%d</string>
