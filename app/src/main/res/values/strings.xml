@@ -303,7 +303,7 @@
     <string name="delete_parameter" translatable="false">Delete parameter</string>
     <string name="parameters_list">Parameters</string>
     <string name="add_new_parameter" translatable="false">Add new parameter</string>
-    <string name="muscle_groups">Muscle groups </string>
+    <string name="muscle_groups"><u>Muscle groups</u> </string>
     <string name="send_message_text">Send message</string>
     <string name="message_input_text">Message</string>
     <string name="chat">Chat</string>
@@ -328,4 +328,7 @@
     <string name="record_enabled"><u>Record on</u></string>
     <string name="skip">Skip</string>
     <string name="its_clear">All clear!</string>
+    <string name="add_photo">Add photo</string>
+    <string name="add_video">Add video</string>
+    <string name="load_media">Upload photos or animations</string>
 </resources>

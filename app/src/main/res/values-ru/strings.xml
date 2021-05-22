@@ -246,7 +246,7 @@
     <string name="timer">Таймер</string>
     <string name="show_in_short_description">Отображать в кратком описании</string>
     <string name="parameters_list">Параметры</string>
-    <string name="muscle_groups">Группы мыщц </string>
+    <string name="muscle_groups"><u>Группы мыщц</u> </string>
     <string name="day">День</string>
     <string name="week">Неделя</string>
     <string name="month">Месяц</string>
@@ -265,4 +265,7 @@
     <string name="record_enabled"><u>Запись включена</u></string>
     <string name="skip">Пропустить</string>
     <string name="its_clear">Понятно!</string>
+    <string name="add_photo">Добавить фотографию</string>
+    <string name="add_video">Добавить видео</string>
+    <string name="load_media">Загрузите фотографии и анимации</string>
 </resources>
