@@ -8,6 +8,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.fragment_new_exercise_1.*
+import kotlinx.android.synthetic.main.view_appbar.*
 import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.db.entity.ParameterEntity
 import ru.ok.technopolis.training.personal.fragments.dialogs.ParameterDialogFragment
@@ -26,6 +27,7 @@ class CreateExerciseFragment1 : BaseFragment(), ParameterDialogFragment.Paramete
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        activity?.base_toolbar?.title = getString(R.string.exercise_creation)
         nextStepCard = next_step_card
         nextStepCard?.setOnClickListener {
             router?.showNewExercisePage2()

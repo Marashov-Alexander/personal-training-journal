@@ -6,6 +6,7 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.fragment_workout_plan.view.*
+import kotlinx.android.synthetic.main.view_appbar.*
 import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.items.*
 import ru.ok.technopolis.training.personal.utils.recycler.adapters.DayListAdapter
@@ -39,6 +40,7 @@ class WorkoutPlanFragment : BaseFragment() {
         recyclerView = view.days_recycler_view
         workoutsRecycler = view.scheduled_workouts_recycler
         addWorkoutButton = view.add_workout_button
+        activity?.base_toolbar?.title = getString(R.string.workouts_plan)
         addWorkoutButton?.setOnClickListener {
             router?.showNewWorkoutPage()
         }

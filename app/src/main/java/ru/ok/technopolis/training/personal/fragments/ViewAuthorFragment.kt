@@ -11,6 +11,7 @@ import kotlinx.android.synthetic.main.fragment_view_author.view.*
 import kotlinx.android.synthetic.main.item_profile.view.*
 import kotlinx.android.synthetic.main.item_train_ex_switcher.*
 import kotlinx.android.synthetic.main.item_train_ex_switcher.view.*
+import kotlinx.android.synthetic.main.view_appbar.*
 import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.items.ItemsList
 import ru.ok.technopolis.training.personal.items.ProfileItem
@@ -109,6 +110,9 @@ class ViewAuthorFragment : BaseFragment() {
         val list = listOf("Легкая атлетика", "Бейсбол", "Теннис")
         val authorId = (activity?.intent?.extras?.get(Page.AUTHOR_ID_KEY)) as Long
         val prof = ProfileItem("1234", authorId,"Иванов Иван", list, true, null, 5, 10, 23,6)
+
+        activity?.base_toolbar?.title = getString(R.string.author) + " ${prof.name}"
+
         var sportsList = ""
         for (sport in prof.sports!!) {
             sportsList += if (sport != prof.sports.last()) {

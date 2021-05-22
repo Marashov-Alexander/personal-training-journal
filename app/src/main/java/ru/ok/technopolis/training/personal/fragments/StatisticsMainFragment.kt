@@ -6,6 +6,7 @@ import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_statistics_main.view.*
+import kotlinx.android.synthetic.main.view_appbar.*
 import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.items.ItemsList
 import ru.ok.technopolis.training.personal.items.ShortExerciseItem
@@ -33,6 +34,8 @@ class StatisticsMainFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         toggle = view.toggle_background
         recyclerView = view.statistics_workout_ex_list
+        activity?.base_toolbar?.title = getString(R.string.statistics)
+
         loadItems(flag)
         var touchMode = 0
         val clickListener = View.OnClickListener {

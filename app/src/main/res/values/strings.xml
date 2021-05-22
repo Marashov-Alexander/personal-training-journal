@@ -330,4 +330,8 @@
     <string name="its_clear">All clear!</string>
     <string name="author">Author:</string>
     <string name="redactor">Redactor:</string>
+    <string name="workouts_plan">Workouts plan</string>
+    <string name="workout_creation">Workout creation</string>
+    <string name="exercise_creation">Exercise creation</string>
+    <string name="chats">Chats</string>
 </resources>

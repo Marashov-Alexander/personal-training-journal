@@ -267,4 +267,8 @@
     <string name="record_enabled"><u>Запись включена</u></string>
     <string name="skip">Пропустить</string>
     <string name="its_clear">Понятно!</string>
+    <string name="workouts_plan">План тренировок</string>
+    <string name="workout_creation">Создание тренировки</string>
+    <string name="exercise_creation">Создание упражнения</string>
+    <string name="chats">Сообщения</string>
 </resources>
