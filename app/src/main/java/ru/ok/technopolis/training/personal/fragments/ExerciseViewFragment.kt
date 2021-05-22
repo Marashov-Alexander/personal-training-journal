@@ -1,6 +1,9 @@
 package ru.ok.technopolis.training.personal.fragments
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.ImageSwitcher
 import android.widget.ImageView
@@ -19,6 +22,7 @@ import ru.ok.technopolis.training.personal.items.ShortExerciseItem
 import ru.ok.technopolis.training.personal.items.ShortParameterItem
 import ru.ok.technopolis.training.personal.items.SingleSelectableList
 import ru.ok.technopolis.training.personal.lifecycle.Page
+import ru.ok.technopolis.training.personal.utils.logger.Logger
 import ru.ok.technopolis.training.personal.utils.recycler.adapters.BundleAdapter
 import ru.ok.technopolis.training.personal.utils.recycler.adapters.ParameterAdapter
 import ru.ok.technopolis.training.personal.viewholders.BundleItemViewHolder
@@ -115,6 +119,24 @@ class ExerciseViewFragment : BaseFragment(), ParameterDialogFragment.ParameterDi
         exerciseShortInfoRecycler?.adapter = exerciseAdapter
         val layoutManager = LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false)
         exerciseShortInfoRecycler?.layoutManager = layoutManager
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        Logger.d(this, "onCreateOptionsMenu")
+        inflater.inflate(R.menu.change_menu, menu)
+
+        val button: MenuItem = menu.findItem(R.id.change_button)
+
+//        if (exercise not in currentUser.exercises) {
+        button.setIcon(R.drawable.ic_add_black_24dp)
+//        }
+
+        button.setOnMenuItemClickListener {
+//             if (exercise not in currentUser.exercises) {
+
+            true
+        }
+
     }
 
     override fun getFragmentLayoutId(): Int = R.layout.fragment_view_exercise

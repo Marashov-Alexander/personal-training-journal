@@ -1,7 +1,11 @@
 package ru.ok.technopolis.training.personal.fragments
 
+import android.content.IntentFilter
 import android.graphics.Color
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.TextView
 import androidx.cardview.widget.CardView
@@ -12,12 +16,20 @@ import kotlinx.android.synthetic.main.item_profile.view.*
 import kotlinx.android.synthetic.main.item_train_ex_switcher.*
 import kotlinx.android.synthetic.main.item_train_ex_switcher.view.*
 import kotlinx.android.synthetic.main.view_appbar.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import ru.ok.technopolis.training.personal.R
+import ru.ok.technopolis.training.personal.db.entity.UserEntity
 import ru.ok.technopolis.training.personal.items.ItemsList
 import ru.ok.technopolis.training.personal.items.ProfileItem
 import ru.ok.technopolis.training.personal.items.ShortExerciseItem
 import ru.ok.technopolis.training.personal.items.ShortWorkoutItem
 import ru.ok.technopolis.training.personal.lifecycle.Page
+import ru.ok.technopolis.training.personal.repository.CurrentUserRepository
+import ru.ok.technopolis.training.personal.repository.CurrentUserRepository.currentUser
+import ru.ok.technopolis.training.personal.utils.logger.Logger
 import ru.ok.technopolis.training.personal.utils.recycler.adapters.ShortExerciseListAdapter
 import ru.ok.technopolis.training.personal.utils.recycler.adapters.ShortWorkoutListAdapter
 import ru.ok.technopolis.training.personal.viewholders.ShortExerciseViewHolder
@@ -35,13 +47,15 @@ class ViewAuthorFragment : BaseFragment() {
     private var workoutsMutableList = mutableListOf<ShortWorkoutItem>()
     private var exerciseMutableList = mutableListOf<ShortExerciseItem>()
 
+    private var author: UserEntity? = null
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         profileNameAndIcon = view.profile
         subscribersNumber = view.subscribers_number
         subscriptionsNumber = view.subscriptions_number
         sendMessage = view.send_author_message
-
+        setHasOptionsMenu(true)
         recyclerView = view.author_tr_ex_list
         val trSwLine = view.train_switch_line
         val exSwitchLine = view.ex_switch_line
@@ -111,6 +125,7 @@ class ViewAuthorFragment : BaseFragment() {
         val authorId = (activity?.intent?.extras?.get(Page.AUTHOR_ID_KEY)) as Long
         val prof = ProfileItem("1234", authorId,"Иванов Иван", list, true, null, 5, 10, 23,6)
 
+        author = UserEntity(prof.name, prof.name, prof.name, "123", "f", "", -1, prof.userId)
         activity?.base_toolbar?.title = getString(R.string.author) + " ${prof.name}"
 
         var sportsList = ""
@@ -210,6 +225,29 @@ class ViewAuthorFragment : BaseFragment() {
         exerciseMutableList.add(
                 ShortExerciseItem(id.toString(), Time(System.currentTimeMillis()), name, category, description, true, sharedNumber, rank)
         )
+    }
+
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        Logger.d(this, "onCreateOptionsMenu")
+        inflater.inflate(R.menu.subscribe_menu, menu)
+
+        val button: MenuItem = menu.findItem(R.id.subscribe_button)
+
+//        if (author?.id in currentUser.subscribers) {
+//            button.setIcon(R.drawable.ic_persone_added_)
+//        }  else if (author?.id in currentUser.weithingList) {
+//            button.setIcon(R.drawable.ic_waiting_approval)
+//        }
+
+        button.setOnMenuItemClickListener {
+//            if (author?.id not in currentUser.subscribers) {
+            button.setIcon(R.drawable.ic_waiting_approval)
+//            var chatId = db.createChat()
+//            router?.showChatPage(123)
+            true
+        }
+
     }
 
     override fun getFragmentLayoutId() = R.layout.fragment_view_author

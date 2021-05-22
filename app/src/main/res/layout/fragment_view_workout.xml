@@ -83,7 +83,7 @@
             android:layout_height="@dimen/dimens_24dp"
             android:layout_margin="@dimen/padding_5"
             android:contentDescription="@string/workout_downloads"
-            android:src="@drawable/ic_baseline_flash_on_24"
+            android:src="@drawable/ic_difficulty_"
             app:layout_constraintStart_toEndOf="@id/difficulty_value"
             app:layout_constraintTop_toTopOf="@id/workout_image_switcher" />
 

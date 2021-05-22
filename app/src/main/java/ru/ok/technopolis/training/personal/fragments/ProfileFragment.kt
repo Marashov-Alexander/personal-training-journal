@@ -47,6 +47,9 @@ class ProfileFragment : BaseFragment() {
         filterButtons = view.tr_ex_filter_buttons
         recyclerView = view.profile_tr_ex_list
 
+
+
+
         activity?.base_toolbar?.title = getString(R.string.profile)
         val trSwLine = view.train_switch_line
         val exSwitchLine = view.ex_switch_line
@@ -62,15 +65,21 @@ class ProfileFragment : BaseFragment() {
                 "$sport "
             }
         }
-        profileNameAndIcon!!.profile_name.text = prof.name
-        profileNameAndIcon!!.complaint.visibility = View.INVISIBLE
-        profileNameAndIcon!!.profile_description.text = sportsList
-        subscribersNumber!!.text= prof.subscribersNumber.toString()
-        subscriptionsNumber!!.text = prof.subscriptionsNumber.toString()
-        sharedTrainingsNumber!!.text = prof.sharedTrainingsNumber.toString()
-        sharedExercisesNumber!!.text = prof.sharedExercisesNumber.toString()
+        profileNameAndIcon?.profile_name?.text = prof.name
+        profileNameAndIcon?.complaint?.visibility = View.INVISIBLE
+        profileNameAndIcon?.profile_description?.text = sportsList
+        subscribersNumber?.text= prof.subscribersNumber.toString()
+        subscriptionsNumber?.text = prof.subscriptionsNumber.toString()
+        sharedTrainingsNumber?.text = prof.sharedTrainingsNumber.toString()
+        sharedExercisesNumber?.text = prof.sharedExercisesNumber.toString()
 
+        subscribersNumber?.setOnClickListener {
+            router?.showSubscribersPage(prof.userId)
+        }
 
+        subscriptionsNumber?.setOnClickListener {
+            router?.showSubscriptionsPage(prof.userId)
+        }
 
         var flag = true
         putNumbers(flag)

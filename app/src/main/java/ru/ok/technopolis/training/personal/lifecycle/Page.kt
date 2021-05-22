@@ -121,6 +121,15 @@ sealed class Page : Serializable {
         object TrainingView : Fragment() {
             override val clazz = TrainingViewFragment::class
         }
+
+        object ViewSubscribers: Fragment() {
+            override val clazz = ViewSubscribersFragment::class
+        }
+
+        object ViewSubscriptions: Fragment() {
+            override val clazz = ViewSubscriptionsFragment::class
+
+        }
     }
 
     companion object {
