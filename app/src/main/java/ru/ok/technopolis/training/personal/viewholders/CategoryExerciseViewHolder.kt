@@ -12,12 +12,13 @@ import ru.ok.technopolis.training.personal.items.ItemsList
 import ru.ok.technopolis.training.personal.utils.recycler.adapters.ShortExerciseListAdapter
 
 
-class CategoryExerciseViewHolder  (
+class CategoryExerciseViewHolder(
         itemView: View
 ) : BaseViewHolder<CategoryExerciseItem>(itemView) {
 
     private var categoryName: TextView = itemView.navigation_category_name
     private var exercisesList: RecyclerView = itemView.navigation_category_elements
+    private var exerciseView: (Long) -> Unit = {}
 
     override fun bind(item: CategoryExerciseItem) {
         update(item)
@@ -32,18 +33,17 @@ class CategoryExerciseViewHolder  (
                 holderType = ShortExerciseViewHolder::class,
                 layoutId = R.layout.item_short_exercice,
                 dataSource = exercises,
-                onClick = {workoutItem -> println("workout ${workoutItem.id} clicked")},
+                onClick = { workoutItem -> println("workout ${workoutItem.id} clicked") },
                 onStart = { workoutItem ->
                     println("workout ${workoutItem.id} started")
+                    exerciseView.invoke(workoutItem.id.toLong())
                 }
         )
         exercisesList.adapter = workoutsAdapter
     }
 
 
-    fun setOnStartClickListener(onStart: () -> Unit) {
-        if (itemView.visibility == View.VISIBLE) {
-            exercisesList.setOnClickListener { onStart() }
-        }
+    fun setOnStartClickListener(onStart: (Long) -> Unit) {
+        this.exerciseView = onStart
     }
 }

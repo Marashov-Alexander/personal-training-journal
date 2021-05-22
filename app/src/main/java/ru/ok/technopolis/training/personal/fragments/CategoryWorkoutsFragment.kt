@@ -39,7 +39,7 @@ class CategoryWorkoutsFragment : BaseFragment() {
     private fun exDummyToRecView() {
 
         pushWorkout(0, "Тренировка 1", "Кардио", "", "Легкая атлетика", 0, 0.0)
-        pushWorkout(0, "Любимая тренировка", "Круговая", "", "Легкая атлетика", 0, 0.0)
+        pushWorkout(1, "Любимая тренировка", "Круговая", "", "Легкая атлетика", 0, 0.0)
         pushWorkout4(0, "Любимая тренировка", "Круговая", "", "Легкая атлетика", 0, 0.0)
 
         pushWorkout2(0, "Тренировка 1", "Кардио", "", "Легкая атлетика", 0, 0.0)
@@ -47,8 +47,8 @@ class CategoryWorkoutsFragment : BaseFragment() {
         pushWorkout2(2, "Тренировка 3", "Кардио", "", "Легкая атлетика", 0, 0.0)
 
         pushWorkout3(1, "Тренировка 2", "Силовая", "", "Легкая атлетика", 0, 0.0)
-        pushWorkout3(1, "Тренировка 3", "Силовая", "", "Легкая атлетика", 0, 0.0)
-        pushWorkout3(1, "Тренировка 1", "Силовая", "", "Легкая атлетика", 0, 0.0)
+        pushWorkout3(2, "Тренировка 3", "Силовая", "", "Легкая атлетика", 0, 0.0)
+        pushWorkout3(3, "Тренировка 1", "Силовая", "", "Легкая атлетика", 0, 0.0)
 
         pushCategory(0, "Популярное", workoutsMutableList)
         pushCategory(1, "Кардио", workoutsMutableList2)
@@ -60,9 +60,10 @@ class CategoryWorkoutsFragment : BaseFragment() {
                 holderType = CategoryWorkoutsViewHolder::class,
                 layoutId = R.layout.item_library_elements,
                 dataSource = categories,
-                onClick = { workoutItem -> println("workout ${workoutItem.id} clicked") },
-                onStart = { workoutItem ->
-                    println("workout ${workoutItem.id} started")
+                onClick = { workoutItem -> println("Треня ${workoutItem.id} clicked") },
+                onStart = { workoutId->
+                    println("Элемент ${workoutId} started")
+                    router?.showWorkoutPage(workoutId)
                 }
         )
         recycler?.adapter = catAdapter
@@ -70,28 +71,27 @@ class CategoryWorkoutsFragment : BaseFragment() {
         recycler?.layoutManager = workoutsLayoutManager
     }
 
-
     private fun pushWorkout(id: Int, name: String, category: String, description: String, sport: String, sharedNumber: Int, rank: Double) {
         workoutsMutableList.add(
-                ShortWorkoutItem(id.toString(), Time(System.currentTimeMillis()), name, category, sport, "40 min", true, sharedNumber, rank, false)
+                ShortWorkoutItem(id.toString(), Time(System.currentTimeMillis()), name, category, sport, "40 min", true, sharedNumber, rank, false, false)
         )
     }
 
     private fun pushWorkout2(id: Int, name: String, category: String, description: String, sport: String, sharedNumber: Int, rank: Double) {
         workoutsMutableList2.add(
-                ShortWorkoutItem(id.toString(), Time(System.currentTimeMillis()), name, category, sport, "40 min", true, sharedNumber, rank, false)
+                ShortWorkoutItem(id.toString(), Time(System.currentTimeMillis()), name, category, sport, "40 min", true, sharedNumber, rank, true, false)
         )
     }
 
     private fun pushWorkout3(id: Int, name: String, category: String, description: String, sport: String, sharedNumber: Int, rank: Double) {
         workoutsMutableList3.add(
-                ShortWorkoutItem(id.toString(), Time(System.currentTimeMillis()), name, category, sport, "40 min", true, sharedNumber, rank, false)
+                ShortWorkoutItem(id.toString(), Time(System.currentTimeMillis()), name, category, sport, "40 min", true, sharedNumber, rank, true, false)
         )
     }
 
     private fun pushWorkout4(id: Int, name: String, category: String, description: String, sport: String, sharedNumber: Int, rank: Double) {
         workoutsMutableList4.add(
-                ShortWorkoutItem(id.toString(), Time(System.currentTimeMillis()), name, category, sport, "40 min", true, sharedNumber, rank, false)
+                ShortWorkoutItem(id.toString(), Time(System.currentTimeMillis()), name, category, sport, "40 min", true, sharedNumber, rank, false, false)
         )
     }
 

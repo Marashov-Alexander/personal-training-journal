@@ -58,7 +58,8 @@ class CategoryExercisesFragment : BaseFragment() {
                 dataSource = categories,
                 onClick = { workoutItem -> println("workout ${workoutItem.id} clicked") },
                 onStart = { workoutItem ->
-                    println("workout ${workoutItem.id} started")
+                    println("workout ${workoutItem} started")
+                    router?.showExercisePage(workoutItem)
                 }
         )
         recycler?.adapter = catAdapter

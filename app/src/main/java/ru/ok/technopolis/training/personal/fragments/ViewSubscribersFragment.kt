@@ -6,7 +6,7 @@ import android.widget.HorizontalScrollView
 import android.widget.LinearLayout
 import android.widget.RadioButton
 import android.widget.RadioGroup
-import androidx.core.content.ContextCompat.getColor
+import androidx.core.content.ContextCompat
 import androidx.core.view.get
 import androidx.core.view.size
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -19,8 +19,7 @@ import ru.ok.technopolis.training.personal.items.ProfileItem
 import ru.ok.technopolis.training.personal.utils.recycler.adapters.AuthorsAdapter
 import ru.ok.technopolis.training.personal.viewholders.AuthorViewHolder
 
-
-class AuthorsFragment : BaseFragment() {
+class ViewSubscribersFragment : BaseFragment() {
     private var buttonsScroll: HorizontalScrollView? = null
     private var buttonsGroup: RadioGroup? = null
 
@@ -31,7 +30,7 @@ class AuthorsFragment : BaseFragment() {
         recycler = view.authors_list
         buttonsScroll = view.scrollview
         buttonsGroup = view.author_categories_buttons
-        activity?.base_toolbar?.title = getString(R.string.authors)
+        activity?.base_toolbar?.title = getString(R.string.subscribers_text)
         exDummyToRecView()
     }
 
@@ -66,7 +65,7 @@ class AuthorsFragment : BaseFragment() {
         newRadioButton.setBackgroundResource(R.drawable.border_radio_button_selector)
         newRadioButton.setPadding(35,10,35,10)
         newRadioButton.textAlignment = View.TEXT_ALIGNMENT_CENTER
-        newRadioButton.setTextColor(getColor(requireContext(), R.color.design_default_color_secondary_variant))
+        newRadioButton.setTextColor(ContextCompat.getColor(requireContext(), R.color.design_default_color_secondary_variant))
         buttonsGroup?.addView(newRadioButton, layoutParams)
         var i = 1
         val categories = sports.distinct()
@@ -87,10 +86,10 @@ class AuthorsFragment : BaseFragment() {
             print(radioGroup.checkedRadioButtonId)
             for (j in 0 until radioGroup.size)  {
                 val but = radioGroup[j] as RadioButton
-                but.setTextColor(getColor(requireContext(), R.color.black))
+                but.setTextColor(ContextCompat.getColor(requireContext(), R.color.black))
             }
             val button = radioGroup[radioGroup.checkedRadioButtonId] as RadioButton
-            button.setTextColor(getColor(requireContext(), R.color.design_default_color_secondary_variant))
+            button.setTextColor(ContextCompat.getColor(requireContext(), R.color.design_default_color_secondary_variant))
             if (index != 0) {
                 val newList = mutableListOf<ProfileItem>()
                 for (author in authorsMutableList) {
@@ -125,7 +124,7 @@ class AuthorsFragment : BaseFragment() {
 
     private fun pushAuthor(id: Long, list: List<String>) {
         authorsMutableList.add(
-               ProfileItem(id.toString(), id,"dfdhf", list, false, null, 123,23,23,2)
+                ProfileItem(id.toString(), id,"dfdhf", list, false, null, 123,23,23,2)
         )
     }
 

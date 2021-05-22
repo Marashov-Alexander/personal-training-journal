@@ -5,6 +5,7 @@ import android.view.View
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_workout_progress.*
+import kotlinx.android.synthetic.main.view_appbar.*
 import okhttp3.internal.immutableListOf
 import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.controllers.ButtonGroupController
@@ -29,6 +30,8 @@ class WorkoutProgressFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         scrollView = scroll_view
         chart = progress_chart
+        activity?.base_toolbar?.title = getString(R.string.workout_progress)
+
         chart?.setScrollLockListener(
             lockListener = {
                 scrollView?.isEnableScrolling = false

@@ -47,6 +47,9 @@ class ProfileFragment : BaseFragment() {
         filterButtons = view.tr_ex_filter_buttons
         recyclerView = view.profile_tr_ex_list
 
+
+
+
         activity?.base_toolbar?.title = getString(R.string.profile)
         val trSwLine = view.train_switch_line
         val exSwitchLine = view.ex_switch_line
@@ -62,15 +65,21 @@ class ProfileFragment : BaseFragment() {
                 "$sport "
             }
         }
-        profileNameAndIcon!!.profile_name.text = prof.name
-        profileNameAndIcon!!.complaint.visibility = View.INVISIBLE
-        profileNameAndIcon!!.profile_description.text = sportsList
-        subscribersNumber!!.text= prof.subscribersNumber.toString()
-        subscriptionsNumber!!.text = prof.subscriptionsNumber.toString()
-        sharedTrainingsNumber!!.text = prof.sharedTrainingsNumber.toString()
-        sharedExercisesNumber!!.text = prof.sharedExercisesNumber.toString()
+        profileNameAndIcon?.profile_name?.text = prof.name
+        profileNameAndIcon?.complaint?.visibility = View.INVISIBLE
+        profileNameAndIcon?.profile_description?.text = sportsList
+        subscribersNumber?.text= prof.subscribersNumber.toString()
+        subscriptionsNumber?.text = prof.subscriptionsNumber.toString()
+        sharedTrainingsNumber?.text = prof.sharedTrainingsNumber.toString()
+        sharedExercisesNumber?.text = prof.sharedExercisesNumber.toString()
 
+        subscribersNumber?.setOnClickListener {
+            router?.showSubscribersPage(prof.userId)
+        }
 
+        subscriptionsNumber?.setOnClickListener {
+            router?.showSubscriptionsPage(prof.userId)
+        }
 
         var flag = true
         putNumbers(flag)
@@ -241,9 +250,12 @@ class ProfileFragment : BaseFragment() {
                 holderType = ShortWorkoutViewHolder::class,
                 layoutId = R.layout.item_short_workout,
                 dataSource = workoutsList,
-                onClick = {workoutItem -> println("workout ${workoutItem.id} clicked")},
+                onClick = {workoutItem -> println("workout ${workoutItem.id} clicked")
+                router?.showWorkoutPage(workoutItem.id.toLong())
+                },
                 onStart = { workoutItem ->
                     println("workout ${workoutItem.id} started")
+                    router?.showWorkoutPage(workoutItem.id.toLong())
                 }
         )
         recyclerView?.adapter = workoutsAdapter
@@ -261,6 +273,7 @@ class ProfileFragment : BaseFragment() {
                 onClick = {workoutItem -> println("workout ${workoutItem.id} clicked")},
                 onStart = { workoutItem ->
                     println("workout ${workoutItem.id} started")
+                    router?.showWorkoutPage(workoutItem.id.toLong())
                 }
         )
         recyclerView?.adapter = workoutsAdapter
@@ -285,6 +298,7 @@ class ProfileFragment : BaseFragment() {
                 onClick = {workoutItem -> println("workout ${workoutItem.id} clicked")},
                 onStart = { workoutItem ->
                     println("workout ${workoutItem.id} started")
+                    router?.showWorkoutPage(workoutItem.id.toLong())
                 }
         )
         recyclerView?.adapter = workoutsAdapter
@@ -308,6 +322,7 @@ class ProfileFragment : BaseFragment() {
                 onClick = {exItem -> println("workout ${exItem.id} clicked")},
                 onStart = { exItem ->
                     println("workout ${exItem.id} started")
+                    router?.showExercisePage(exItem.id.toLong())
                 }
         )
         recyclerView?.adapter = exAdapter
@@ -325,6 +340,7 @@ class ProfileFragment : BaseFragment() {
                 onClick = {exItem -> println("workout ${exItem.id} clicked")},
                 onStart = { exItem ->
                     println("workout ${exItem.id} started")
+                    router?.showExercisePage(exItem.id.toLong())
                 }
         )
         recyclerView?.adapter = exAdapter
@@ -342,6 +358,7 @@ class ProfileFragment : BaseFragment() {
                 onClick = { exItem -> println("workout ${exItem.id} clicked")},
                 onStart = { exItem ->
                     println("workout ${exItem.id} started")
+                    router?.showExercisePage(exItem.id.toLong())
                 }
         )
         recyclerView?.adapter = exAdapter
@@ -392,7 +409,7 @@ class ProfileFragment : BaseFragment() {
 
     private fun pushWorkout(id: Int, name: String, category: String, description: String, sport: String, sharedNumber: Int, rank: Double) {
         workoutsMutableList.add(
-                ShortWorkoutItem(id.toString(), Time(System.currentTimeMillis()), name, category, sport, "40 min", true, sharedNumber, rank, false)
+                ShortWorkoutItem(id.toString(), Time(System.currentTimeMillis()), name, category, sport, "40 min", true, sharedNumber, rank, false, false)
         )
     }
 

@@ -259,6 +259,8 @@
     <string name="my_request_text">Хочу подписаться на Вас</string>
     <string name="decline">Отклонить</string>
     <string name="accept">Принять</string>
+    <string name="author">Автор: </string>
+    <string name="redactor">Редактор: </string>
     <string name="start_in">Начните через</string>
     <string name="exercise_description"><u>Описание упражнения</u></string>
     <string name="repeats">Подходы: %d/%d</string>
@@ -268,4 +270,8 @@
     <string name="add_photo">Добавить фотографию</string>
     <string name="add_video">Добавить видео</string>
     <string name="load_media">Загрузите фотографии и анимации</string>
+    <string name="workouts_plan">План тренировок</string>
+    <string name="workout_creation">Создание тренировки</string>
+    <string name="exercise_creation">Создание упражнения</string>
+    <string name="chats">Сообщения</string>
 </resources>

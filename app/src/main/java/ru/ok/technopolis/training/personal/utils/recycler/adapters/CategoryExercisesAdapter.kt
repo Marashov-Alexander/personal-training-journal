@@ -12,14 +12,14 @@ class CategoryExercisesAdapter (
         @LayoutRes layoutId: Int,
         dataSource: ItemsList<CategoryExerciseItem>,
         onClick: (CategoryExerciseItem) -> Unit = {},
-        private val onStart: (CategoryExerciseItem) -> Unit = {}
+        private val onStart: (Long) -> Unit = {}
 ) : BaseListAdapter<CategoryExerciseItem>(holderType, layoutId, dataSource, onClick) {
 
     override fun onBindViewHolder(holder: BaseViewHolder<CategoryExerciseItem>, position: Int) {
         super.onBindViewHolder(holder, position)
         val item = data[position]
         (holder as CategoryExerciseViewHolder).setOnStartClickListener {
-            onStart.invoke(item)
+            onStart.invoke(it)
         }
     }
 }

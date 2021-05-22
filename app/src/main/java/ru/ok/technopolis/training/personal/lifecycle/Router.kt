@@ -65,10 +65,22 @@ class Router(private val activity: Activity) {
         showPage(Page.Fragment.WorkoutProgress)
     }
 
-    fun showAuthorPage(authorId: Long){
+    fun showAuthorPage(authorId: Long) {
         val authorIdBundle = Bundle(1)
         authorIdBundle.putLong(AUTHOR_ID_KEY, authorId)
         showPage(Page.Fragment.Author, authorIdBundle)
+    }
+
+    fun showSubscribersPage(userId: Long) {
+        val userIdBundle = Bundle(1)
+        userIdBundle.putLong(USER_ID_KEY, userId)
+        showPage(Page.Fragment.ViewSubscribers, userIdBundle)
+    }
+
+    fun showSubscriptionsPage(userId: Long) {
+        val userIdBundle = Bundle(1)
+        userIdBundle.putLong(USER_ID_KEY, userId)
+        showPage(Page.Fragment.ViewSubscriptions, userIdBundle)
     }
 
     fun showTrainingViewPage() {

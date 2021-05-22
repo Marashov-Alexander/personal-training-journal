@@ -4,6 +4,7 @@ import android.os.Bundle
 import android.view.View
 import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.fragment_new_workout_2.*
+import kotlinx.android.synthetic.main.view_appbar.*
 import ru.ok.technopolis.training.personal.R
 
 
@@ -14,6 +15,7 @@ class CreateWorkoutFragment2 : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        activity?.base_toolbar?.title = getString(R.string.workout_creation)
         prevStepCard = prev_step_card
         nextStepCard = next_step_card
         prevStepCard?.setOnClickListener {

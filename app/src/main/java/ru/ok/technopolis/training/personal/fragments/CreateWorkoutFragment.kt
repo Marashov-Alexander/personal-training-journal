@@ -11,6 +11,7 @@ import com.google.android.material.card.MaterialCardView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.fragment_new_workout_1.*
+import kotlinx.android.synthetic.main.view_appbar.*
 import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.items.ExerciseItem
 import ru.ok.technopolis.training.personal.items.ExercisesList
@@ -30,6 +31,7 @@ class CreateWorkoutFragment : BaseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        activity?.base_toolbar?.title = getString(R.string.workout_creation)
         addExerciseButton = add_exercise_button
         workoutName = input_workout_name
         exercisesRecycler = exercises_recycler
@@ -60,6 +62,10 @@ class CreateWorkoutFragment : BaseFragment() {
                 dataSource = exercisesList!!,
                 onClick = { exercise ->
                     print("Exercise $exercise clicked")
+                },
+                onStart = {exercise ->
+                    print("Exercise $exercise started")
+                    router?.showExercisePage(exercise.id.toLong())
                 },
                 onLongExerciseClick = { item, itemView ->
                     val popup = PopupMenu(requireContext(), itemView)

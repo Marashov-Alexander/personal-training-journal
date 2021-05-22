@@ -331,4 +331,10 @@
     <string name="add_photo">Add photo</string>
     <string name="add_video">Add video</string>
     <string name="load_media">Upload photos or animations</string>
+    <string name="author">Author:</string>
+    <string name="redactor">Redactor:</string>
+    <string name="workouts_plan">Workouts plan</string>
+    <string name="workout_creation">Workout creation</string>
+    <string name="exercise_creation">Exercise creation</string>
+    <string name="chats">Chats</string>
 </resources>

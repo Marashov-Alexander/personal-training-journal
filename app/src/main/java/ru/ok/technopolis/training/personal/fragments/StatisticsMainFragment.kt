@@ -6,6 +6,7 @@ import android.view.View
 import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_statistics_main.view.*
+import kotlinx.android.synthetic.main.view_appbar.*
 import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.items.ItemsList
 import ru.ok.technopolis.training.personal.items.ShortExerciseItem
@@ -33,6 +34,8 @@ class StatisticsMainFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         toggle = view.toggle_background
         recyclerView = view.statistics_workout_ex_list
+        activity?.base_toolbar?.title = getString(R.string.statistics)
+
         loadItems(flag)
         var touchMode = 0
         val clickListener = View.OnClickListener {
@@ -131,7 +134,6 @@ class StatisticsMainFragment : BaseFragment() {
                 dataSource = workoutsList,
                 onClick = {workoutItem ->
                     println("workout ${workoutItem.id} clicked")
-
                 },
                 onStart = { workoutItem ->
                     println("workout ${workoutItem.id} started")
@@ -150,7 +152,8 @@ class StatisticsMainFragment : BaseFragment() {
                 holderType = ShortExerciseViewHolder::class,
                 layoutId = R.layout.item_short_exercice,
                 dataSource = exList,
-                onClick = { exItem -> println("workout ${exItem.id} clicked")},
+                onClick = { exItem -> println("workout ${exItem.id} clicked")
+                },
                 onStart = { exItem ->
                     println("workout ${exItem.id} started")
                 }
@@ -161,7 +164,7 @@ class StatisticsMainFragment : BaseFragment() {
     }
         private fun pushWorkout(id: Int) {
             workoutsMutableList.add(
-                    ShortWorkoutItem(id.toString(), Time(System.currentTimeMillis()), "MYвшпвшпвкпиквпшкивпквпвпквпивчмпч MY", "kardio", "ofp", "", true, 0,0.0, false)
+                    ShortWorkoutItem(id.toString(), Time(System.currentTimeMillis()), "MYвшпвшпвкпиквпшкивпквпвпквпивчмпч MY", "kardio", "ofp", "", true, 0,0.0, false, false)
             )
         }
 
