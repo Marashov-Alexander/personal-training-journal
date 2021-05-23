@@ -6,6 +6,7 @@ import android.view.View
 import android.widget.TextView
 import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.fragment_new_exercise_2.*
+import kotlinx.android.synthetic.main.item_media_loader.*
 import kotlinx.android.synthetic.main.view_appbar.*
 import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.items.ItemsList
