@@ -1,24 +1,19 @@
 package ru.ok.technopolis.training.personal.viewholders
 
-import android.net.Uri
 import android.view.View
 import android.widget.ImageView
-import android.widget.TextView
 import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.item_media.view.*
 import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.items.MediaItem
-import java.io.File
 
 class MediaViewHolder(
     itemView: View
 ) : BaseViewHolder<MediaItem>(itemView) {
 
     private val mediaView: ImageView = itemView.media_view
-    private val mediaTitle: TextView = itemView.media_name
 
     override fun bind(item: MediaItem) {
-        mediaTitle.text = item.uri.substringAfterLast("/")
         val requestBuilder = Glide
             .with(mediaView)
             .asDrawable()
