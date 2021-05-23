@@ -8,11 +8,14 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.fragment_active_exercise.*
+import kotlinx.android.synthetic.main.item_media_viewer.*
 import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.db.entity.ParameterEntity
 import ru.ok.technopolis.training.personal.items.ItemsList
+import ru.ok.technopolis.training.personal.items.MediaItem
 import ru.ok.technopolis.training.personal.utils.recycler.adapters.ActiveParameterAdapter
 import ru.ok.technopolis.training.personal.viewholders.ActiveParameterViewHolder
+import ru.ok.technopolis.training.personal.views.MediaViewerWrapper
 
 class ActiveExerciseFragment : BaseFragment() {
 
@@ -25,6 +28,9 @@ class ActiveExerciseFragment : BaseFragment() {
     private var repeatsAllCount = 10
     private var repeatsDoneCount = 0
 
+    private val mediaList: ItemsList<MediaItem> = ItemsList(mutableListOf())
+    private var mediaViewer: MediaViewerWrapper? = null
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         exerciseProgressText = exercise_progress_text
@@ -32,6 +38,14 @@ class ActiveExerciseFragment : BaseFragment() {
         repeatsLeft = repeats_left
         parametersRecycler = parameters_recycler
         nextCard = next_card
+
+        mediaViewer = MediaViewerWrapper(
+            this,
+            exercise_image_switcher,
+            pos_value,
+            pos_card,
+            mediaList
+        )
 
         setRepeatsProgress(repeatsDoneCount, repeatsAllCount)
         nextCard?.setOnClickListener {
