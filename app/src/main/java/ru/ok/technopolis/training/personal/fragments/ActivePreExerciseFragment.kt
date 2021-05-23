@@ -8,13 +8,16 @@ import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.fragment_next_exercise.*
+import kotlinx.android.synthetic.main.item_media_viewer.*
 import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.fragments.dialogs.DescriptionDialogFragment
 import ru.ok.technopolis.training.personal.items.ItemsList
+import ru.ok.technopolis.training.personal.items.MediaItem
 import ru.ok.technopolis.training.personal.items.ProgressRectItem
 import ru.ok.technopolis.training.personal.utils.RestCountDownTimer
 import ru.ok.technopolis.training.personal.utils.recycler.adapters.ProgressRectAdapter
 import ru.ok.technopolis.training.personal.viewholders.ProgressRectViewHolder
+import ru.ok.technopolis.training.personal.views.MediaViewerWrapper
 
 class ActivePreExerciseFragment : BaseFragment() {
 
@@ -25,6 +28,9 @@ class ActivePreExerciseFragment : BaseFragment() {
 
     private var timer: CountDownTimer? = null
 
+    private val mediaList: ItemsList<MediaItem> = ItemsList(mutableListOf())
+    private var mediaViewer: MediaViewerWrapper? = null
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         startCard = start_card
@@ -34,6 +40,14 @@ class ActivePreExerciseFragment : BaseFragment() {
             timer?.cancel()
             router?.showActiveExercisePage(0, 0)
         }
+
+        mediaViewer = MediaViewerWrapper(
+            this,
+            exercise_image_switcher,
+            pos_value,
+            pos_card,
+            mediaList
+        )
 
         exerciseDescription = exercise_description
         exerciseDescription?.setOnClickListener {
