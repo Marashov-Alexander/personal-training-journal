@@ -42,6 +42,7 @@ class ActiveExerciseFragment : BaseFragment() {
         mediaViewer = MediaViewerWrapper(
             this,
             exercise_image_switcher,
+            no_content,
             pos_value,
             pos_card,
             mediaList

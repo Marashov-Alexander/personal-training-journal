@@ -337,4 +337,5 @@
     <string name="workout_creation">Workout creation</string>
     <string name="exercise_creation">Exercise creation</string>
     <string name="chats">Chats</string>
+    <string name="no_media_content">No media content :(</string>
 </resources>

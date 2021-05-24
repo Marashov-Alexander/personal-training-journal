@@ -18,6 +18,7 @@ import ru.ok.technopolis.training.personal.viewholders.MediaViewHolder
 open class MediaViewerWrapper(
     fragment: BaseFragment,
     mediaRecycler: RecyclerView,
+    private val noMediaContent: TextView,
     private val posValue: TextView,
     private val posCard: MaterialCardView,
     private val mediaList: ItemsList<MediaItem>
@@ -31,8 +32,10 @@ open class MediaViewerWrapper(
         posValue.text = ""
         subscribe = mediaList.sizeChangedSubject().subscribe { size ->
             if (size == 0) {
+                noMediaContent.visibility = View.VISIBLE
                 posCard.visibility = View.INVISIBLE
             } else {
+                noMediaContent.visibility = View.INVISIBLE
                 mediaCount = size
                 posValue.text = "${mediaPosition + 1}/$mediaCount"
                 posCard.visibility = View.VISIBLE

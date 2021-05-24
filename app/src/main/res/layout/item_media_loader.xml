@@ -67,4 +67,16 @@
         app:layout_constraintTop_toTopOf="@id/exercise_image_switcher"
         app:srcCompat="@drawable/ic_delete_black_24dp" />
 
+    <TextView
+        android:id="@+id/no_content"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toTopOf="@id/exercise_image_switcher"
+        app:layout_constraintBottom_toBottomOf="@id/exercise_image_switcher"
+        app:layout_constraintStart_toStartOf="@id/exercise_image_switcher"
+        app:layout_constraintEnd_toEndOf="@id/exercise_image_switcher"
+        android:text="@string/no_media_content"
+        android:drawableTop="@drawable/ic_photo_camera_black_24dp"
+        />
+
 </androidx.constraintlayout.widget.ConstraintLayout>

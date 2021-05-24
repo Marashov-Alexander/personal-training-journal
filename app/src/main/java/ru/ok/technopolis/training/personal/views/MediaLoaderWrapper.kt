@@ -5,11 +5,15 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.provider.MediaStore
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import io.reactivex.disposables.Disposable
+import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.fragments.BaseFragment
 import ru.ok.technopolis.training.personal.items.ItemsList
 import ru.ok.technopolis.training.personal.items.MediaItem
@@ -18,12 +22,15 @@ import kotlin.random.Random
 class MediaLoaderWrapper(
     private val fragment: BaseFragment,
     private val mediaRecycler: RecyclerView,
+    noMediaContent: TextView,
     editContentBtn: FloatingActionButton,
     removeContentBtn: FloatingActionButton,
     posValue: TextView,
     posCard: MaterialCardView,
     private val mediaList: ItemsList<MediaItem>
-) : MediaViewerWrapper(fragment, mediaRecycler, posValue, posCard, mediaList) {
+) : MediaViewerWrapper(fragment, mediaRecycler, noMediaContent, posValue, posCard, mediaList) {
+
+    private val subscribe: Disposable
 
     init {
         editContentBtn.setOnClickListener {
@@ -36,6 +43,15 @@ class MediaLoaderWrapper(
             if (mediaList.size() != 0) {
                 mediaPosition = Integer.min(mediaList.size() - 1, Integer.max(0, mediaPosition - 1))
                 mediaList.remove(mediaPosition)
+            }
+        }
+        removeContentBtn.visibility = INVISIBLE
+        noMediaContent.text = fragment.context?.resources?.getString(R.string.load_media)
+        subscribe = mediaList.sizeChangedSubject().subscribe { size ->
+            if (size == 0) {
+                removeContentBtn.visibility = INVISIBLE
+            } else {
+                removeContentBtn.visibility = VISIBLE
             }
         }
     }

@@ -7,23 +7,11 @@
     android:layout_height="match_parent"
     android:layout_margin="@dimen/dimens_16dp">
 
-    <TextView
-        android:id="@+id/title"
-        android:layout_width="match_parent"
-        android:layout_height="wrap_content"
-        android:text="@string/load_media"
-        android:textAlignment="center"
-        android:textColor="@color/black"
-        android:textSize="@dimen/text_size_18"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintBottom_toTopOf="@id/image_include"
-        />
-
     <include
         android:id="@+id/image_include"
         android:layout_width="match_parent"
         android:layout_height="0dp"
-        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/muscle_groups_label"
         layout="@layout/item_media_loader"
         app:layout_constraintVertical_weight="70"

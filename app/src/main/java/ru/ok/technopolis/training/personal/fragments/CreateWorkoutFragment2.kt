@@ -32,6 +32,7 @@ class CreateWorkoutFragment2 : BaseFragment() {
         mediaLoader = MediaLoaderWrapper(
             this,
             exercise_image_switcher,
+            no_content,
             edit_content_btn,
             remove_content_btn,
             pos_value,

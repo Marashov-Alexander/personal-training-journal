@@ -3,8 +3,8 @@ package ru.ok.technopolis.training.personal.viewholders
 import android.content.Context
 import android.graphics.drawable.BitmapDrawable
 import android.graphics.drawable.Drawable
+import android.graphics.drawable.VectorDrawable
 import android.util.AttributeSet
-import android.widget.ImageView
 import androidx.core.graphics.drawable.RoundedBitmapDrawableFactory
 
 class RoundedImageView : androidx.appcompat.widget.AppCompatImageView {
@@ -14,10 +14,21 @@ class RoundedImageView : androidx.appcompat.widget.AppCompatImageView {
 
     override fun setImageDrawable(drawable: Drawable?) {
         super.setImageDrawable(drawable)
-        val radius = 0.2f
-        val bitmap = (drawable as BitmapDrawable).bitmap
-        val resourceId = RoundedBitmapDrawableFactory.create(resources, bitmap)
-        resourceId.cornerRadius = bitmap.width * radius
-        super.setImageDrawable(resourceId)
+        drawable?.let {
+            when (drawable) {
+                is BitmapDrawable -> {
+                    val radius = 0.2f
+                    val bitmap = drawable.bitmap
+                    val resourceId = RoundedBitmapDrawableFactory.create(resources, bitmap)
+                    resourceId.cornerRadius = bitmap.width * radius
+                    super.setImageDrawable(resourceId)
+                }
+                is VectorDrawable -> {
+                    // do nothing?
+                }
+            }
+        }
     }
+
+
 }
