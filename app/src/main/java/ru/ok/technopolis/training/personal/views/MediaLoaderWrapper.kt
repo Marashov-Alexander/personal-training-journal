@@ -3,6 +3,7 @@ package ru.ok.technopolis.training.personal.views
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.net.Uri
 import android.provider.MediaStore
 import android.view.View
 import android.widget.TextView
@@ -51,24 +52,36 @@ class MediaLoaderWrapper(
         hasPosition = true
         if (resultCode == Activity.RESULT_OK && requestCode == MediaItem.PICK_IMAGE_REQUEST) {
             data?.clipData?.let { clipData ->
+                println("Chosen ${clipData.itemCount} files")
                 for (i in 0 until clipData.itemCount) {
                     val uri = clipData.getItemAt(i).uri
-                    val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
-                    val cursor = fragment.context?.contentResolver?.query(uri, filePathColumn, null, null, null)
-                    cursor?.moveToFirst()
-                    val columnIndex = cursor?.getColumnIndex(filePathColumn[0])
-                    val filePath = columnIndex?.let {
-                        cursor.getString(it)
-                    }
-                    cursor?.close()
-                    filePath?.let {
-                        if (hasPos) {
-                            mediaPosition++
-                        }
-                        mediaList.add(MediaItem((mediaList.size() + 1).toString(), it, MediaItem.DisplayMode.FIT_CENTER))
-                    }
+                    loadMedia(hasPos, uri)
                 }
             }
+            if (data?.clipData == null) {
+                println("Clip data is null")
+                data?.data?.let { uri ->
+                    println("Chosen only one file")
+                    loadMedia(hasPos, uri)
+                }
+            }
+        }
+    }
+
+    private fun loadMedia(hasPos: Boolean, uri: Uri) {
+        val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
+        val cursor = fragment.context?.contentResolver?.query(uri, filePathColumn, null, null, null)
+        cursor?.moveToFirst()
+        val columnIndex = cursor?.getColumnIndex(filePathColumn[0])
+        val filePath = columnIndex?.let {
+            cursor.getString(it)
+        }
+        cursor?.close()
+        filePath?.let {
+            if (hasPos) {
+                mediaPosition++
+            }
+            mediaList.add(MediaItem((mediaList.size() + 1).toString(), it, MediaItem.DisplayMode.FIT_CENTER))
         }
     }
 
