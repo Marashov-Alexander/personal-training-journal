@@ -1,0 +1,81 @@
+<?xml version="1.0" encoding="utf-8"?>
+<menu
+    xmlns:android="http://schemas.android.com/apk/res/android">
+    <group android:id="@+id/group1">
+        <item android:title="Бицепс бедра" android:checkable="true" />
+        <item android:title="Блок таранной кости" android:checkable="true" />
+        <item android:title="Большая грудная мышца" android:checkable="true" />
+        <item android:title="Большая круглая мышца" android:checkable="true" />
+        <item android:title="Большая приводящая мышца" android:checkable="true" />
+        <item android:title="Большая ягодичная мышца" android:checkable="true" />
+        <item android:title="Верхняя близнецовая мышца" android:checkable="true" />
+        <item android:title="Внешняя запирательная мышца" android:checkable="true" />
+        <item android:title="Внутренняя запирательная мышца" android:checkable="true" />
+        <item android:title="Внутренняя косая мышца живота" android:checkable="true" />
+        <item android:title="Гребенчатая мышца" android:checkable="true" />
+        <item android:title="Грудино-ключично-сосцевидная мышца" android:checkable="true" />
+        <item android:title="Грушевидная мышца" android:checkable="true" />
+        <item android:title="Двуглавая мышца плеча" android:checkable="true" />
+        <item android:title="Длинная приводящая мышца" android:checkable="true" />
+        <item android:title="Длинный разгибатель большого пальца стопы" android:checkable="true" />
+        <item android:title="Длинный сгибатель большого пальца кисти" android:checkable="true" />
+        <item android:title="Задний дельтовидный пучок мышц" android:checkable="true" />
+        <item android:title="Задняя большеберцовая мышца" android:checkable="true" />
+        <item android:title="Икроножная мышца" android:checkable="true" />
+        <item android:title="Камбаловидная мышца" android:checkable="true" />
+        <item android:title="Квадратная мышца бедра" android:checkable="true" />
+        <item android:title="Квадратная мышца поясницы" android:checkable="true" />
+        <item android:title="Клювовидно плечевая мышца" android:checkable="true" />
+        <item android:title="Круглый пронатор" android:checkable="true" />
+        <item android:title="Латеральная мышца бедра" android:checkable="true" />
+        <item android:title="Латеральная широкая мышца бедра" android:checkable="true" />
+        <item android:title="Лестничная мышца" android:checkable="true" />
+        <item android:title="Локтевая мышца" android:checkable="true" />
+        <item android:title="Локтевой сгибатель запястья" android:checkable="true" />
+        <item android:title="Лучевой разгибатель запястья" android:checkable="true" />
+        <item android:title="Лучевой сгибатель запястья" android:checkable="true" />
+        <item android:title="Малая круглая мышца" android:checkable="true" />
+        <item android:title="Малая ягодичная мышца" android:checkable="true" />
+        <item android:title="Малоберцовая мышца" android:checkable="true" />
+        <item android:title="Медиальная широкая мышца бедра" android:checkable="true" />
+        <item android:title="Многораздельная мышца" android:checkable="true" />
+        <item android:title="Мышца поднимающая лопатку" android:checkable="true" />
+        <item android:title="Мышца, отводящая мизинца" android:checkable="true" />
+        <item android:title="Мышца, приводящая большой палец стопы" android:checkable="true" />
+        <item android:title="Надостная мышца" android:checkable="true" />
+        <item android:title="Напрягатель широкой фасции бедра" android:checkable="true" />
+        <item android:title="Наружная косая мышца живота" android:checkable="true" />
+        <item android:title="Нижняя близнецовая мышца" android:checkable="true" />
+        <item android:title="Передняя большеберцовая мышца" android:checkable="true" />
+        <item android:title="Передняя дельтовидная мышца" android:checkable="true" />
+        <item android:title="Передняя зубчатая мышца" android:checkable="true" />
+        <item android:title="Плечевая мышца" android:checkable="true" />
+        <item android:title="Плечелучевая мышца" android:checkable="true" />
+        <item android:title="Подвздошная мышца" android:checkable="true" />
+        <item android:title="Подвздошно-большеберцовый тракт" android:checkable="true" />
+        <item android:title="Подвздошно-поясничная мышца" android:checkable="true" />
+        <item android:title="Подлопаточная мышца" android:checkable="true" />
+        <item android:title="Подостная мышца" android:checkable="true" />
+        <item android:title="Подошвенная мышца" android:checkable="true" />
+        <item android:title="Полуостистая мышца" android:checkable="true" />
+        <item android:title="Полуперепончатая мышца" android:checkable="true" />
+        <item android:title="Полусухожильная мышца" android:checkable="true" />
+        <item android:title="Портняжная мышца" android:checkable="true" />
+        <item android:title="Прямая мышца бедра" android:checkable="true" />
+        <item android:title="Прямая мышца живота" android:checkable="true" />
+        <item android:title="Разгибатель пальцев" android:checkable="true" />
+        <item android:title="Разгибающая мышца спины" android:checkable="true" />
+        <item android:title="Ременная мышца" android:checkable="true" />
+        <item android:title="Ромбовидная мышца" android:checkable="true" />
+        <item android:title="Сгибатель большого пальца стопы" android:checkable="true" />
+        <item android:title="Сгибатель пальцев" android:checkable="true" />
+        <item android:title="Средний дельтовидный пучок мышц" android:checkable="true" />
+        <item android:title="Средняя ягодичная мышца" android:checkable="true" />
+        <item android:title="Тонкая мышца" android:checkable="true" />
+        <item android:title="Трапециевидная мышца" android:checkable="true" />
+        <item android:title="Трехглавая мышца плеча" android:checkable="true" />
+        <item android:title="Широчайшая мышца спины" android:checkable="true" />
+        <item android:title="поперечная мышца живота" android:checkable="true" />
+
+    </group>
+</menu>

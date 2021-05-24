@@ -4,6 +4,7 @@ import android.content.Intent
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
+import androidx.appcompat.widget.PopupMenu
 import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.fragment_new_exercise_2.*
 import kotlinx.android.synthetic.main.item_media_loader.*
@@ -32,7 +33,13 @@ class CreateExerciseFragment2 : BaseFragment() {
         }
         muscleGroupsLabel = muscle_groups_label
         muscleGroupsLabel.setOnClickListener {
-
+            val popup = PopupMenu(requireContext(), it)
+            popup.inflate(R.menu.muscles_menu)
+            popup.setOnMenuItemClickListener { menuItem ->
+                print(menuItem)
+                true
+            }
+            popup.show()
         }
 
         mediaLoader = MediaLoaderWrapper(
