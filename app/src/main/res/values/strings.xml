@@ -243,6 +243,12 @@
         <item>Level 10</item>
     </string-array>
 
+    <string-array name="workout_repetition_variants">
+        <item>Every … day</item>
+        <item>Choose days</item>
+        <item>Choose date</item>
+    </string-array>
+
     <!-- TODO: Remove or change this placeholder text -->
     <string name="hello_blank_fragment" translatable="false">Hello blank fragment</string>
     <string name="navigation">Navigation</string>

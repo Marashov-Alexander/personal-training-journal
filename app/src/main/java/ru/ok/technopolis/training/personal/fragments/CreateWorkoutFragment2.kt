@@ -8,12 +8,15 @@ import kotlinx.android.synthetic.main.fragment_new_workout_2.*
 import kotlinx.android.synthetic.main.item_media_loader.*
 import kotlinx.android.synthetic.main.view_appbar.*
 import ru.ok.technopolis.training.personal.R
+import ru.ok.technopolis.training.personal.db.entity.WorkoutEntity
+import ru.ok.technopolis.training.personal.fragments.dialogs.ParameterDialogFragment
+import ru.ok.technopolis.training.personal.fragments.dialogs.PlanWorkoutDialog
 import ru.ok.technopolis.training.personal.items.ItemsList
 import ru.ok.technopolis.training.personal.items.MediaItem
 import ru.ok.technopolis.training.personal.views.MediaLoaderWrapper
 
 
-class CreateWorkoutFragment2 : BaseFragment() {
+class CreateWorkoutFragment2 : BaseFragment(), PlanWorkoutDialog.PlanWorkoutListener {
 
     private var prevStepCard: MaterialCardView? = null
     private var nextStepCard: MaterialCardView? = null
@@ -25,6 +28,12 @@ class CreateWorkoutFragment2 : BaseFragment() {
         activity?.base_toolbar?.title = getString(R.string.workout_creation)
         prevStepCard = prev_step_card
         nextStepCard = next_step_card
+
+        nextStepCard?.setOnClickListener {
+            PlanWorkoutDialog(WorkoutEntity("name", "12:00", 3,"description"), this)
+                    .show(requireActivity().supportFragmentManager, "ParameterDialogFragment")
+        }
+
         prevStepCard?.setOnClickListener {
             router?.goToPrevFragment()
         }
