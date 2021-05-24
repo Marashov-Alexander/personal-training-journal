@@ -22,7 +22,6 @@ open class MediaViewerWrapper(
     private val posCard: MaterialCardView,
     private val mediaList: ItemsList<MediaItem>
 ) {
-    protected var hasPosition: Boolean = false
     protected var mediaPosition: Int = 0
     protected var mediaCount: Int = 0
     private val subscribe: Disposable
@@ -33,7 +32,6 @@ open class MediaViewerWrapper(
         subscribe = mediaList.sizeChangedSubject().subscribe { size ->
             if (size == 0) {
                 posCard.visibility = View.INVISIBLE
-                hasPosition = false
             } else {
                 mediaCount = size
                 posValue.text = "${mediaPosition + 1}/$mediaCount"

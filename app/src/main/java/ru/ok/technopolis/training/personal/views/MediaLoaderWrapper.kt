@@ -5,26 +5,19 @@ import android.app.Activity
 import android.content.Intent
 import android.net.Uri
 import android.provider.MediaStore
-import android.view.View
 import android.widget.TextView
 import androidx.core.app.ActivityCompat
-import androidx.recyclerview.widget.LinearLayoutManager
-import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import io.reactivex.disposables.Disposable
-import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.fragments.BaseFragment
 import ru.ok.technopolis.training.personal.items.ItemsList
 import ru.ok.technopolis.training.personal.items.MediaItem
-import ru.ok.technopolis.training.personal.utils.recycler.LinearHorizontalSpacingDecoration
-import ru.ok.technopolis.training.personal.utils.recycler.adapters.MediaAdapter
-import ru.ok.technopolis.training.personal.viewholders.MediaViewHolder
+import kotlin.random.Random
 
 class MediaLoaderWrapper(
     private val fragment: BaseFragment,
-    mediaRecycler: RecyclerView,
+    private val mediaRecycler: RecyclerView,
     editContentBtn: FloatingActionButton,
     removeContentBtn: FloatingActionButton,
     posValue: TextView,
@@ -48,27 +41,22 @@ class MediaLoaderWrapper(
     }
 
     fun onActivityResult(requestCode: Int, resultCode: Int, data: Intent?) {
-        val hasPos = hasPosition
-        hasPosition = true
         if (resultCode == Activity.RESULT_OK && requestCode == MediaItem.PICK_IMAGE_REQUEST) {
             data?.clipData?.let { clipData ->
-                println("Chosen ${clipData.itemCount} files")
                 for (i in 0 until clipData.itemCount) {
                     val uri = clipData.getItemAt(i).uri
-                    loadMedia(hasPos, uri)
+                    loadMedia(uri)
                 }
             }
             if (data?.clipData == null) {
-                println("Clip data is null")
                 data?.data?.let { uri ->
-                    println("Chosen only one file")
-                    loadMedia(hasPos, uri)
+                    loadMedia(uri)
                 }
             }
         }
     }
 
-    private fun loadMedia(hasPos: Boolean, uri: Uri) {
+    private fun loadMedia(uri: Uri) {
         val filePathColumn = arrayOf(MediaStore.Images.Media.DATA)
         val cursor = fragment.context?.contentResolver?.query(uri, filePathColumn, null, null, null)
         cursor?.moveToFirst()
@@ -78,10 +66,9 @@ class MediaLoaderWrapper(
         }
         cursor?.close()
         filePath?.let {
-            if (hasPos) {
-                mediaPosition++
-            }
-            mediaList.add(MediaItem((mediaList.size() + 1).toString(), it, MediaItem.DisplayMode.FIT_CENTER))
+            val item = MediaItem((Random.nextInt()).toString(), it, MediaItem.DisplayMode.FIT_CENTER)
+            mediaList.addLast(item)
+            mediaRecycler.smoothScrollToPosition(mediaList.size() - 1)
         }
     }
 

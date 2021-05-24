@@ -42,6 +42,12 @@ open class ItemsList<Item>(var items: MutableList<Item>) {
         addingSubject.onNext(item)
     }
 
+    fun addLast(item: Item) {
+        items.add(items.size, item)
+        sizeChangedSubject.onNext(items.size)
+        addingSubject.onNext(item)
+    }
+
     fun remove(item: Item) {
         val ind = items.indexOf(item)
         items.remove(item)
