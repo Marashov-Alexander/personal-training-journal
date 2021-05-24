@@ -10,12 +10,11 @@ import android.widget.Button
 import android.widget.CheckBox
 import android.widget.LinearLayout
 import android.widget.Spinner
-import androidx.cardview.widget.CardView
 import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.fragment.app.DialogFragment
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.item_plan_workout.*
+import kotlinx.android.synthetic.main.item_plan_workout.view.*
 import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.db.entity.WorkoutEntity
 import ru.ok.technopolis.training.personal.items.ItemsList
@@ -47,15 +46,15 @@ class PlanWorkoutDialog (private val workout: WorkoutEntity, private val listene
             val dialog = builder.create()
             dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
+            daysRecyclerView = view.choose_days
+            workoutRepetitionSpinner = view.workout_repetition_variants
+            everyDayPart = view.every_n_day
+            oneDayPart = view.one_date
 
-            workoutRepetitionSpinner = workout_repetition_variants
-            everyDayPart = every_n_day
-            oneDayPart = one_date
-
-            setNotification = set_notification
-            notificationTimePicker = notification_time_picker
-            minutesHoursSwitcher = minutes_hours_switcher
-            planButton = plan_button
+            setNotification = view.set_notification
+            notificationTimePicker = view.notification_time_picker
+            minutesHoursSwitcher = view.minutes_hours_switcher
+            planButton = view.plan_button
 
             everyDayPart?.visibility = View.INVISIBLE
             oneDayPart?.visibility = View.INVISIBLE
@@ -74,7 +73,6 @@ class PlanWorkoutDialog (private val workout: WorkoutEntity, private val listene
 
                     }
             )
-            daysRecyclerView = choose_days
             daysRecyclerView?.adapter = daysAdapter
             val layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
             daysRecyclerView?.layoutManager = layoutManager
