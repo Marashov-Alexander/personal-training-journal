@@ -344,4 +344,6 @@
     <string name="exercise_creation">Exercise creation</string>
     <string name="chats">Chats</string>
     <string name="no_media_content">No media content :(</string>
+    <string name="congratulations">Workout done.\nCongratulations!</string>
+    <string name="to_results">Show results!</string>
 </resources>

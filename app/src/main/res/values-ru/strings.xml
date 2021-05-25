@@ -281,4 +281,6 @@
     <string name="exercise_creation">Создание упражнения</string>
     <string name="chats">Сообщения</string>
     <string name="no_media_content">Медиа-контент отсутствует :(</string>
+    <string name="congratulations">Тренировка завершена.\nПоздравляем!</string>
+    <string name="to_results">К результатам!</string>
 </resources>
