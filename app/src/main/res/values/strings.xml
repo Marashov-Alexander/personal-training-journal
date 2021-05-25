@@ -309,7 +309,7 @@
     <string name="delete_parameter" translatable="false">Delete parameter</string>
     <string name="parameters_list">Parameters</string>
     <string name="add_new_parameter" translatable="false">Add new parameter</string>
-    <string name="muscle_groups"><u>Muscle groups</u> </string>
+    <string name="muscle_groups">Muscle groups</string>
     <string name="send_message_text">Send message</string>
     <string name="message_input_text">Message</string>
     <string name="chat">Chat</string>

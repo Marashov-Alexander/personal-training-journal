@@ -21,7 +21,6 @@
         android:id="@+id/muscle_groups_label"
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
-        android:drawableEnd="@drawable/ic_edit_element"
         android:text="@string/muscle_groups"
         android:textColor="@color/black"
         android:textSize="@dimen/text_size_20"
@@ -31,8 +30,19 @@
         app:layout_constraintBottom_toTopOf="@id/muscle_groups_value"
         />
 
-    <TextView
+    <ru.ok.technopolis.training.personal.views.MultiSpinner
         android:id="@+id/muscle_groups_value"
+        android:layout_width="match_parent"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/muscle_groups_label"
+        app:layout_constraintBottom_toTopOf="@id/exercise_description"
+        app:layout_constraintStart_toStartOf="@id/muscle_groups_label"
+        app:layout_constraintEnd_toEndOf="@id/muscle_groups_label"
+        />
+
+    <TextView
+        android:visibility="gone"
+
         android:layout_width="match_parent"
         android:layout_height="wrap_content"
         android:paddingHorizontal="@dimen/dimens_8dp"
