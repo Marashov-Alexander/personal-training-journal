@@ -283,4 +283,7 @@
     <string name="no_media_content">Медиа-контент отсутствует :(</string>
     <string name="congratulations">Тренировка завершена.\nПоздравляем!</string>
     <string name="to_results">К результатам!</string>
+    <string name="motivation">Так держать!\nНа %d% лучше, чем в прошлый раз.</string>
+    <string name="change_difficulty">Изменить\nнагрузку</string>
+    <string name="send_results">Отправить\nрезультаты</string>
 </resources>

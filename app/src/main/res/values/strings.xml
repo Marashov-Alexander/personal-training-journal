@@ -346,4 +346,7 @@
     <string name="no_media_content">No media content :(</string>
     <string name="congratulations">Workout done.\nCongratulations!</string>
     <string name="to_results">Show results!</string>
+    <string name="motivation">Keep it up!\n%d% better than last time.</string>
+    <string name="change_difficulty">Change\nthe difficulty</string>
+    <string name="send_results">Send\nresults</string>
 </resources>

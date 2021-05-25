@@ -7,7 +7,7 @@
     <ru.ok.technopolis.training.personal.views.ProgressChartView
         android:id="@+id/progress_chart"
         android:layout_width="match_parent"
-        android:layout_height="300dp"
+        android:layout_height="0dp"
         android:layout_margin="@dimen/dimens_8dp"
         android:padding="@dimen/dimens_16dp"
         app:badColor="@color/red_transparent"
@@ -16,6 +16,7 @@
         app:itemColor="@color/gray_5"
         app:itemWidth="35dp"
         app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/motivation_text"
         app:startLineColor="@color/shadow_start_light" />
 
     <TextView
@@ -31,7 +32,7 @@
         android:textStyle="italic"
         android:layout_margin="@dimen/dimens_16dp"
         android:textSize="@dimen/text_size_18"
-        android:text="Так держать!\nНа 10% лучше, чем в прошлый раз."
+        android:text="@string/motivation"
         />
 
     <com.google.android.material.card.MaterialCardView
@@ -39,6 +40,7 @@
         android:layout_width="wrap_content"
         android:layout_height="wrap_content"
         app:layout_constraintTop_toBottomOf="@id/motivation_text"
+        app:layout_constraintBottom_toTopOf="@id/configure_card"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
         app:strokeColor="@color/gray_4"
@@ -86,7 +88,7 @@
             android:id="@+id/configure_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Изменить\nнагрузку"
+            android:text="@string/change_difficulty"
             android:textColor="@color/black"
             android:textAlignment="center"
             android:textSize="@dimen/text_size_18"
@@ -118,7 +120,7 @@
             android:id="@+id/send_results_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:text="Отправить\nрезультаты"
+            android:text="@string/send_results"
             android:textColor="@color/black"
             android:textAlignment="center"
             android:textSize="@dimen/text_size_18"
