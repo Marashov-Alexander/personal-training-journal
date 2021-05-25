@@ -1,5 +1,6 @@
 package ru.ok.technopolis.training.personal.fragments
 
+import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
@@ -23,7 +24,12 @@ class ActiveExerciseFragment : BaseFragment() {
     private var repeatsDone: View? = null
     private var repeatsLeft: View? = null
     private var parametersRecycler: RecyclerView? = null
+
     private var nextCard: MaterialCardView? = null
+    private var nextTextView: TextView? = null
+
+    private var skipCard: MaterialCardView? = null
+    private var skipTextView: TextView? = null
 
     private var repeatsAllCount = 10
     private var repeatsDoneCount = 0
@@ -38,6 +44,9 @@ class ActiveExerciseFragment : BaseFragment() {
         repeatsLeft = repeats_left
         parametersRecycler = parameters_recycler
         nextCard = next_card
+        nextTextView = next_text
+        skipCard = skip_card
+        skipTextView = skip_text
 
         mediaViewer = MediaViewerWrapper(
             this,
@@ -50,6 +59,9 @@ class ActiveExerciseFragment : BaseFragment() {
 
         setRepeatsProgress(repeatsDoneCount, repeatsAllCount)
         nextCard?.setOnClickListener {
+            setRepeatsProgress(++repeatsDoneCount, repeatsAllCount)
+        }
+        skipCard?.setOnClickListener {
             setRepeatsProgress(++repeatsDoneCount, repeatsAllCount)
         }
 
@@ -83,6 +95,25 @@ class ActiveExerciseFragment : BaseFragment() {
         val doneParams = repeatsDone?.layoutParams as? ConstraintLayout.LayoutParams
         doneParams?.horizontalWeight = donePercents
         exerciseProgressText?.text = String.format(requireContext().getString(R.string.repeats), repeatsDoneCount, repeatsAllCount)
+        checkExerciseDone()
+    }
+
+    private fun checkExerciseDone() {
+        if (repeatsDoneCount == repeatsAllCount) {
+            nextTextView?.text = "Завершить"
+            nextTextView?.setTextColor(Color.WHITE)
+
+            nextCard?.setOnClickListener {
+                router?.showWorkoutDonePage(0, 0)
+            }
+            nextCard?.setCardBackgroundColor(requireContext().getColor(R.color.light_blue))
+            nextCard?.strokeColor = requireContext().getColor(R.color.dark_cyanide)
+
+            skipTextView?.text = "Ещё подход!"
+            skipCard?.setOnClickListener {
+                setRepeatsProgress(++repeatsDoneCount, repeatsAllCount)
+            }
+        }
     }
 
     override fun getFragmentLayoutId(): Int = R.layout.fragment_active_exercise
