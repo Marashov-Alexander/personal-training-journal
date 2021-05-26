@@ -19,19 +19,17 @@
             app:layout_constraintTop_toTopOf="parent"
             tools:itemCount="@integer/integer_1" />
 
-        <ImageSwitcher
+        <include
             android:id="@+id/workout_image_switcher"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
+            layout="@layout/item_media_viewer"
+            android:layout_height="300dp"
             android:layout_marginBottom="@dimen/dimens_16dp"
-            android:minHeight="300dp"
             app:layout_constraintBottom_toTopOf="@id/author_name"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintHorizontal_bias="0.0"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/workout_scroll_info"
-            app:layout_constraintVertical_bias="1.0"
-            tools:background="@color/gray_4" />
+            app:layout_constraintTop_toBottomOf="@id/short_workout_downloads"
+            />
 
         <ImageView
             android:id="@+id/workout_start_icon"
@@ -72,9 +70,9 @@
             android:textColor="@color/design_default_color_secondary_variant"
             android:textSize="@dimen/text_size_13"
             app:layout_constraintBottom_toBottomOf="@id/short_workout_downloads"
+            app:layout_constraintTop_toTopOf="@id/short_workout_downloads"
             app:layout_constraintEnd_toStartOf="@id/rank_number"
             app:layout_constraintStart_toEndOf="@id/downloads_number"
-            app:layout_constraintTop_toTopOf="@id/short_workout_downloads"
             tools:text="Сложность" />
 
         <ImageView
@@ -85,7 +83,9 @@
             android:contentDescription="@string/workout_downloads"
             android:src="@drawable/ic_difficulty_"
             app:layout_constraintStart_toEndOf="@id/difficulty_value"
-            app:layout_constraintTop_toTopOf="@id/workout_image_switcher" />
+            app:layout_constraintBottom_toBottomOf="@id/short_workout_downloads"
+            app:layout_constraintTop_toTopOf="@id/short_workout_downloads"
+            />
 
         <TextView
             android:id="@+id/downloads_number"
@@ -107,7 +107,7 @@
             android:contentDescription="@string/workout_downloads"
             android:src="@drawable/ic_baseline_group_theme_24"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/workout_image_switcher" />
+            app:layout_constraintTop_toBottomOf="@id/workout_scroll_info" />
 
         <ImageView
             android:id="@+id/short_workout_star"
@@ -117,7 +117,9 @@
             android:contentDescription="@string/workout_rank"
             android:src="@drawable/ic_baseline_star_theme_color_24"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintTop_toTopOf="@id/workout_image_switcher" />
+            app:layout_constraintBottom_toBottomOf="@id/short_workout_downloads"
+            app:layout_constraintTop_toTopOf="@id/short_workout_downloads"
+            />
 
         <TextView
             android:id="@+id/rank_number"
@@ -126,32 +128,10 @@
             android:layout_marginStart="@dimen/dimens_8dp"
             android:textColor="@color/design_default_color_secondary_variant"
             android:textSize="@dimen/text_size_13"
-            app:layout_constraintBottom_toBottomOf="@id/short_workout_star"
+            app:layout_constraintBottom_toBottomOf="@id/short_workout_downloads"
+            app:layout_constraintTop_toTopOf="@id/short_workout_downloads"
             app:layout_constraintEnd_toStartOf="@id/short_workout_star"
-            app:layout_constraintTop_toTopOf="@id/short_workout_star"
             tools:text="9.8" />
-
-        <ImageView
-            android:id="@+id/next_image_btn"
-            android:layout_width="@dimen/dimens_32dp"
-            android:layout_height="@dimen/dimens_32dp"
-            android:contentDescription="@string/next_image_button"
-            android:src="@drawable/ic_chevron_right"
-            android:tint="@color/black"
-            app:layout_constraintBottom_toBottomOf="@id/workout_image_switcher"
-            app:layout_constraintEnd_toEndOf="@id/workout_image_switcher"
-            app:layout_constraintTop_toTopOf="@id/workout_image_switcher" />
-
-        <ImageView
-            android:id="@+id/prev_image_btn"
-            android:layout_width="@dimen/dimens_32dp"
-            android:layout_height="@dimen/dimens_32dp"
-            android:contentDescription="@string/previous_image_button"
-            android:src="@drawable/ic_chevron_left"
-            android:tint="@color/black"
-            app:layout_constraintBottom_toBottomOf="@id/workout_image_switcher"
-            app:layout_constraintStart_toStartOf="@id/workout_image_switcher"
-            app:layout_constraintTop_toTopOf="@id/workout_image_switcher" />
 
         <TextView
             android:id="@+id/author_text"

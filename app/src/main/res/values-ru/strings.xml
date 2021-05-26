@@ -281,7 +281,7 @@
     <string name="timer">Таймер</string>
     <string name="show_in_short_description">Отображать в кратком описании</string>
     <string name="parameters_list">Параметры</string>
-    <string name="muscle_groups"><u>Группы мыщц</u> </string>
+    <string name="muscle_groups">Группы мыщц</string>
     <string name="day">День</string>
     <string name="week">Неделя</string>
     <string name="month">Месяц</string>
@@ -323,4 +323,9 @@
     <string name="_1">1</string>
     <string name="plus">+</string>
     <string name="plan">Запланировать!</string>
+    <string name="congratulations">Тренировка завершена.\nПоздравляем!</string>
+    <string name="to_results">К результатам!</string>
+    <string name="motivation">Так держать!\nНа %d% лучше, чем в прошлый раз.</string>
+    <string name="change_difficulty">Изменить\nнагрузку</string>
+    <string name="send_results">Отправить\nрезультаты</string>
 </resources>

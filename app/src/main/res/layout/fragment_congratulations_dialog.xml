@@ -1,0 +1,77 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/dimens_8dp"
+    android:background="@drawable/rounded_filled_white_outline"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="@string/congratulations"
+        android:textAlignment="center"
+        android:textSize="@dimen/text_size_25"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:layout_marginTop="20dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toTopOf="@id/show_results_card"
+        />
+
+    <ImageView
+        android:id="@+id/con_left"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dim64"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/show_results_card"
+        android:src="@drawable/ic_congratulations"
+        />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/show_results_card"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintStart_toEndOf="@id/con_left"
+        app:layout_constraintEnd_toStartOf="@id/con_right"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:strokeColor="@color/dark_cyanide"
+        app:strokeWidth="1dp"
+        app:cardCornerRadius="@dimen/dimens_16dp"
+        android:theme="@style/AppTheme"
+        app:cardBackgroundColor="@color/light_blue"
+        android:layout_marginTop="@dimen/dimens_24dp"
+        android:layout_marginBottom="@dimen/dimens_32dp"
+        android:clickable="true"
+        >
+
+        <TextView
+            android:id="@+id/next_text_view"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:text="@string/to_results"
+            android:textColor="@color/white"
+            android:textSize="@dimen/text_size_25"
+            android:layout_marginHorizontal="@dimen/dimens_16dp"
+            android:layout_marginVertical="@dimen/dimens_8dp"
+            />
+
+    </com.google.android.material.card.MaterialCardView>
+
+    <ImageView
+        android:id="@+id/con_right"
+        android:layout_width="0dp"
+        android:layout_height="@dimen/dim64"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintStart_toEndOf="@id/show_results_card"
+        android:src="@drawable/ic_congratulations"
+        android:scaleX="-1"
+        />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

@@ -317,7 +317,7 @@
     <string name="delete_parameter" translatable="false">Delete parameter</string>
     <string name="parameters_list">Parameters</string>
     <string name="add_new_parameter" translatable="false">Add new parameter</string>
-    <string name="muscle_groups"><u>Muscle groups</u> </string>
+    <string name="muscle_groups">Muscle groups</string>
     <string name="send_message_text">Send message</string>
     <string name="message_input_text">Message</string>
     <string name="chat">Chat</string>
@@ -352,6 +352,11 @@
     <string name="exercise_creation">Exercise creation</string>
     <string name="chats">Chats</string>
     <string name="no_media_content">No media content :(</string>
+    <string name="congratulations">Workout done.\nCongratulations!</string>
+    <string name="to_results">Show results!</string>
+    <string name="motivation">Keep it up!\n%d% better than last time.</string>
+    <string name="change_difficulty">Change\nthe difficulty</string>
+    <string name="send_results">Send\nresults</string>
     <string name="plan_workout">Plan workout?</string>
     <string name="choose_repetition">Choose repetition variant</string>
     <string name="every">Every</string>

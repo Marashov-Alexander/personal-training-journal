@@ -65,7 +65,7 @@
         />
 
     <com.google.android.material.card.MaterialCardView
-        android:id="@+id/prev_card"
+        android:id="@+id/skip_card"
         android:layout_width="0dp"
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
@@ -81,7 +81,7 @@
         >
 
         <TextView
-            android:id="@+id/prev_text"
+            android:id="@+id/skip_text"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
             android:text="@string/skip"
@@ -100,7 +100,7 @@
         android:layout_height="wrap_content"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintStart_toEndOf="@id/prev_card"
+        app:layout_constraintStart_toEndOf="@id/skip_card"
         app:strokeColor="@color/gray_4"
         app:strokeWidth="1dp"
         app:cardCornerRadius="@dimen/dimens_16dp"

@@ -8,6 +8,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_view_workout.view.*
+import kotlinx.android.synthetic.main.item_media_viewer.view.*
 import kotlinx.android.synthetic.main.view_appbar.*
 import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.items.BundleItem
@@ -24,7 +25,7 @@ import java.sql.Time
 
 class WorkoutViewFragment : BaseFragment() {
     private var workoutShortInfoRecycler: RecyclerView? = null
-    private var imageSwitcher: ImageSwitcher? = null
+    private var imageSwitcher: RecyclerView? = null
     private var startButton: ImageView? = null
     private var shareText: TextView? = null
     private var shareButton: ImageView? = null
@@ -45,12 +46,10 @@ class WorkoutViewFragment : BaseFragment() {
         workoutShortInfoRecycler = view.workout_scroll_info
         startButton = view.workout_start_icon
         shareButton = view.share_icon
-        imageSwitcher = view.workout_image_switcher
+        imageSwitcher = view.exercise_image_switcher
         downloadsNumber = view.downloads_number
         raiting = view.rank_number
         difficulty = view.difficulty_value
-        nextSwitch = view.next_image_btn
-        prevSwitch = view.prev_image_btn
         authorName = view.author_name
         redactorName = view.redactor_name
         exerciseRecycler = view.workout_ex_list
