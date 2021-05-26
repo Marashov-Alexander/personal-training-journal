@@ -11,7 +11,7 @@
         app:layout_constraintTop_toTopOf="@id/day_start_at_edit_text"
         app:layout_constraintBottom_toBottomOf="@id/day_start_at_edit_text"
         app:layout_constraintStart_toStartOf="parent"
-        android:textSize="@dimen/text_size_18"
+        android:textSize="@dimen/text_size_17"
         />
     <EditText
         android:id="@+id/day_start_at_edit_text"
@@ -22,7 +22,8 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintTop_toTopOf="parent"
         android:text="12:00"
-
+        android:focusable="false"
+        android:textSize="@dimen/text_size_17"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>
