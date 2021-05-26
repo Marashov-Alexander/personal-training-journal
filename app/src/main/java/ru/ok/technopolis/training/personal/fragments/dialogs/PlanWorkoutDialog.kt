@@ -2,8 +2,6 @@ package ru.ok.technopolis.training.personal.fragments.dialogs
 
 import android.annotation.SuppressLint
 import android.app.AlertDialog
-import android.app.DatePickerDialog
-import android.app.DatePickerDialog.OnDateSetListener
 import android.app.Dialog
 import android.app.TimePickerDialog
 import android.app.TimePickerDialog.OnTimeSetListener
@@ -24,7 +22,7 @@ import androidx.fragment.app.DialogFragment
 import androidx.fragment.app.FragmentActivity
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
-import kotlinx.android.synthetic.main.item_plan_workout.*
+import com.mikepenz.fastadapter.dsl.genericFastAdapter
 import kotlinx.android.synthetic.main.item_plan_workout.view.*
 import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.db.entity.WorkoutEntity
@@ -33,7 +31,6 @@ import ru.ok.technopolis.training.personal.items.PlanDayItem
 import ru.ok.technopolis.training.personal.utils.recycler.adapters.PlanDayAdapter
 import ru.ok.technopolis.training.personal.viewholders.PlanDayViewHolder
 import java.sql.Time
-import java.text.SimpleDateFormat
 
 
 class PlanWorkoutDialog(private val workout: WorkoutEntity, private val listener: PlanWorkoutListener) : DialogFragment() {
@@ -126,6 +123,8 @@ class PlanWorkoutDialog(private val workout: WorkoutEntity, private val listener
 
                             val everyDay = view.every_day_checkbox
                             everyDay.setOnCheckedChangeListener { compoundButton, b ->
+                                nDayInput.setText(R.string._1)
+                                nDayInput.isEnabled = !nDayInput.isEnabled
                             }
 
                             startAt.setOnClickListener {
