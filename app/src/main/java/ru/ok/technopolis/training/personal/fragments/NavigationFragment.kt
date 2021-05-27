@@ -33,6 +33,7 @@ class NavigationFragment : BaseFragment() {
         TabLayoutMediator(navigationTabs!!, tabView!!) { tab, position ->
             tab.text = tabNames!![position]
         }.attach()
+        tabView?.isUserInputEnabled = false;
         search = view.search_input
     }
 

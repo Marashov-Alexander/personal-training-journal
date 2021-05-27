@@ -66,12 +66,12 @@ class ChatFragment : BaseFragment() {
 
     private fun addDummyMessages() {
 
-        val oldMessageTo = chat?.chatId?.let { MessageEntity("lsls", Date(System.currentTimeMillis()), 12, it, 1, null, null) }
-        val oldMessageFrom = prof?.userId?.let { chat?.chatId?.let { it1 -> MessageEntity("fff", Date(System.currentTimeMillis()), it, it1, null, 1, null) } }
+        val oldMessageTo = chat?.chatId?.let { MessageEntity("lsls", Date(System.currentTimeMillis()), 12, it, 1, null, null, true) }
+        val oldMessageFrom = prof?.userId?.let { chat?.chatId?.let { it1 -> MessageEntity("fff", Date(System.currentTimeMillis()), it, it1, null, 1, null, true) } }
         oldMessageFrom?.let { MessageFromItem(it, router!!) }?.let { adapter.add(it) }
         oldMessageTo?.let { MessageToItem(it, router!!) }?.let { adapter.add(it) }
-        val oldMessageTo2 = chat?.chatId?.let { MessageEntity("lslkkkkkkkkkkkkkkkkkkkks", Date(System.currentTimeMillis()), 12, it, null, null, 1) }
-        val oldMessageFrom2 = prof?.userId?.let { chat?.chatId?.let { it1 -> MessageEntity("ffkkkkkkkkkkkkkkkfffffffffffffffffffffffffffffkkkkkkkkkf", Date(System.currentTimeMillis()), it, it1, null, null, null) } }
+        val oldMessageTo2 = chat?.chatId?.let { MessageEntity("lslkkkkkkkkkkkkkkkkkkkks", Date(System.currentTimeMillis()), 12, it, null, null, 1, true) }
+        val oldMessageFrom2 = prof?.userId?.let { chat?.chatId?.let { it1 -> MessageEntity("ffkkkkkkkkkkkkkkkfffffffffffffffffffffffffffffkkkkkkkkkf", Date(System.currentTimeMillis()), it, it1, null, null, null, true) } }
         oldMessageFrom2?.let { MessageFromItem(it, router!!) }?.let { adapter.add(it) }
         oldMessageTo2?.let { MessageToItem(it, router!!) }?.let { adapter.add(it) }
         dialog?.adapter = adapter
@@ -84,7 +84,7 @@ class ChatFragment : BaseFragment() {
                 val messageEntity = prof?.userId?.let {
                     chat?.chatId?.let { it1 ->
                         MessageEntity(
-                                message, Date(System.currentTimeMillis()), it, it1, null, null, null
+                                message, Date(System.currentTimeMillis()), it, it1, null, null, null, true
                         )
                     }
                 }
@@ -94,7 +94,7 @@ class ChatFragment : BaseFragment() {
 
 
 //        val lasMessage = database!!.messageDao().getAll().last()
-        val lastMessage = chat?.chatId?.let { message?.let { it1 -> MessageEntity(it1, Date(System.currentTimeMillis()), 12, it, null, null, null) } }
+        val lastMessage = chat?.chatId?.let { message?.let { it1 -> MessageEntity(it1, Date(System.currentTimeMillis()), 12, it, null, null, null, true) } }
         lastMessage?.let { MessageToItem(it, router!!) }?.let { adapter.add(it) }
         dialog?.adapter = adapter
         messageText?.text?.clear()
