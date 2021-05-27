@@ -92,11 +92,11 @@ class ExerciseViewFragment : BaseFragment(), ParameterDialogFragment.ParameterDi
         activity?.base_toolbar?.title = getString(R.string.exercise) + " \"${exercise?.name}\" "
         raiting?.text = exercise?.rank.toString()
         downloadsNumber?.text = exercise?.downloadsNumber.toString()
-        val isLocal = false
-        if (!isLocal) {
-            shareButton?.visibility = View.INVISIBLE
-            startButton?.visibility = View.INVISIBLE
-        }
+//        val isLocal = false
+//        if (!isLocal) {
+//            shareButton?.visibility = View.INVISIBLE
+//            startButton?.visibility = View.INVISIBLE
+//        }
 
         info?.setOnClickListener {
             showExerciseDescription(exercise!!.name, exercise!!.description)

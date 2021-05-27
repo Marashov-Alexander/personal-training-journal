@@ -1,6 +1,7 @@
 package ru.ok.technopolis.training.personal.viewholders
 
 import android.view.View
+import android.view.View.GONE
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
 import android.widget.EditText
@@ -15,7 +16,6 @@ class ParameterViewHolder(
         itemView: View
 ) : BaseViewHolder<ShortParameterItem>(itemView) {
 
-    private val icon: ImageView = itemView.icon
     private val title: TextView = itemView.title
     private val units: TextView = itemView.units
     private val value: EditText = itemView.value
@@ -27,7 +27,7 @@ class ParameterViewHolder(
         units.text = item.parameter?.measureUnit
         value.setText(item.parameter?.value.toString())
         value.isEnabled = item.editable
-        edit.visibility = if (item.editable) VISIBLE else INVISIBLE
+        edit.visibility = if (item.editable) VISIBLE else GONE
         itemView.visibility = if (item.invisible) INVISIBLE else VISIBLE
 
         this.item = item

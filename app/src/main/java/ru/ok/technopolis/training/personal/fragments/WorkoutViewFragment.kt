@@ -105,9 +105,9 @@ class WorkoutViewFragment : BaseFragment() {
         difficulty?.text = (3).toString()
         downloadsNumber?.text = workout?.downloadsNumber.toString()
         if (!workout?.private!!) {
-            shareButton?.visibility = View.INVISIBLE
-            startButton?.visibility = View.INVISIBLE
-            shareText?.visibility = View.INVISIBLE
+//            shareButton?.visibility = View.INVISIBLE
+//            startButton?.visibility = View.INVISIBLE
+//            shareText?.visibility = View.INVISIBLE
         }
 
         info?.setOnClickListener {
