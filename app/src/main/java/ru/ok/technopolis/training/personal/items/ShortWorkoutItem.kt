@@ -11,7 +11,6 @@ data class ShortWorkoutItem(
         var category: String,
         var sport: String,
         var duration: String,
-        val done: Boolean,
         val downloadsNumber: Int,
         val rank: Double,
         val private: Boolean,

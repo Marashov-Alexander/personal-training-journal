@@ -23,7 +23,6 @@ import ru.ok.technopolis.training.personal.items.chatItems.MessageFromItem
 import ru.ok.technopolis.training.personal.items.chatItems.MessageToItem
 import ru.ok.technopolis.training.personal.lifecycle.Page
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.CHAT_ID_KEY
-import java.sql.Date
 import java.sql.Time
 
 class ChatFragment : BaseFragment() {
@@ -63,7 +62,8 @@ class ChatFragment : BaseFragment() {
         GlobalScope.launch(Dispatchers.IO) {
             val chatId = (activity?.intent?.extras?.get(CHAT_ID_KEY)) as Long
             database?.let { appDatabase ->
-                messagesList = appDatabase.messageDao().getByChatId(chatId)
+                // TODO: DO SOMETHING
+//                messagesList = appDatabase.messageDao().getDialog(chatId)
 
 //                withContext(Dispatchers.Main) {
 ////                    progressBar?.visibility = View.GONE
@@ -76,12 +76,12 @@ class ChatFragment : BaseFragment() {
 
     private fun addDummyMessages() {
 
-        val oldMessageTo = chat?.chatId?.let { MessageEntity("lsls", System.currentTimeMillis(), 12, it, 1, null) }
-        val oldMessageFrom = prof?.userId?.let { chat?.chatId?.let { it1 -> MessageEntity("fff", System.currentTimeMillis(), it, it1, null, 1) } }
+        val oldMessageTo = chat?.chatId?.let { MessageEntity("lsls", System.currentTimeMillis(), 12, it, 1, null, true) }
+        val oldMessageFrom = prof?.userId?.let { chat?.chatId?.let { it1 -> MessageEntity("fff", System.currentTimeMillis(), it, it1, null, 1, true) } }
         oldMessageFrom?.let { MessageFromItem(it, router!!) }?.let { adapter.add(it) }
         oldMessageTo?.let { MessageToItem(it, router!!) }?.let { adapter.add(it) }
-        val oldMessageTo2 = chat?.chatId?.let { MessageEntity("lslkkkkkkkkkkkkkkkkkkkks", System.currentTimeMillis(), 12, it, null, null) }
-        val oldMessageFrom2 = prof?.userId?.let { chat?.chatId?.let { it1 -> MessageEntity("ffkkkkkkkkkkkkkkkfffffffffffffffffffffffffffffkkkkkkkkkf", System.currentTimeMillis(), it, it1, null, null) } }
+        val oldMessageTo2 = chat?.chatId?.let { MessageEntity("lslkkkkkkkkkkkkkkkkkkkks", System.currentTimeMillis(), 12, it, null, null, true) }
+        val oldMessageFrom2 = prof?.userId?.let { chat?.chatId?.let { it1 -> MessageEntity("ffkkkkkkkkkkkkkkkfffffffffffffffffffffffffffffkkkkkkkkkf", System.currentTimeMillis(), it, it1, null, null, true) } }
         oldMessageFrom2?.let { MessageFromItem(it, router!!) }?.let { adapter.add(it) }
         oldMessageTo2?.let { MessageToItem(it, router!!) }?.let { adapter.add(it) }
         dialog?.adapter = adapter
@@ -95,7 +95,7 @@ class ChatFragment : BaseFragment() {
                     ///CHAT ID
                     chat?.chatId?.let { it1 ->
                         MessageEntity(
-                                message, System.currentTimeMillis(), it, it1, null, null
+                                message, System.currentTimeMillis(), it, it1, null, null, true
                         )
                     }
                 }!!

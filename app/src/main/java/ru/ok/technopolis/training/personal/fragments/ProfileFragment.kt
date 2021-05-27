@@ -409,13 +409,13 @@ class ProfileFragment : BaseFragment() {
 
     private fun pushWorkout(id: Int, name: String, category: String, description: String, sport: String, sharedNumber: Int, rank: Double) {
         workoutsMutableList.add(
-                ShortWorkoutItem(id.toString(), Time(System.currentTimeMillis()), name, "lsl",category, sport, "40 min", true, sharedNumber, rank, false, false)
+                ShortWorkoutItem(id.toString(), Time(System.currentTimeMillis()), name, "lsl",category, sport, "40 min",  sharedNumber, rank, false, false)
         )
     }
 
     private fun pushExercise(id: Int, name: String, category: String, description: String,  sharedNumber: Int, rank: Double) {
         exerciseMutableList.add(
-                ShortExerciseItem(id.toString(), Time(System.currentTimeMillis()), name, category, description, true, sharedNumber, rank)
+                ShortExerciseItem(id.toString(), Time(System.currentTimeMillis()), name, category, description,  sharedNumber, rank)
         )
     }
 

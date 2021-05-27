@@ -73,25 +73,25 @@ class CategoryWorkoutsFragment : BaseFragment() {
 
     private fun pushWorkout(id: Int, name: String, category: String, description: String, sport: String, sharedNumber: Int, rank: Double) {
         workoutsMutableList.add(
-                ShortWorkoutItem(id.toString(), Time(System.currentTimeMillis()),name,description,category,sport, "40 min", false, sharedNumber, rank, true, false)
+                ShortWorkoutItem(id.toString(), Time(System.currentTimeMillis()),name,description,category,sport, "40 min", sharedNumber, rank, true, false)
         )
     }
 
     private fun pushWorkout2(id: Int, name: String, category: String, description: String, sport: String, sharedNumber: Int, rank: Double) {
         workoutsMutableList2.add(
-                ShortWorkoutItem(id.toString(), Time(System.currentTimeMillis()), name, description, category, sport, "40 min", true, sharedNumber, rank, true, false)
+                ShortWorkoutItem(id.toString(), Time(System.currentTimeMillis()), name, description, category, sport, "40 min", sharedNumber, rank, true, false)
         )
     }
 
     private fun pushWorkout3(id: Int, name: String, category: String, description: String, sport: String, sharedNumber: Int, rank: Double) {
         workoutsMutableList3.add(
-                ShortWorkoutItem(id.toString(), Time(System.currentTimeMillis()), name, description ,category, sport, "40 min", true, sharedNumber, rank, true, false)
+                ShortWorkoutItem(id.toString(), Time(System.currentTimeMillis()), name, description ,category, sport, "40 min", sharedNumber, rank, true, false)
         )
     }
 
     private fun pushWorkout4(id: Int, name: String, category: String, description: String, sport: String, sharedNumber: Int, rank: Double) {
         workoutsMutableList4.add(
-                ShortWorkoutItem(id.toString(), Time(System.currentTimeMillis()), name,description, category, sport, "40 min", true, sharedNumber, rank, false, false)
+                ShortWorkoutItem(id.toString(), Time(System.currentTimeMillis()), name,description, category, sport, "40 min", sharedNumber, rank, false, false)
         )
     }
 

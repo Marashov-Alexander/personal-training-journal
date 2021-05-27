@@ -9,7 +9,6 @@ data class ShortExerciseItem (
         var name: String,
         var category: String,
         var description: String,
-        val done: Boolean,
         val downloadsNumber: Int,
         val rank: Double
 ): WithId

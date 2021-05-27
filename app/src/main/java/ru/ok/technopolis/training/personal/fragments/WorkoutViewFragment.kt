@@ -99,7 +99,7 @@ class WorkoutViewFragment : BaseFragment() {
 
     private fun setWorkoutDummy(){
         val workoutId = (activity?.intent?.extras?.get(Page.WORKOUT_ID_KEY) as Long)
-        workout = ShortWorkoutItem(workoutId.toString(), Time(System.currentTimeMillis()), "name", "description","category", "sport", "40 min", true, 123, 3.5, false, false)
+        workout = ShortWorkoutItem(workoutId.toString(), Time(System.currentTimeMillis()), "name", "description","category", "sport", "40 min",  123, 3.5, false, false)
         activity?.base_toolbar?.title = getString(R.string.workout) + " \"${workout?.name}\" "
         raiting?.text = workout?.rank.toString()
         difficulty?.text = (3).toString()

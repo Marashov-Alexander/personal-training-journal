@@ -18,12 +18,10 @@ import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.db.entity.LevelExerciseParameterEntity
 import ru.ok.technopolis.training.personal.db.entity.ParameterEntity
 import ru.ok.technopolis.training.personal.fragments.dialogs.DescriptionDialogFragment
-import ru.ok.technopolis.training.personal.fragments.dialogs.ParameterDialogFragment
 import ru.ok.technopolis.training.personal.items.BundleItem
 import ru.ok.technopolis.training.personal.items.ItemsList
 import ru.ok.technopolis.training.personal.items.ParameterItem
 import ru.ok.technopolis.training.personal.items.ShortExerciseItem
-import ru.ok.technopolis.training.personal.items.ShortParameterItem
 import ru.ok.technopolis.training.personal.items.SingleSelectableList
 import ru.ok.technopolis.training.personal.lifecycle.Page
 import ru.ok.technopolis.training.personal.utils.logger.Logger
@@ -114,7 +112,7 @@ class ExerciseViewFragment : BaseFragment() {
 
     private fun setWorkoutDummy(){
         val workoutId = (activity?.intent?.extras?.get(Page.EXERCISE_ID_KEY) as Long)
-        exercise = ShortExerciseItem(workoutId.toString(), Time(System.currentTimeMillis()), "name", "category", "sport", false, 123, 3.5)
+        exercise = ShortExerciseItem(workoutId.toString(), Time(System.currentTimeMillis()), "name", "category", "sport", 123, 3.5)
         activity?.base_toolbar?.title = getString(R.string.exercise) + " \"${exercise?.name}\" "
         raiting?.text = exercise?.rank.toString()
         downloadsNumber?.text = exercise?.downloadsNumber.toString()

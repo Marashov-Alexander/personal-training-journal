@@ -63,19 +63,19 @@ class LibraryExercisesFragment : BaseFragment() {
 
     private fun pushExercise(id: Int, name: String, category: String, description: String, sharedNumber: Int, rank: Double) {
         workoutsMutableList.add(
-                ShortExerciseItem(id.toString(), Time(System.currentTimeMillis()), name, category, description, true, sharedNumber, rank)
+                ShortExerciseItem(id.toString(), Time(System.currentTimeMillis()), name, category, description, sharedNumber, rank)
         )
     }
 
     private fun pushExercise2(id: Int, name: String, category: String, description: String, sharedNumber: Int, rank: Double) {
         workoutsMutableList2.add(
-                ShortExerciseItem(id.toString(), Time(System.currentTimeMillis()), name, category, description, true, sharedNumber, rank)
+                ShortExerciseItem(id.toString(), Time(System.currentTimeMillis()), name, category, description, sharedNumber, rank)
         )
     }
 
     private fun pushExercise3(id: Int, name: String, category: String, description: String, sharedNumber: Int, rank: Double) {
         workoutsMutableList3.add(
-                ShortExerciseItem(id.toString(), Time(System.currentTimeMillis()), name, category, description, true, sharedNumber, rank)
+                ShortExerciseItem(id.toString(), Time(System.currentTimeMillis()), name, category, description, sharedNumber, rank)
         )
     }
 
