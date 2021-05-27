@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_view_exercise.view.*
@@ -15,6 +16,7 @@ import kotlinx.android.synthetic.main.item_media_viewer.view.*
 import kotlinx.android.synthetic.main.view_appbar.*
 import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.db.entity.ParameterEntity
+import ru.ok.technopolis.training.personal.fragments.dialogs.DescriptionDialogFragment
 import ru.ok.technopolis.training.personal.fragments.dialogs.ParameterDialogFragment
 import ru.ok.technopolis.training.personal.items.BundleItem
 import ru.ok.technopolis.training.personal.items.ItemsList
@@ -40,6 +42,7 @@ class ExerciseViewFragment : BaseFragment(), ParameterDialogFragment.ParameterDi
     private var authorName: TextView? = null
     private var redactorName: TextView? = null
     private var parametersRecycler: RecyclerView? = null
+    private var info: ConstraintLayout? = null
 
     private var exercise: ShortExerciseItem? = null
 
@@ -55,6 +58,7 @@ class ExerciseViewFragment : BaseFragment(), ParameterDialogFragment.ParameterDi
         authorName = view.author_name
         redactorName = view.redactor_name
         parametersRecycler = view.exercise_param_list
+        info = view.info_card
         loadDummy()
     }
 
@@ -93,6 +97,11 @@ class ExerciseViewFragment : BaseFragment(), ParameterDialogFragment.ParameterDi
             shareButton?.visibility = View.INVISIBLE
             startButton?.visibility = View.INVISIBLE
         }
+
+        info?.setOnClickListener {
+            showExerciseDescription(exercise!!.name, exercise!!.description)
+        }
+
         //TODO:load author and redactor from db
 //        authorName?.text =
 //        redactorName?.text =
@@ -116,6 +125,11 @@ class ExerciseViewFragment : BaseFragment(), ParameterDialogFragment.ParameterDi
         exerciseShortInfoRecycler?.layoutManager = layoutManager
     }
 
+    private fun showExerciseDescription(title: String, description: String) {
+        DescriptionDialogFragment(title, description)
+                .show(requireActivity().supportFragmentManager, "ParameterDialogFragment")
+    }
+
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         Logger.d(this, "onCreateOptionsMenu")
         inflater.inflate(R.menu.change_menu, menu)
@@ -133,6 +147,7 @@ class ExerciseViewFragment : BaseFragment(), ParameterDialogFragment.ParameterDi
         }
 
     }
+
 
     override fun getFragmentLayoutId(): Int = R.layout.fragment_view_exercise
 

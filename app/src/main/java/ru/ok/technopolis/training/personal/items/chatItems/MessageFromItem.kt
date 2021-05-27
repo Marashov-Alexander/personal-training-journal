@@ -53,7 +53,7 @@ class MessageFromItem(@NonNull val message: MessageEntity, private val router: R
     }
 
     private fun workoutDummy(viewHolder: GroupieViewHolder) {
-        val workout = mutableListOf(ShortWorkoutItem(message.workoutId.toString(), Time(System.currentTimeMillis()), "kk", "category", "sport", "40 min", true, 0, 0.0, false, false))
+        val workout = mutableListOf(ShortWorkoutItem(message.workoutId.toString(), Time(System.currentTimeMillis()), "kk", "lsl", "category", "sport", "40 min", true, 0, 0.0, false, false))
         val workoutsList = ItemsList(workout)
         val workoutsAdapter = ShortWorkoutListAdapter(
                 holderType = ShortWorkoutViewHolder::class,

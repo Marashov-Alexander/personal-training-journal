@@ -69,7 +69,7 @@ class ViewAuthorFragment : BaseFragment() {
         var flag = true
         loadWorkoutItems()
 
-        val clL = View.OnClickListener {elem ->
+        val clL = View.OnClickListener { elem ->
             flag = !flag
             print(flag)
             if (flag) {
@@ -123,7 +123,7 @@ class ViewAuthorFragment : BaseFragment() {
 
         val list = listOf("Легкая атлетика", "Бейсбол", "Теннис")
         val authorId = (activity?.intent?.extras?.get(Page.AUTHOR_ID_KEY)) as Long
-        val prof = ProfileItem("1234", authorId,"Иванов Иван", list, true, null, 5, 10, 23,6)
+        val prof = ProfileItem("1234", authorId, "Иванов Иван", list, true, null, 5, 10, 23, 6)
 
         author = UserEntity(prof.name, prof.name, prof.name, "123", "f", "", -1, prof.userId)
         activity?.base_toolbar?.title = getString(R.string.author) + " ${prof.name}"
@@ -139,7 +139,7 @@ class ViewAuthorFragment : BaseFragment() {
         profileNameAndIcon?.profile_name?.text = prof.name
         profileNameAndIcon?.complaint?.visibility = View.VISIBLE
         profileNameAndIcon?.profile_description?.text = sportsList
-        subscribersNumber?.text= prof.subscribersNumber.toString()
+        subscribersNumber?.text = prof.subscribersNumber.toString()
         subscriptionsNumber?.text = prof.subscriptionsNumber.toString()
     }
 
@@ -151,6 +151,7 @@ class ViewAuthorFragment : BaseFragment() {
             loadExItems()
         }
     }
+
     private fun clearRecView(flag: Boolean) {
         if (flag) {
             val listSize = workoutsMutableList.size
@@ -164,8 +165,9 @@ class ViewAuthorFragment : BaseFragment() {
     }
 
     private fun loadWorkoutItems() {
-                exDummyToRecView()
+        exDummyToRecView()
     }
+
     private fun exDummyToRecView() {
         pushWorkout(0, "Тренировка 1", "Кардио", "", "Легкая атлетика", 123, 4.0)
         pushWorkout(1, "Тренировка 2", "Силовая", "", "Легкая атлетика", 200, 3.5)
@@ -179,7 +181,7 @@ class ViewAuthorFragment : BaseFragment() {
                 holderType = ShortWorkoutViewHolder::class,
                 layoutId = R.layout.item_short_workout,
                 dataSource = workoutsList,
-                onClick = {workoutItem -> println("workout ${workoutItem.id} clicked")},
+                onClick = { workoutItem -> println("workout ${workoutItem.id} clicked") },
                 onStart = { workoutItem ->
                     println("workout ${workoutItem.id} started")
                     router?.showWorkoutPage(workoutItem.id.toLong())
@@ -189,6 +191,7 @@ class ViewAuthorFragment : BaseFragment() {
         val workoutsLayoutManager = GridLayoutManager(activity, 2)
         recyclerView?.layoutManager = workoutsLayoutManager
     }
+
     private fun exerciseDummyAll() {
         pushExercise(0, "Мое упражнение", "Кардио", "Офп", 0, 0.0)
         pushExercise(1, "Бег на месте", "Кардио", "Офп", 0, 0.0)
@@ -200,7 +203,7 @@ class ViewAuthorFragment : BaseFragment() {
                 holderType = ShortExerciseViewHolder::class,
                 layoutId = R.layout.item_short_exercice,
                 dataSource = exList,
-                onClick = { exItem -> println("workout ${exItem.id} clicked")},
+                onClick = { exItem -> println("workout ${exItem.id} clicked") },
                 onStart = { exItem ->
                     println("workout ${exItem.id} started")
                     router?.showExercisePage(exItem.id.toLong())
@@ -212,16 +215,16 @@ class ViewAuthorFragment : BaseFragment() {
     }
 
     private fun loadExItems() {
-                exerciseDummyAll()
+        exerciseDummyAll()
     }
 
     private fun pushWorkout(id: Int, name: String, category: String, description: String, sport: String, sharedNumber: Int, rank: Double) {
         workoutsMutableList.add(
-                ShortWorkoutItem(id.toString(), Time(System.currentTimeMillis()), name, category, sport, "40 min", true, sharedNumber, rank, false, false)
+                ShortWorkoutItem(id.toString(), Time(System.currentTimeMillis()), name, "lsl", category, sport, "40 min", true, sharedNumber, rank, false, false)
         )
     }
 
-    private fun pushExercise(id: Int, name: String, category: String, description: String,  sharedNumber: Int, rank: Double) {
+    private fun pushExercise(id: Int, name: String, category: String, description: String, sharedNumber: Int, rank: Double) {
         exerciseMutableList.add(
                 ShortExerciseItem(id.toString(), Time(System.currentTimeMillis()), name, category, description, true, sharedNumber, rank)
         )

@@ -53,7 +53,7 @@ class StatisticsMainFragment : BaseFragment() {
 
     private fun pushWorkout(id: Int) {
         workoutsMutableList.add(
-                ShortWorkoutItem(id.toString(), Time(System.currentTimeMillis()), "MYвшпвшпвкпиквпшкивпквпвпквпивчмпч MY", "kardio", "ofp", "", true, 0, 0.0, false, false)
+                ShortWorkoutItem(id.toString(), Time(System.currentTimeMillis()), "MYвшпвшпвкпиквпшкивпквпвпквпивчмпч MY","lsl", "kardio", "ofp", "", true, 0, 0.0, false, false)
         )
     }
 
