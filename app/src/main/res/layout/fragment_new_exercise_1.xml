@@ -5,18 +5,6 @@
     android:layout_margin="@dimen/dimens_16dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
 
-    <TextView
-        android:id="@+id/enter_exercise_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:text="@string/enter_exercise_name"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        />
-
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/input_exercise_name"
         android:layout_width="match_parent"
@@ -26,13 +14,13 @@
         android:textColorHint="@color/gray_3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/enter_exercise_name">
+        app:layout_constraintTop_toTopOf="parent">
         <AutoCompleteTextView
             android:id="@+id/name"
             style="@style/Input"
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/exercise" />
+            android:hint="@string/enter_exercise_name" />
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
@@ -81,6 +69,7 @@
         android:background="@drawable/rounded_outline"
         android:layout_margin="@dimen/dimens_8dp"
         android:textAlignment="center"
+        android:padding="2dp"
         />
 
 

@@ -8,16 +8,26 @@ import androidx.room.PrimaryKey
 @Entity(
     foreignKeys = [
         ForeignKey(
-            entity = ExerciseTypeEntity::class,
+            entity = UserEntity::class,
             parentColumns = ["id"],
-            childColumns = ["typeId"]
+            childColumns = ["authorId"],
+            onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+            entity = UserEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["redactorId"],
+            onDelete = ForeignKey.CASCADE
         )
     ]
 )
 data class ExerciseEntity(
     @ColumnInfo var name: String,
     @ColumnInfo var description: String?,
-    @ColumnInfo var typeId: Long,
+    @ColumnInfo var category: String?,
+    @ColumnInfo var isPublic: Boolean,
+    @ColumnInfo var authorId: Long,
+    @ColumnInfo var redactorId: Long?,
     @ColumnInfo var serverId: Long = -1L,
     @PrimaryKey(autoGenerate = true) var id: Long = 0
 ) : WithServerId {

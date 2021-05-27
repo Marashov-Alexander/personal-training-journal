@@ -10,7 +10,7 @@ import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.fragment_congratulations_dialog.view.*
 import ru.ok.technopolis.training.personal.R
 
-class CongratulationsDialogFragment(): DialogFragment() {
+class CongratulationsDialogFragment : DialogFragment() {
 
     private var showResultCard: MaterialCardView? = null
 

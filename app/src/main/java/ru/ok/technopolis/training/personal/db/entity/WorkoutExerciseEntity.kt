@@ -4,9 +4,9 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.ForeignKey.CASCADE
+import androidx.room.PrimaryKey
 
 @Entity(
-    primaryKeys = ["workoutId", "exerciseId"],
     foreignKeys = [
         ForeignKey(
             entity = WorkoutEntity::class,
@@ -26,7 +26,7 @@ data class WorkoutExerciseEntity(
     @ColumnInfo var workoutId: Long,
     @ColumnInfo var exerciseId: Long,
     @ColumnInfo var serverId: Long = -1L,
-    @ColumnInfo var deleted: Boolean = false
+    @PrimaryKey(autoGenerate = true) var id: Long = 0
 ) : WithServerId {
     override fun serverId(newId: Long) {
         serverId = newId

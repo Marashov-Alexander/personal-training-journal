@@ -16,8 +16,12 @@ import ru.ok.technopolis.training.personal.db.entity.ParameterEntity
 import ru.ok.technopolis.training.personal.db.entity.ParameterEntity.Companion.EQUALS_BETTER
 import ru.ok.technopolis.training.personal.db.entity.ParameterEntity.Companion.GREATER_BETTER
 import ru.ok.technopolis.training.personal.db.entity.ParameterEntity.Companion.LESS_BETTER
+import ru.ok.technopolis.training.personal.items.ParameterItem
 
-class ParameterDialogFragment(private val item: ParameterEntity, private val listener: ParameterDialogListener): DialogFragment() {
+class ParameterDialogFragment(
+    private val item: ParameterItem,
+    private val listener: ParameterDialogListener
+): DialogFragment() {
 
     private var inputType: ImageView? = null
     private var saveBtn: MaterialCardView? = null
@@ -33,22 +37,24 @@ class ParameterDialogFragment(private val item: ParameterEntity, private val lis
             dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
             resetErrors(view)
 
-            saveBtn = view.save_card
-            saveBtn!!.setOnClickListener {
-                if (updateParameterEntity(view)) {
-                    listener.onSaveClick(item)
-                    dialog.dismiss()
-                }
-            }
-
             val units = view.units
             val chosenUnit = view.chosen_unit
             units.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
+                private var loaded = false
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                    if (units.selectedItem.toString() != "") {
+                    if (units.selectedItem.toString() != "" && loaded) {
                         chosenUnit.setText(units.selectedItem.toString())
                     }
+                    loaded = true
+                }
+            }
+
+            saveBtn = view.save_card
+            saveBtn!!.setOnClickListener {
+                if (updateParameterEntity(view)) {
+                    listener.onSaveParameterClick(item)
+                    dialog.dismiss()
                 }
             }
 
@@ -67,7 +73,7 @@ class ParameterDialogFragment(private val item: ParameterEntity, private val lis
                     true
                 }
             }
-            typeMenuItemClicked(item.resultType)
+            typeMenuItemClicked(item.parameter.resultType)
             inputType!!.setOnClickListener {
                 it.showContextMenu()
             }
@@ -100,13 +106,13 @@ class ParameterDialogFragment(private val item: ParameterEntity, private val lis
 
     private fun bindParameter(view: View?) {
         view?.let {
-            it.value.setText(item.value.toString())
-            it.title.setText(item.name)
-            it.chosen_unit.setText(item.measureUnit)
-            typeMenuItemClicked(item.resultType)
-            it.show_in_description_checkbox.isChecked = item.showInDescription
-            it.stopwatch_switch.isChecked = (item.input == ParameterEntity.INPUT_STOPWATCH)
-            it.timer_switch.isChecked = (item.input == ParameterEntity.INPUT_TIMER)
+            it.value.setText(item.levelExerciseParameterEntity.value.toString())
+            it.title.setText(item.parameter.name)
+            typeMenuItemClicked(item.parameter.resultType)
+            it.show_in_description_checkbox.isChecked = item.parameter.showInDescription
+            it.stopwatch_switch.isChecked = (item.parameter.input == ParameterEntity.INPUT_STOPWATCH)
+            it.timer_switch.isChecked = (item.parameter.input == ParameterEntity.INPUT_TIMER)
+            it.chosen_unit.setText(item.parameter.measureUnit)
         }
     }
 
@@ -133,12 +139,12 @@ class ParameterDialogFragment(private val item: ParameterEntity, private val lis
                 return false
             }
 
-            item.measureUnit = measureUnit
-            item.name = name
-            item.resultType = inputTypeId
-            item.value = value!!
-            item.showInDescription = it.show_in_description_checkbox.isChecked
-            item.input = when {
+            item.parameter.measureUnit = measureUnit
+            item.parameter.name = name
+            item.parameter.resultType = inputTypeId
+            item.levelExerciseParameterEntity.value = value!!
+            item.parameter.showInDescription = it.show_in_description_checkbox.isChecked
+            item.parameter.input = when {
                 it.stopwatch_switch.isChecked -> ParameterEntity.INPUT_STOPWATCH
                 it.timer_switch.isChecked -> ParameterEntity.INPUT_TIMER
                 else -> ParameterEntity.INPUT_SIMPLE
@@ -167,6 +173,6 @@ class ParameterDialogFragment(private val item: ParameterEntity, private val lis
     }
 
     interface ParameterDialogListener {
-        fun onSaveClick(item: ParameterEntity)
+        fun onSaveParameterClick(item: ParameterItem)
     }
 }

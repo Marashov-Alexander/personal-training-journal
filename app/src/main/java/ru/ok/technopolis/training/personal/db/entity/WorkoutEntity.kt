@@ -7,9 +7,13 @@ import androidx.room.PrimaryKey
 @Entity
 data class WorkoutEntity(
     @ColumnInfo var name: String,
-    @ColumnInfo var plannedTime: String,
-    @ColumnInfo var weekdaysMask: Int,
     @ColumnInfo var description: String?,
+    @ColumnInfo var category: String?,
+    @ColumnInfo var sport: String?,
+    @ColumnInfo var difficulty: Int,
+    @ColumnInfo var isPublic: Boolean,
+    @ColumnInfo var authorId: Long,
+    @ColumnInfo var redactorId: Long?,
     @ColumnInfo var serverId: Long = -1L,
     @PrimaryKey(autoGenerate = true) var id: Long = 0
 ) : WithServerId {

@@ -5,14 +5,14 @@ import io.reactivex.subjects.PublishSubject
 
 open class ItemsList<Item>(var items: MutableList<Item>) {
 
-    private val addingSubject: PublishSubject<Item> = PublishSubject.create()
+    private val addingSubject: PublishSubject<Pair<Item, Int>> = PublishSubject.create()
     private val removingSubject: PublishSubject<Int> = PublishSubject.create()
     private val updatingSubject: PublishSubject<Int> = PublishSubject.create()
     private val updatingRangeSubject: PublishSubject<Pair<Int, Int>> = PublishSubject.create()
     private val replacingSubject: PublishSubject<List<Item>> = PublishSubject.create()
     private val sizeChangedSubject: PublishSubject<Int> = PublishSubject.create()
 
-    fun addingSubject(): Observable<Item> {
+    fun addingSubject(): Observable<Pair<Item, Int>> {
         return addingSubject
     }
 
@@ -39,13 +39,14 @@ open class ItemsList<Item>(var items: MutableList<Item>) {
     fun add(item: Item) {
         items.add(0, item)
         sizeChangedSubject.onNext(items.size)
-        addingSubject.onNext(item)
+        addingSubject.onNext(Pair(item, 0))
     }
 
     fun addLast(item: Item) {
-        items.add(items.size, item)
+        val position = items.size
+        items.add(position, item)
         sizeChangedSubject.onNext(items.size)
-        addingSubject.onNext(item)
+        addingSubject.onNext(Pair(item, position))
     }
 
     fun remove(item: Item) {
@@ -82,5 +83,9 @@ open class ItemsList<Item>(var items: MutableList<Item>) {
 
     fun contains(item: Item): Boolean {
         return items.contains(item)
+    }
+
+    fun indexOf(item: Item): Int {
+        return items.indexOf(item)
     }
 }

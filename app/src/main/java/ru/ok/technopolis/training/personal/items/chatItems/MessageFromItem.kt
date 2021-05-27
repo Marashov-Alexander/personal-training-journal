@@ -29,17 +29,14 @@ class MessageFromItem(@NonNull val message: MessageEntity, private val router: R
         viewHolder.itemView.message_text.text = message.text
         val prof = loadSender(message.senderId)
         viewHolder.itemView.sender_name.text = prof.name
-        viewHolder.itemView.message_send_time.text = formatter.format(message.sendTime)
+        viewHolder.itemView.message_send_time.text = formatter.format(message.timestamp)
         viewHolder.itemView.request.visibility = View.GONE
         when {
-            message.workoutId != null -> {
+            message.userWorkoutId != null -> {
                 workoutDummy(viewHolder)
             }
-            message.exerciseId != null -> {
+            message.userExerciseId != null -> {
                 exDummy(viewHolder)
-            }
-            message.requestId != null -> {
-                viewHolder.itemView.request.visibility = View.VISIBLE
             }
 //        val imUrl = message.senderId.pictureUrlStr
 //            viewHolder.itemView.sender_icon.setImageURI(imUrl)
@@ -53,7 +50,7 @@ class MessageFromItem(@NonNull val message: MessageEntity, private val router: R
     }
 
     private fun workoutDummy(viewHolder: GroupieViewHolder) {
-        val workout = mutableListOf(ShortWorkoutItem(message.workoutId.toString(), Time(System.currentTimeMillis()), "kk", "category", "sport", "40 min", true, 0, 0.0, false, false))
+        val workout = mutableListOf(ShortWorkoutItem(message.userWorkoutId.toString(), Time(System.currentTimeMillis()), "kk", "category", "sport", "40 min", true, 0, 0.0, false, false))
         val workoutsList = ItemsList(workout)
         val workoutsAdapter = ShortWorkoutListAdapter(
                 holderType = ShortWorkoutViewHolder::class,
@@ -71,7 +68,7 @@ class MessageFromItem(@NonNull val message: MessageEntity, private val router: R
     }
 
     private fun exDummy(viewHolder: GroupieViewHolder) {
-        val ex = mutableListOf(ShortExerciseItem(message.exerciseId.toString(), Time(System.currentTimeMillis()), "kk", "category", "sport", true, 0, 0.0))
+        val ex = mutableListOf(ShortExerciseItem(message.userExerciseId.toString(), Time(System.currentTimeMillis()), "kk", "category", "sport", true, 0, 0.0))
         val exList = ItemsList(ex)
         val workoutsAdapter = ShortExerciseListAdapter(
                 holderType = ShortExerciseViewHolder::class,

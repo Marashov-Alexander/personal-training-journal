@@ -4,29 +4,29 @@ import androidx.room.ColumnInfo
 import androidx.room.Entity
 import androidx.room.ForeignKey
 import androidx.room.ForeignKey.CASCADE
-import androidx.room.PrimaryKey
 
 @Entity(
+    primaryKeys = ["userId", "exerciseWorkoutId"],
     foreignKeys = [
         ForeignKey(
-            entity = ExerciseEntity::class,
+            entity = WorkoutExerciseEntity::class,
             parentColumns = ["id"],
-            childColumns = ["exerciseId"],
+            childColumns = ["exerciseWorkoutId"],
             onDelete = CASCADE
         ),
         ForeignKey(
-            entity = ParameterEntity::class,
+            entity = UserEntity::class,
             parentColumns = ["id"],
-            childColumns = ["parameterId"],
+            childColumns = ["userId"],
             onDelete = CASCADE
         )
     ]
 )
-data class ExerciseParameterEntity(
-    @ColumnInfo var exerciseId: Long,
-    @ColumnInfo var parameterId: Long,
-    @ColumnInfo var serverId: Long = -1L,
-    @PrimaryKey(autoGenerate = true) var id: Long = 0
+data class UserLevelEntity(
+    @ColumnInfo var userId: Long,
+    @ColumnInfo var exerciseWorkoutId: Long,
+    @ColumnInfo var level: Int,
+    @ColumnInfo var serverId: Long = -1L
 ) : WithServerId {
     override fun serverId(newId: Long) {
         serverId = newId

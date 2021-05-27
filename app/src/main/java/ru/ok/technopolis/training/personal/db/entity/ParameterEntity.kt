@@ -9,7 +9,6 @@ data class ParameterEntity(
     @ColumnInfo var name: String,
     @ColumnInfo var measureUnit: String,
     @ColumnInfo var resultType: Int = GREATER_BETTER,
-    @ColumnInfo var value: Float = 0.0f,
     @ColumnInfo var input: Int = INPUT_SIMPLE,
     @ColumnInfo var showInDescription: Boolean = false,
     @ColumnInfo var serverId: Long = -1L,

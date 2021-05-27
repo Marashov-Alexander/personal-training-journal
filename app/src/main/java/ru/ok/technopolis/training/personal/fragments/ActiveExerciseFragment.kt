@@ -11,9 +11,11 @@ import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.fragment_active_exercise.*
 import kotlinx.android.synthetic.main.item_media_viewer.*
 import ru.ok.technopolis.training.personal.R
+import ru.ok.technopolis.training.personal.db.entity.LevelExerciseParameterEntity
 import ru.ok.technopolis.training.personal.db.entity.ParameterEntity
 import ru.ok.technopolis.training.personal.items.ItemsList
 import ru.ok.technopolis.training.personal.items.MediaItem
+import ru.ok.technopolis.training.personal.items.ParameterItem
 import ru.ok.technopolis.training.personal.utils.recycler.adapters.ActiveParameterAdapter
 import ru.ok.technopolis.training.personal.viewholders.ActiveParameterViewHolder
 import ru.ok.technopolis.training.personal.views.MediaViewerWrapper
@@ -66,11 +68,33 @@ class ActiveExerciseFragment : BaseFragment() {
         }
 
         val parameters = mutableListOf(
-            ParameterEntity("Параметр 1", "Ед. измерения", value = 3f),
-            ParameterEntity("Параметр 2", "Ед. измерения", value = 3f),
-            ParameterEntity("Параметр 3", "Ед. измерения", value = 3f),
-            ParameterEntity("Параметр 4", "Ед. измерения"),
-            ParameterEntity("Параметр 5", "Ед. измерения")
+            ParameterItem(
+                "1",
+                ParameterEntity(
+                    "parameter 1",
+                    "ue"
+                ),
+                LevelExerciseParameterEntity(
+                    1,
+                    3f,
+                    1
+                ),
+                editable = false
+            ),
+
+            ParameterItem(
+                "2",
+                ParameterEntity(
+                    "parameter 2",
+                    "ue"
+                ),
+                LevelExerciseParameterEntity(
+                    1,
+                    3f,
+                    1
+                ),
+                editable = false
+            )
         )
         val parametersList = ItemsList(parameters)
 

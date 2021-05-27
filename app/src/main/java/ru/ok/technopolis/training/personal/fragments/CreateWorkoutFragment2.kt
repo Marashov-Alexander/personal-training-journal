@@ -30,7 +30,7 @@ class CreateWorkoutFragment2 : BaseFragment(), PlanWorkoutDialog.PlanWorkoutList
         nextStepCard = next_step_card
 
         nextStepCard?.setOnClickListener {
-            PlanWorkoutDialog(WorkoutEntity("name", "12:00", 3,"description"), this)
+            PlanWorkoutDialog(WorkoutEntity("name", "description", "category","sport", 5, false, 1, null), this)
                     .show(requireActivity().supportFragmentManager, "ParameterDialogFragment")
         }
 

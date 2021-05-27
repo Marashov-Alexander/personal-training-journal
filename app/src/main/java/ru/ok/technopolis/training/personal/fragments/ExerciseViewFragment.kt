@@ -14,12 +14,12 @@ import kotlinx.android.synthetic.main.fragment_view_exercise.view.*
 import kotlinx.android.synthetic.main.item_media_viewer.view.*
 import kotlinx.android.synthetic.main.view_appbar.*
 import ru.ok.technopolis.training.personal.R
+import ru.ok.technopolis.training.personal.db.entity.LevelExerciseParameterEntity
 import ru.ok.technopolis.training.personal.db.entity.ParameterEntity
-import ru.ok.technopolis.training.personal.fragments.dialogs.ParameterDialogFragment
 import ru.ok.technopolis.training.personal.items.BundleItem
 import ru.ok.technopolis.training.personal.items.ItemsList
+import ru.ok.technopolis.training.personal.items.ParameterItem
 import ru.ok.technopolis.training.personal.items.ShortExerciseItem
-import ru.ok.technopolis.training.personal.items.ShortParameterItem
 import ru.ok.technopolis.training.personal.items.SingleSelectableList
 import ru.ok.technopolis.training.personal.lifecycle.Page
 import ru.ok.technopolis.training.personal.utils.logger.Logger
@@ -29,7 +29,7 @@ import ru.ok.technopolis.training.personal.viewholders.BundleItemViewHolder
 import ru.ok.technopolis.training.personal.viewholders.ParameterViewHolder
 import java.sql.Time
 
-class ExerciseViewFragment : BaseFragment(), ParameterDialogFragment.ParameterDialogListener {
+class ExerciseViewFragment : BaseFragment() {
     private var exerciseShortInfoRecycler: RecyclerView? = null
     private var imageSwitcher: RecyclerView? = null
     private var startButton: ImageView? = null
@@ -61,11 +61,35 @@ class ExerciseViewFragment : BaseFragment(), ParameterDialogFragment.ParameterDi
     private fun loadDummy() {
         setWorkoutDummy()
 
-        val parameters = mutableListOf<ShortParameterItem>()
-        for (i in 1..7) {
-            parameters.add(ShortParameterItem(i.toString(), ParameterEntity("Параметр $i", "ед. изм."), false))
-        }
-        parameters.add(ShortParameterItem("0", null, editable = false, invisible = true))
+        val parameters = mutableListOf(
+            ParameterItem(
+                "1",
+                ParameterEntity(
+                    "parameter 1",
+                    "ue"
+                ),
+                LevelExerciseParameterEntity(
+                    1,
+                    3f,
+                    1
+                ),
+                editable = false
+            ),
+
+            ParameterItem(
+                "2",
+                ParameterEntity(
+                    "parameter 2",
+                    "ue"
+                ),
+                LevelExerciseParameterEntity(
+                    1,
+                    3f,
+                    1
+                ),
+                editable = false
+            )
+        )
 
         val parametersList = ItemsList(parameters)
 
@@ -136,7 +160,4 @@ class ExerciseViewFragment : BaseFragment(), ParameterDialogFragment.ParameterDi
 
     override fun getFragmentLayoutId(): Int = R.layout.fragment_view_exercise
 
-    override fun onSaveClick(item: ParameterEntity) {
-        println(item.toString())
-    }
 }

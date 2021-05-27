@@ -8,20 +8,28 @@ import androidx.room.PrimaryKey
 @Entity(
     foreignKeys = [
         ForeignKey(
-            entity = DoneExerciseEntity::class,
+            entity = UserEntity::class,
             parentColumns = ["id"],
-            childColumns = ["doneExerciseId"]
+            childColumns = ["userId"]
         ),
         ForeignKey(
-            entity = ParameterEntity::class,
+            entity = ExerciseParameterEntity::class,
             parentColumns = ["id"],
-            childColumns = ["parameterId"]
+            childColumns = ["exerciseParameterId"]
+        ),
+        ForeignKey(
+            entity = WorkoutEntity::class,
+            parentColumns = ["id"],
+            childColumns = ["workoutId"]
         )
     ]
 )
 data class ParameterResultEntity(
-    @ColumnInfo var doneExerciseId: Long,
-    @ColumnInfo var parameterId: Long,
+    @ColumnInfo var userId: Long,
+    @ColumnInfo var exerciseParameterId: Long,
+    @ColumnInfo var workoutId: Long,
+    @ColumnInfo var timestamp: Long,
+    @ColumnInfo var goalValue: Float,
     @ColumnInfo var value: Float,
     @ColumnInfo var serverId: Long = -1L,
     @PrimaryKey(autoGenerate = true) var id: Long = 0

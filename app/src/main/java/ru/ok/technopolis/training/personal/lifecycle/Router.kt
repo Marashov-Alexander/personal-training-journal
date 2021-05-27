@@ -19,14 +19,6 @@ class Router(private val activity: Activity) {
         showPage(Page.Activity.Login)
     }
 
-    fun showUploadPage() {
-        showPage(Page.Fragment.Upload)
-    }
-
-    fun showCalendarPage() {
-        showPage(Page.Fragment.Calendar)
-    }
-
     fun showWorkoutPlanPage() {
         showPage(Page.Fragment.WorkoutPlan)
     }
@@ -47,8 +39,12 @@ class Router(private val activity: Activity) {
         showPage(Page.Fragment.NewWorkout2)
     }
 
-    fun showNewExercisePage1() {
-        showPage(Page.Fragment.NewExercise1)
+    fun showNewExercisePage1(userId: Long, workoutId: Long, exerciseId: Long) {
+        val bundle = Bundle(2)
+        bundle.putLong(USER_ID_KEY, userId)
+        bundle.putLong(WORKOUT_ID_KEY, workoutId)
+        bundle.putLong(EXERCISE_ID_KEY, exerciseId)
+        showPage(Page.Fragment.NewExercise1, bundle)
     }
 
     fun showNewExercisePage2() {
@@ -85,13 +81,6 @@ class Router(private val activity: Activity) {
 
     fun showTrainingViewPage() {
         showPage(Page.Fragment.TrainingView)
-    }
-
-    fun showActiveExerciseOldPage(userId: Long, workoutId: Long) {
-        val workoutIdBundle = Bundle(2)
-        workoutIdBundle.putLong(USER_ID_KEY, userId)
-        workoutIdBundle.putLong(WORKOUT_ID_KEY, workoutId)
-        showPage(Page.Fragment.ActiveExerciseOld, workoutIdBundle)
     }
 
     fun showActiveExercisePage(userId: Long, workoutId: Long) {

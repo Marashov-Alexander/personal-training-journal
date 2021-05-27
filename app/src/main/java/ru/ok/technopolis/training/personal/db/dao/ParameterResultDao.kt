@@ -13,8 +13,8 @@ interface ParameterResultDao {
     @Query("SELECT * FROM ParameterResultEntity")
     fun getAll(): List<ParameterResultEntity>
 
-    @Query("SELECT * FROM ParameterResultEntity WHERE doneExerciseId=:doneExerciseId")
-    fun getAllByDoneExerciseId(doneExerciseId: Long): List<ParameterResultEntity>
+    @Query("SELECT * FROM ParameterResultEntity WHERE userId = :userId and workoutId = :workoutId")
+    fun getAllByDoneExerciseId(userId: Long, workoutId: Long): List<ParameterResultEntity>
 
     @Query("SELECT * FROM ParameterResultEntity WHERE id = :id")
     fun getById(id: Long): ParameterResultEntity

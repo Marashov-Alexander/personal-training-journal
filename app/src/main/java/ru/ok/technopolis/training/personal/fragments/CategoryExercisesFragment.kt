@@ -29,7 +29,7 @@ class CategoryExercisesFragment : BaseFragment() {
         addButton = view.add_element_button
         exDummyToRecView()
         addButton?.setOnClickListener {
-            router?.showNewExercisePage1()
+            router?.showNewExercisePage1(1, 1, 1)
         }
     }
 

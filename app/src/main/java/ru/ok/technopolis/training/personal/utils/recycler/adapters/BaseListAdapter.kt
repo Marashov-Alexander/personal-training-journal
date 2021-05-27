@@ -30,7 +30,7 @@ open class BaseListAdapter<Item>(
         super.onAttachedToRecyclerView(recyclerView)
         data = dataSource.items
         onAddDataSourceSubscription = dataSource.addingSubject().subscribe {
-            notifyItemInserted(0)
+            notifyItemInserted(it.second)
         }
         onRemoveDataSourceSubscription = dataSource.removingSubject().subscribe {
             notifyItemRemoved(it)

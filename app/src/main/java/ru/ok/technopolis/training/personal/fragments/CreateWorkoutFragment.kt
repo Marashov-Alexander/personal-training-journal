@@ -42,7 +42,7 @@ class CreateWorkoutFragment : BaseFragment() {
         }
 
         addExerciseButton?.setOnClickListener {
-            router?.showNewExercisePage1()
+            router?.showNewExercisePage1(1, 1, 1)
         }
 
         exercisesList = ExercisesList(mutableListOf(

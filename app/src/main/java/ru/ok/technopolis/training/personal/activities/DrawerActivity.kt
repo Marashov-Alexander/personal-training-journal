@@ -22,14 +22,8 @@ import ru.ok.technopolis.training.personal.repository.CurrentUserRepository
 abstract class DrawerActivity : BaseActivity() {
 
     companion object {
-        const val SEARCH_ITEM_ID = 1L
-        const val BOOKMARKS_ITEM_ID = 2L
-        const val FAVOURITE_ITEM_ID = 3L
         const val SETTINGS_ITEM_ID = 4L
         const val EXIT_ITEM_ID = 5L
-        const val RESULTS_ITEM_ID = 6L
-        const val CALENDAR_ITEM_ID = 7L
-        const val SAVE_TO_SERVER_ITEM_ID = 8L
     }
 
     private val profile: ProfileDrawerItem = ProfileDrawerItem()
@@ -43,21 +37,6 @@ abstract class DrawerActivity : BaseActivity() {
         slider.apply {
             onDrawerItemClickListener = { _, item, _ ->
                 when (item.identifier) {
-                    SAVE_TO_SERVER_ITEM_ID -> {
-                        router?.showUploadPage()
-                    }
-                    CALENDAR_ITEM_ID -> {
-                        router?.showCalendarPage()
-                    }
-                    RESULTS_ITEM_ID -> {
-                        router?.showResultsPage()
-                    }
-                    SEARCH_ITEM_ID -> {
-                    }
-                    BOOKMARKS_ITEM_ID -> {
-                    }
-                    FAVOURITE_ITEM_ID -> {
-                    }
                     EXIT_ITEM_ID -> {
                         buildExitDialog()
                     }
@@ -86,27 +65,6 @@ abstract class DrawerActivity : BaseActivity() {
 
     private fun setupItems() {
 
-        val calendarItem = PrimaryDrawerItem().apply {
-            name = StringHolder(R.string.drawer_item_calendar)
-            icon = ImageHolder(R.drawable.ic_item_calendar)
-            identifier = CALENDAR_ITEM_ID
-            isSelectable = false
-        }
-
-        val resultsItem = PrimaryDrawerItem().apply {
-            name = StringHolder(R.string.drawer_item_results)
-            icon = ImageHolder(R.drawable.ic_results)
-            identifier = RESULTS_ITEM_ID
-            isSelectable = false
-        }
-
-        val saveItem = PrimaryDrawerItem().apply {
-            name = StringHolder(R.string.drawer_item_save)
-            icon = ImageHolder(R.drawable.ic_upload)
-            identifier = SAVE_TO_SERVER_ITEM_ID
-            isSelectable = false
-        }
-
         val settingsItem = PrimaryDrawerItem().apply {
             name = StringHolder(R.string.drawer_item_settings)
             icon = ImageHolder(R.drawable.ic_settings)
@@ -121,10 +79,7 @@ abstract class DrawerActivity : BaseActivity() {
         }
 
         slider.addItems(
-                calendarItem,
-                resultsItem,
                 DividerDrawerItem(),
-                saveItem,
                 settingsItem,
                 exitItem
         )
