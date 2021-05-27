@@ -21,15 +21,14 @@
 
         <include
             android:id="@+id/image_switcher"
+            layout="@layout/item_media_viewer"
             android:layout_width="match_parent"
             android:layout_height="300dp"
-            layout="@layout/item_media_viewer"
             android:layout_marginBottom="@dimen/dimens_16dp"
             app:layout_constraintBottom_toTopOf="@id/level_value"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/short_workout_downloads"
-            />
+            app:layout_constraintTop_toBottomOf="@id/short_workout_downloads" />
 
         <com.google.android.material.floatingactionbutton.FloatingActionButton
             android:id="@+id/decrease_level"
@@ -82,8 +81,8 @@
             android:textColor="@color/design_default_color_secondary_variant"
             android:textSize="@dimen/text_size_13"
             app:layout_constraintBottom_toBottomOf="@id/short_workout_downloads"
-            app:layout_constraintTop_toTopOf="@id/short_workout_downloads"
             app:layout_constraintStart_toEndOf="@id/short_workout_downloads"
+            app:layout_constraintTop_toTopOf="@id/short_workout_downloads"
             tools:text="123" />
 
         <ImageView
@@ -93,10 +92,9 @@
             android:layout_margin="@dimen/padding_5"
             android:contentDescription="@string/workout_downloads"
             android:src="@drawable/ic_baseline_group_theme_24"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/exercise_scroll_info"
             app:layout_constraintBottom_toTopOf="@id/image_switcher"
-            />
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toBottomOf="@id/exercise_scroll_info" />
 
         <ImageView
             android:id="@+id/short_workout_star"
@@ -105,21 +103,20 @@
             android:layout_margin="@dimen/padding_5"
             android:contentDescription="@string/workout_rank"
             android:src="@drawable/ic_baseline_star_theme_color_24"
-            app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintBottom_toBottomOf="@id/short_workout_downloads"
-            app:layout_constraintTop_toTopOf="@id/short_workout_downloads"
-            />
+            app:layout_constraintEnd_toEndOf="parent"
+            app:layout_constraintTop_toTopOf="@id/short_workout_downloads" />
 
         <TextView
             android:id="@+id/rank_number"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:layout_marginStart="@dimen/dimens_8dp"
+            android:layout_marginEnd="@dimen/dimens_8dp"
             android:textColor="@color/design_default_color_secondary_variant"
             android:textSize="@dimen/text_size_13"
             app:layout_constraintBottom_toBottomOf="@id/short_workout_star"
-            app:layout_constraintTop_toTopOf="@id/short_workout_star"
             app:layout_constraintEnd_toStartOf="@id/short_workout_star"
+            app:layout_constraintTop_toTopOf="@id/short_workout_star"
             tools:text="9.8" />
 
         <TextView
@@ -161,6 +158,8 @@
             android:layout_height="wrap_content"
             android:layout_margin="@dimen/padding_5"
             android:text="@string/share"
+            android:textSize="12sp"
+            android:textStyle="italic"
             app:layout_constraintBottom_toBottomOf="@id/image_switcher"
             app:layout_constraintStart_toStartOf="parent" />
 
@@ -201,28 +200,36 @@
             app:layout_constraintTop_toBottomOf="@+id/author_name"
             tools:text="Author Name" />
 
-        <ImageView
-            android:id="@+id/info_icon"
+        <androidx.constraintlayout.widget.ConstraintLayout
+            android:id="@+id/info_card"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
-            android:contentDescription="@string/description"
-            android:paddingVertical="@dimen/padding_5"
-            android:src="@drawable/ic_info"
-            app:layout_constraintBottom_toTopOf="@id/info_text"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="@id/info_text" />
-
-        <TextView
-            android:id="@+id/info_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginBottom="@dimen/padding_10"
-            android:paddingHorizontal="@dimen/padding_5"
-            android:text="@string/description"
-            android:textSize="12sp"
-            android:textStyle="italic"
             app:layout_constraintBottom_toBottomOf="@id/image_switcher"
-            app:layout_constraintEnd_toEndOf="parent" />
+            app:layout_constraintEnd_toEndOf="parent">
+
+            <ImageView
+                android:id="@+id/info_icon"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:contentDescription="@string/description"
+                android:paddingVertical="@dimen/padding_5"
+                android:src="@drawable/ic_info"
+                app:layout_constraintBottom_toTopOf="@id/info_text"
+                app:layout_constraintEnd_toEndOf="parent"
+                app:layout_constraintStart_toStartOf="@id/info_text" />
+
+            <TextView
+                android:id="@+id/info_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_marginBottom="@dimen/padding_10"
+                android:paddingHorizontal="@dimen/padding_5"
+                android:text="@string/description"
+                android:textSize="12sp"
+                android:textStyle="italic"
+                app:layout_constraintBottom_toBottomOf="parent"
+                app:layout_constraintEnd_toEndOf="parent" />
+        </androidx.constraintlayout.widget.ConstraintLayout>
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/exercise_param_list"

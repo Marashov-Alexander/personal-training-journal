@@ -2,15 +2,16 @@ package ru.ok.technopolis.training.personal.fragments
 
 import android.os.Bundle
 import android.view.View
-import android.widget.ImageSwitcher
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_view_workout.view.*
 import kotlinx.android.synthetic.main.item_media_viewer.view.*
 import kotlinx.android.synthetic.main.view_appbar.*
 import ru.ok.technopolis.training.personal.R
+import ru.ok.technopolis.training.personal.fragments.dialogs.DescriptionDialogFragment
 import ru.ok.technopolis.training.personal.items.BundleItem
 import ru.ok.technopolis.training.personal.items.ExerciseItem
 import ru.ok.technopolis.training.personal.items.ExercisesList
@@ -38,6 +39,7 @@ class WorkoutViewFragment : BaseFragment() {
     private var redactorName: TextView? = null
     private var exerciseRecycler: RecyclerView? = null
     private var exercisesList: ExercisesList? = null
+    private var info: ConstraintLayout? = null
 
     private var workout: ShortWorkoutItem? = null
 
@@ -53,6 +55,7 @@ class WorkoutViewFragment : BaseFragment() {
         authorName = view.author_name
         redactorName = view.redactor_name
         exerciseRecycler = view.workout_ex_list
+        info = view.info_card
 
         shareText = view.share_text
 
@@ -96,20 +99,29 @@ class WorkoutViewFragment : BaseFragment() {
 
     private fun setWorkoutDummy(){
         val workoutId = (activity?.intent?.extras?.get(Page.WORKOUT_ID_KEY) as Long)
-        workout = ShortWorkoutItem(workoutId.toString(), Time(System.currentTimeMillis()), "name", "category", "sport", "40 min", true, 123, 3.5, false, false)
+        workout = ShortWorkoutItem(workoutId.toString(), Time(System.currentTimeMillis()), "name", "description","category", "sport", "40 min", true, 123, 3.5, false, false)
         activity?.base_toolbar?.title = getString(R.string.workout) + " \"${workout?.name}\" "
         raiting?.text = workout?.rank.toString()
         difficulty?.text = (3).toString()
         downloadsNumber?.text = workout?.downloadsNumber.toString()
         if (!workout?.private!!) {
-            shareButton?.visibility = View.INVISIBLE
-            startButton?.visibility = View.INVISIBLE
-            shareText?.visibility = View.INVISIBLE
+//            shareButton?.visibility = View.INVISIBLE
+//            startButton?.visibility = View.INVISIBLE
+//            shareText?.visibility = View.INVISIBLE
+        }
+
+        info?.setOnClickListener {
+            showExerciseDescription(workout!!.name, workout!!.description)
         }
         //TODO:load author and redactor from db
 //        authorName?.text =
 //        redactorName?.text =
         setWorkoutShortInfo()
+    }
+
+    private fun showExerciseDescription(title: String, description: String) {
+        DescriptionDialogFragment(title, description)
+                .show(requireActivity().supportFragmentManager, "ParameterDialogFragment")
     }
 
     private fun setWorkoutShortInfo(){

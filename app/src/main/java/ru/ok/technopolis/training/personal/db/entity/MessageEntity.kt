@@ -41,6 +41,7 @@ data class MessageEntity (
         @ColumnInfo var recipientId: Long,
         @ColumnInfo var userWorkoutId: Long?,
         @ColumnInfo var userExerciseId: Long?,
+        @ColumnInfo var read: Boolean,
         @ColumnInfo var serverId: Long = -1L,
         @PrimaryKey(autoGenerate = true) var id: Long = 0
 ) : WithServerId {

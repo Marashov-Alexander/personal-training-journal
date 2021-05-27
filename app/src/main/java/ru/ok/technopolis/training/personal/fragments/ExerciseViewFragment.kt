@@ -8,6 +8,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
+import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_view_exercise.view.*
@@ -16,10 +17,13 @@ import kotlinx.android.synthetic.main.view_appbar.*
 import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.db.entity.LevelExerciseParameterEntity
 import ru.ok.technopolis.training.personal.db.entity.ParameterEntity
+import ru.ok.technopolis.training.personal.fragments.dialogs.DescriptionDialogFragment
+import ru.ok.technopolis.training.personal.fragments.dialogs.ParameterDialogFragment
 import ru.ok.technopolis.training.personal.items.BundleItem
 import ru.ok.technopolis.training.personal.items.ItemsList
 import ru.ok.technopolis.training.personal.items.ParameterItem
 import ru.ok.technopolis.training.personal.items.ShortExerciseItem
+import ru.ok.technopolis.training.personal.items.ShortParameterItem
 import ru.ok.technopolis.training.personal.items.SingleSelectableList
 import ru.ok.technopolis.training.personal.lifecycle.Page
 import ru.ok.technopolis.training.personal.utils.logger.Logger
@@ -40,6 +44,7 @@ class ExerciseViewFragment : BaseFragment() {
     private var authorName: TextView? = null
     private var redactorName: TextView? = null
     private var parametersRecycler: RecyclerView? = null
+    private var info: ConstraintLayout? = null
 
     private var exercise: ShortExerciseItem? = null
 
@@ -55,6 +60,7 @@ class ExerciseViewFragment : BaseFragment() {
         authorName = view.author_name
         redactorName = view.redactor_name
         parametersRecycler = view.exercise_param_list
+        info = view.info_card
         loadDummy()
     }
 
@@ -112,11 +118,16 @@ class ExerciseViewFragment : BaseFragment() {
         activity?.base_toolbar?.title = getString(R.string.exercise) + " \"${exercise?.name}\" "
         raiting?.text = exercise?.rank.toString()
         downloadsNumber?.text = exercise?.downloadsNumber.toString()
-        val isLocal = false
-        if (!isLocal) {
-            shareButton?.visibility = View.INVISIBLE
-            startButton?.visibility = View.INVISIBLE
+//        val isLocal = false
+//        if (!isLocal) {
+//            shareButton?.visibility = View.INVISIBLE
+//            startButton?.visibility = View.INVISIBLE
+//        }
+
+        info?.setOnClickListener {
+            showExerciseDescription(exercise!!.name, exercise!!.description)
         }
+
         //TODO:load author and redactor from db
 //        authorName?.text =
 //        redactorName?.text =
@@ -138,6 +149,11 @@ class ExerciseViewFragment : BaseFragment() {
         exerciseShortInfoRecycler?.adapter = exerciseAdapter
         val layoutManager = LinearLayoutManager(activity, RecyclerView.HORIZONTAL, false)
         exerciseShortInfoRecycler?.layoutManager = layoutManager
+    }
+
+    private fun showExerciseDescription(title: String, description: String) {
+        DescriptionDialogFragment(title, description)
+                .show(requireActivity().supportFragmentManager, "ParameterDialogFragment")
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
