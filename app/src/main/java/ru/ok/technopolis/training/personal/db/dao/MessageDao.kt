@@ -16,6 +16,9 @@ interface MessageDao {
     @Query("SELECT * FROM MessageEntity WHERE id = :id")
     fun getById(id: Long): MessageEntity
 
+    @Query("SELECT * FROM MessageEntity WHERE chatId = :chatId")
+    fun getByChatId(chatId: Long): MutableList<MessageEntity>
+
     @Query("SELECT * FROM MessageEntity WHERE serverId = :id")
     fun getByServerId(id: Long): MessageEntity
 
