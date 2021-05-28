@@ -23,17 +23,34 @@ interface LevelExerciseParameterDao {
     fun getByServerId(id: Long): LevelExerciseParameterEntity
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
-    fun insert(workoutEntity: LevelExerciseParameterEntity): Long
+    fun insert(levelExerciseParameterEntity: LevelExerciseParameterEntity): Long
 
     @Insert
-    fun insert(workoutEntityList: List<LevelExerciseParameterEntity>): List<Long>
+    fun insert(levelExerciseParameterEntityList: List<LevelExerciseParameterEntity>): List<Long>
 
     @Update
-    fun update(workoutEntity: LevelExerciseParameterEntity): Int
+    fun update(levelExerciseParameterEntity: LevelExerciseParameterEntity): Int
 
     @Update
-    fun update(workoutEntityList: List<LevelExerciseParameterEntity>): Int
+    fun update(levelExerciseParameterEntityList: List<LevelExerciseParameterEntity>): Int
 
     @Delete
-    fun delete(workoutEntity: LevelExerciseParameterEntity): Int
+    fun delete(levelExerciseParameterEntity: LevelExerciseParameterEntity): Int
+
+    @Query("""
+        DELETE 
+            FROM LevelExerciseParameterEntity 
+        WHERE 
+            LevelExerciseParameterEntity.level > :level 
+                AND EXISTS (
+                    SELECT 
+                        * 
+                    FROM 
+                        ExerciseParameterEntity 
+                    WHERE 
+                        ExerciseParameterEntity.id = LevelExerciseParameterEntity.exerciseParameterId 
+                            AND ExerciseParameterEntity.exerciseId = :exerciseId
+                )
+    """)
+    fun deleteLevelsGreaterThan(level: Int, exerciseId: Long): Int
 }
