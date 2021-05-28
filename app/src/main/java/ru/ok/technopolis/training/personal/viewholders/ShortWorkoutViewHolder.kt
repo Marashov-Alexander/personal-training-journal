@@ -17,19 +17,12 @@ class ShortWorkoutViewHolder (
     private var name: TextView = itemView.short_workout_name
     private var category: TextView = itemView.short_workout_category
     private var sport: TextView = itemView.short_workout_sport
-    private var durationIcon: ImageView = itemView.short_workout_duration_icon
-    private var duration: TextView = itemView.short_workout_duration
     private var downloadsIcon: ImageView = itemView.short_workout_downloads
     private var downloads: TextView = itemView.downloads_number
     private var starIcon: ImageView = itemView.short_workout_star
     private var rank: TextView = itemView.rank_number
 
     override fun bind(item: ShortWorkoutItem) {
-        if (item.invisible) {
-            itemView.visibility = View.INVISIBLE
-        } else {
-            itemView.visibility = View.VISIBLE
-        }
         if (item.downloadsNumber == 0) {
             downloads.visibility = View.GONE
             downloadsIcon.visibility = View.GONE
@@ -46,13 +39,6 @@ class ShortWorkoutViewHolder (
             starIcon.visibility = View.VISIBLE
         }
 
-        if (item.duration.isBlank()) {
-            duration.visibility = View.GONE
-            durationIcon.visibility = View.GONE
-        } else {
-            duration.visibility = View.VISIBLE
-            durationIcon.visibility = View.VISIBLE
-        }
         update(item)
     }
 
@@ -60,7 +46,6 @@ class ShortWorkoutViewHolder (
         name.text = item.name
         category.text = item.category
         sport.text = item.sport
-        duration.text = item.duration
         rank.text = item.rank.toString()
         downloads.text = item.downloadsNumber.toString()
     }
