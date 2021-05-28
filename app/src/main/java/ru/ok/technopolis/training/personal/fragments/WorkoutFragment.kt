@@ -22,7 +22,7 @@ abstract class WorkoutFragment : BaseFragment() {
                         workoutExercise
                     )
                 }.toMutableList()
-                val category = it.workoutCategoryDao().getById(1)
+                val category = it.workoutCategoryDao().getById(workout.categoryId)
                 withContext(Dispatchers.Main) {
                     actionsAfter.invoke(workout, category, exercises)
                 }
