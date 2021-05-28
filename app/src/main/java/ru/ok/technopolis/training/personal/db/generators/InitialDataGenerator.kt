@@ -32,7 +32,7 @@ class InitialDataGenerator {
             return WorkoutEntity(
                 "My workout 1",
                 "Description",
-                "My category",
+                1,
                 "My sport",
                 0,
                 true,

@@ -15,13 +15,20 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.ok.technopolis.training.personal.R
+import ru.ok.technopolis.training.personal.db.entity.ExerciseEntity
+import ru.ok.technopolis.training.personal.db.entity.WorkoutCategoryEntity
+import ru.ok.technopolis.training.personal.db.entity.WorkoutEntity
+import ru.ok.technopolis.training.personal.db.entity.WorkoutExerciseEntity
 import ru.ok.technopolis.training.personal.fragments.dialogs.DescriptionDialogFragment
 import ru.ok.technopolis.training.personal.items.BundleItem
 import ru.ok.technopolis.training.personal.items.ExerciseItem
 import ru.ok.technopolis.training.personal.items.ExercisesList
 import ru.ok.technopolis.training.personal.items.ShortWorkoutItem
 import ru.ok.technopolis.training.personal.items.SingleSelectableList
+import ru.ok.technopolis.training.personal.items.chatItems.MessageFromItem
+import ru.ok.technopolis.training.personal.items.chatItems.MessageToItem
 import ru.ok.technopolis.training.personal.lifecycle.Page
+import ru.ok.technopolis.training.personal.repository.CurrentUserRepository
 import ru.ok.technopolis.training.personal.utils.recycler.adapters.BundleAdapter
 import ru.ok.technopolis.training.personal.utils.recycler.adapters.ExerciseAdapter
 import ru.ok.technopolis.training.personal.viewholders.BundleItemViewHolder
@@ -112,26 +119,26 @@ class WorkoutViewFragment : BaseFragment() {
         }
     }
 
-    private fun setWorkoutDummy(){
-        val workoutId = (activity?.intent?.extras?.get(Page.WORKOUT_ID_KEY) as Long)
-        workout = ShortWorkoutItem(workoutId.toString(), Time(System.currentTimeMillis()), "name", "description","category", "sport", "40 min",  123, 3.5, false, false)
+    private fun setWorkoutDummy(workout: WorkoutEntity, category: WorkoutCategoryEntity){
+//        val workoutId = (activity?.intent?.extras?.get(Page.WORKOUT_ID_KEY) as Long)
+//        workout = ShortWorkoutItem(workoutId.toString(), Time(System.currentTimeMillis()), "name", "description","category", "sport", "40 min",  123, 3.5, false, false)
         activity?.base_toolbar?.title = getString(R.string.workout) + " \"${workout?.name}\" "
-        raiting?.text = workout?.rank.toString()
-        difficulty?.text = (3).toString()
-        downloadsNumber?.text = workout?.downloadsNumber.toString()
-        if (!workout?.private!!) {
+//        raiting?.text = workout.
+        difficulty?.text = workout.difficulty.toString()
+//        downloadsNumber?.text = workout?.downloadsNumber.toString()
+//        if (!workout?.private!!) {
 //            shareButton?.visibility = View.INVISIBLE
 //            startButton?.visibility = View.INVISIBLE
 //            shareText?.visibility = View.INVISIBLE
-        }
+//        }
 
         info?.setOnClickListener {
-            showExerciseDescription(workout!!.name, workout!!.description)
+            showExerciseDescription(workout.name, workout.description.toString())
         }
         //TODO:load author and redactor from db
 //        authorName?.text =
 //        redactorName?.text =
-        setWorkoutShortInfo()
+        setWorkoutShortInfo(workout, category)
     }
 
     private fun showExerciseDescription(title: String, description: String) {
@@ -139,11 +146,11 @@ class WorkoutViewFragment : BaseFragment() {
                 .show(requireActivity().supportFragmentManager, "ParameterDialogFragment")
     }
 
-    private fun setWorkoutShortInfo(){
+    private fun setWorkoutShortInfo(workout: WorkoutEntity, category: WorkoutCategoryEntity){
         val itemsList = SingleSelectableList(mutableListOf(
 //                BundleItem("0", 0, "Сложность 3"),
-                BundleItem("0", 0, workout?.category.toString()),
-                BundleItem("1", 1, workout?.sport.toString())
+                BundleItem("0", 0, category.name),
+                BundleItem("1", 1, workout.sport.toString())
         ))
         val exerciseAdapter = BundleAdapter(
                 holderType = BundleItemViewHolder::class,
