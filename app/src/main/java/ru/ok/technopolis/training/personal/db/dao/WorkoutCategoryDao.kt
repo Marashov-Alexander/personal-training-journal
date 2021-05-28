@@ -8,7 +8,6 @@ import androidx.room.Query
 import androidx.room.Update
 import ru.ok.technopolis.training.personal.db.entity.WorkoutCategoryEntity
 
-
 @Dao
 interface WorkoutCategoryDao {
     @Query("SELECT * FROM WorkoutCategoryEntity")
