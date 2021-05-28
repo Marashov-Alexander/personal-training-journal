@@ -25,6 +25,8 @@ import androidx.room.PrimaryKey
 data class WorkoutExerciseEntity(
     @ColumnInfo var workoutId: Long,
     @ColumnInfo var exerciseId: Long,
+    @ColumnInfo var supersetGroupId: Int? = null,
+    @ColumnInfo var counter: Int? = null,
     @ColumnInfo var serverId: Long = -1L,
     @PrimaryKey(autoGenerate = true) var id: Long = 0
 ) : WithServerId {

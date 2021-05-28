@@ -4,20 +4,19 @@ import android.view.View
 import android.view.View.GONE
 import okhttp3.internal.immutableListOf
 import ru.ok.technopolis.training.personal.R
+import ru.ok.technopolis.training.personal.db.entity.ExerciseEntity
+import ru.ok.technopolis.training.personal.db.entity.WorkoutExerciseEntity
 import ru.ok.technopolis.training.personal.items.interfaces.WithId
 import ru.ok.technopolis.training.personal.viewholders.ExerciseItemViewHolder
 
 data class ExerciseItem(
 
     override val id: String,
-    val iconId: Int,
-    val title: String,
-    val description: String,
+    val exercise: ExerciseEntity,
     // id суперсета, к которому относится упражнение. Если null, то упражнение не включено в суперсет. По этому полю определяется цвет
-    var supersetGroupId: Int?
+    var workoutExercise: WorkoutExerciseEntity
 
 ) : WithId {
-    var counter: Int? = null
     var checked: Boolean? = null
     var counterVisibility: Int = GONE
     var cornerMode: ExerciseItemViewHolder.CornerMode = ExerciseItemViewHolder.CornerMode.ALL
@@ -34,7 +33,7 @@ data class ExerciseItem(
     }
 
     fun itemMode(): ExerciseItemViewHolder.ItemMode {
-        return if (supersetGroupId == null) {
+        return if (workoutExercise.supersetGroupId == null) {
             if (checked == null) {
                 ExerciseItemViewHolder.ItemMode.SIMPLE
             } else {
@@ -54,9 +53,9 @@ data class ExerciseItem(
             }
 
     fun getCornerMode(prevItem: ExerciseItem?, nextItem: ExerciseItem?): ExerciseItemViewHolder.CornerMode {
-        val isSuperset = supersetGroupId != null
-        val prevDisconnected = prevItem == null || prevItem.supersetGroupId != supersetGroupId
-        val nextDisconnected = nextItem == null || nextItem.supersetGroupId != supersetGroupId
+        val isSuperset = workoutExercise.supersetGroupId != null
+        val prevDisconnected = prevItem == null || prevItem.workoutExercise.supersetGroupId != workoutExercise.supersetGroupId
+        val nextDisconnected = nextItem == null || nextItem.workoutExercise.supersetGroupId != workoutExercise.supersetGroupId
         val isFirst = isSuperset && prevDisconnected
         val isLast = isSuperset && nextDisconnected
         val isMiddle = !isFirst && !isLast && isSuperset && !prevDisconnected && !nextDisconnected
@@ -70,16 +69,16 @@ data class ExerciseItem(
     }
 
     fun getColorId(): Int {
-        return if (supersetGroupId == null) {
+        return if (workoutExercise.supersetGroupId == null) {
             transparentColorId
         } else {
-            colorIds[supersetGroupId!! % colorIds.size]
+            colorIds[workoutExercise.supersetGroupId!! % colorIds.size]
         }
     }
 
     fun isSingleExerciseSuperset(prev: ExerciseItem?, next: ExerciseItem?): Boolean {
-        val prevDisconnected = prev == null || prev.supersetGroupId != supersetGroupId
-        val nextDisconnected = next == null || next.supersetGroupId != supersetGroupId
+        val prevDisconnected = prev == null || prev.workoutExercise.supersetGroupId != workoutExercise.supersetGroupId
+        val nextDisconnected = next == null || next.workoutExercise.supersetGroupId != workoutExercise.supersetGroupId
         return prevDisconnected && nextDisconnected
     }
 }

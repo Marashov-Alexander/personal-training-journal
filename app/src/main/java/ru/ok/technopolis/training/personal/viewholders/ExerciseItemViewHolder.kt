@@ -28,11 +28,12 @@ class ExerciseItemViewHolder(
     private var exerciseBackground: MaterialCardView = itemView.exercise_background
     private var cornerRadius: Float = 0f
 
+    // TODO: обновлять item при изменениях?
     override fun bind(item: ExerciseItem) {
         cornerRadius = itemView.resources.getDimension(R.dimen.superset_corner_radius)
-        title.text = item.title
-        description.text = item.description
-        supersetCounter.setText("${item.counter}")
+        title.text = item.exercise.name
+        description.text = item.exercise.description
+        supersetCounter.setText("${item.workoutExercise.counter}")
         setCounter(item.counterVisibility)
         setColor(itemView.context.getColor(item.getColorId()))
         setCornerMode(item.cornerMode)

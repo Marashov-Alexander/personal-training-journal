@@ -10,6 +10,10 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_view_workout.view.*
 import kotlinx.android.synthetic.main.item_media_viewer.view.*
 import kotlinx.android.synthetic.main.view_appbar.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.fragments.dialogs.DescriptionDialogFragment
 import ru.ok.technopolis.training.personal.items.BundleItem
@@ -23,6 +27,7 @@ import ru.ok.technopolis.training.personal.utils.recycler.adapters.ExerciseAdapt
 import ru.ok.technopolis.training.personal.viewholders.BundleItemViewHolder
 import ru.ok.technopolis.training.personal.viewholders.ExerciseItemViewHolder
 import java.sql.Time
+import kotlin.random.Random
 
 class WorkoutViewFragment : BaseFragment() {
     private var workoutShortInfoRecycler: RecyclerView? = null
@@ -43,6 +48,8 @@ class WorkoutViewFragment : BaseFragment() {
 
     private var workout: ShortWorkoutItem? = null
 
+    private var workoutId = 1L
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         workoutShortInfoRecycler = view.workout_scroll_info
@@ -59,24 +66,12 @@ class WorkoutViewFragment : BaseFragment() {
 
         shareText = view.share_text
 
-        loadDummy()
-    }
+//        loadDummy()
+        loadWorkoutInfo { exercises: MutableList<ExerciseItem> ->
 
+            exercisesList = ExercisesList(exercises)
 
-    private fun loadDummy() {
-        setWorkoutDummy()
-
-        exercisesList = ExercisesList(mutableListOf(
-                ExerciseItem("1", 1, "Упражнение 1", "5 подходов, 5 повторений", supersetGroupId = null),
-                ExerciseItem("2", 1, "Упражнение 2", "5 подходов, 5 повторений", supersetGroupId = null),
-                ExerciseItem("3", 1, "Упражнение 3", "5 подходов, 5 повторений", supersetGroupId = null),
-                ExerciseItem("4", 1, "Упражнение 4", "5 подходов, 5 повторений", supersetGroupId = null),
-                ExerciseItem("5", 1, "Упражнение 5", "5 подходов, 5 повторений", supersetGroupId = null),
-                ExerciseItem("6", 1, "Упражнение 6", "5 подходов, 5 повторений", supersetGroupId = null),
-                ExerciseItem("7", 1, "Упражнение 7", "5 подходов, 5 повторений", supersetGroupId = null),
-                ExerciseItem("8", 1, "Упражнение 8", "5 подходов, 5 повторений", supersetGroupId = null)
-        ))
-        val adapter = ExerciseAdapter(
+            val adapter = ExerciseAdapter(
                 holderType = ExerciseItemViewHolder::class,
                 layoutId = R.layout.item_exercise,
                 dataSource = exercisesList!!,
@@ -91,10 +86,30 @@ class WorkoutViewFragment : BaseFragment() {
                 onLongExerciseClick = {  item, itemView  ->
                     print("Exercise $item clicked")
                 }
-        )
-        exerciseRecycler?.adapter = adapter
-        val workoutsLayoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-        exerciseRecycler?.layoutManager = workoutsLayoutManager
+            )
+            exerciseRecycler?.adapter = adapter
+            val workoutsLayoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+            exerciseRecycler?.layoutManager = workoutsLayoutManager
+        }
+    }
+
+    private fun loadWorkoutInfo(actionsAfter: (MutableList<ExerciseItem>) -> Unit) {
+        setWorkoutDummy()
+        GlobalScope.launch(Dispatchers.IO) {
+            database!!.let {
+                val workoutExercisesByWorkout = it.workoutExerciseDao().getAllByWorkout(workoutId)
+                val exercises = workoutExercisesByWorkout.map { workoutExercise ->
+                    ExerciseItem(
+                        Random.nextInt().toString(),
+                        it.exerciseDao().getById(workoutExercise.exerciseId),
+                        workoutExercise
+                    )
+                }.toMutableList()
+                withContext(Dispatchers.Main) {
+                    actionsAfter.invoke(exercises)
+                }
+            }
+        }
     }
 
     private fun setWorkoutDummy(){

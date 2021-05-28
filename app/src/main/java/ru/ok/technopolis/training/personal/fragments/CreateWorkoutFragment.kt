@@ -2,7 +2,6 @@ package ru.ok.technopolis.training.personal.fragments
 
 import android.os.Bundle
 import android.view.View
-import android.widget.Toast
 import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
@@ -12,11 +11,18 @@ import com.google.android.material.floatingactionbutton.FloatingActionButton
 import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.fragment_new_workout_1.*
 import kotlinx.android.synthetic.main.view_appbar.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import ru.ok.technopolis.training.personal.R
+import ru.ok.technopolis.training.personal.db.entity.ExerciseEntity
+import ru.ok.technopolis.training.personal.db.entity.WorkoutExerciseEntity
 import ru.ok.technopolis.training.personal.items.ExerciseItem
 import ru.ok.technopolis.training.personal.items.ExercisesList
 import ru.ok.technopolis.training.personal.utils.recycler.adapters.ExerciseAdapter
 import ru.ok.technopolis.training.personal.viewholders.ExerciseItemViewHolder
+import kotlin.random.Random
 
 
 class CreateWorkoutFragment : BaseFragment() {
@@ -28,6 +34,9 @@ class CreateWorkoutFragment : BaseFragment() {
     private var nextStepCard: MaterialCardView? = null
     private var addExerciseButton: FloatingActionButton? = null
 
+    private var userId = 1L
+    private var workoutId = 1L
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -37,44 +46,7 @@ class CreateWorkoutFragment : BaseFragment() {
         exercisesRecycler = exercises_recycler
         actionButton = add_exercise_button
         nextStepCard = next_step_card
-        nextStepCard?.setOnClickListener {
-            router?.showNewWorkoutPage2()
-        }
 
-        addExerciseButton?.setOnClickListener {
-            router?.showNewExercisePage1(1, 1, 1)
-        }
-
-        exercisesList = ExercisesList(mutableListOf(
-                ExerciseItem("1", 1, "Упражнение 1", "5 подходов, 5 повторений", supersetGroupId = null),
-                ExerciseItem("2", 1, "Упражнение 2", "5 подходов, 5 повторений", supersetGroupId = null),
-                ExerciseItem("3", 1, "Упражнение 3", "5 подходов, 5 повторений", supersetGroupId = null),
-                ExerciseItem("4", 1, "Упражнение 4", "5 подходов, 5 повторений", supersetGroupId = null),
-                ExerciseItem("5", 1, "Упражнение 5", "5 подходов, 5 повторений", supersetGroupId = null),
-                ExerciseItem("6", 1, "Упражнение 6", "5 подходов, 5 повторений", supersetGroupId = null),
-                ExerciseItem("7", 1, "Упражнение 7", "5 подходов, 5 повторений", supersetGroupId = null),
-                ExerciseItem("8", 1, "Упражнение 8", "5 подходов, 5 повторений", supersetGroupId = null)
-        ))
-
-        val adapter = ExerciseAdapter(
-                holderType = ExerciseItemViewHolder::class,
-                layoutId = R.layout.item_exercise,
-                dataSource = exercisesList!!,
-                onClick = { exercise ->
-                    print("Exercise $exercise clicked")
-                },
-                onStart = {exercise ->
-                    print("Exercise $exercise started")
-                    router?.showExercisePage(exercise.id.toLong())
-                },
-                onLongExerciseClick = { item, itemView ->
-                    val popup = PopupMenu(requireContext(), itemView)
-                    popup.inflate(R.menu.exercise_menu)
-                    popup.setOnMenuItemClickListener(getMenuItemClickListener(item))
-                    popup.show()
-                }
-        )
-        exercisesRecycler?.adapter = adapter
         val layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         exercisesRecycler?.layoutManager = layoutManager
 
@@ -91,6 +63,71 @@ class CreateWorkoutFragment : BaseFragment() {
 
         val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
         itemTouchHelper.attachToRecyclerView(exercisesRecycler)
+
+        loadWorkoutInfo { exercises: MutableList<ExerciseItem> ->
+            nextStepCard?.setOnClickListener {
+                router?.showNewWorkoutPage2()
+            }
+
+            addExerciseButton?.setOnClickListener {
+                createNewExercise { exerciseId: Long ->
+                    router?.showNewExercisePage1(userId, workoutId, exerciseId)
+                }
+            }
+
+            exercisesList = ExercisesList(exercises)
+            val adapter = ExerciseAdapter(
+                holderType = ExerciseItemViewHolder::class,
+                layoutId = R.layout.item_exercise,
+                dataSource = exercisesList!!,
+                onClick = { exercise ->
+                    print("Exercise $exercise clicked")
+                },
+                onStart = {exercise ->
+                    print("Exercise $exercise started")
+                    router?.showExercisePage(exercise.id.toLong())
+                },
+                onLongExerciseClick = { item, itemView ->
+                    val popup = PopupMenu(requireContext(), itemView)
+                    popup.inflate(R.menu.exercise_menu)
+                    popup.setOnMenuItemClickListener(getMenuItemClickListener(item))
+                    popup.show()
+                }
+            )
+            exercisesRecycler?.adapter = adapter
+        }
+    }
+
+    private fun loadWorkoutInfo(actionsAfter: (MutableList<ExerciseItem>) -> Unit) {
+        GlobalScope.launch(Dispatchers.IO) {
+            database!!.let {
+                val workoutExercisesByWorkout = it.workoutExerciseDao().getAllByWorkout(workoutId)
+                val exercises = workoutExercisesByWorkout.map { workoutExercise ->
+                    ExerciseItem(
+                        Random.nextInt().toString(),
+                        it.exerciseDao().getById(workoutExercise.exerciseId),
+                        workoutExercise
+                    )
+                }.toMutableList()
+                withContext(Dispatchers.Main) {
+                    actionsAfter.invoke(exercises)
+                }
+            }
+        }
+    }
+
+    private fun createNewExercise(actionsAfter: (Long) -> Unit?) {
+        GlobalScope.launch(Dispatchers.IO) {
+            database!!.let {
+                val newExercise = ExerciseEntity("", "", "", false, userId, null)
+                newExercise.id = it.exerciseDao().insert(newExercise)
+                val newWorkoutExercise = WorkoutExerciseEntity(workoutId, newExercise.id)
+                newWorkoutExercise.id = it.workoutExerciseDao().insert(newWorkoutExercise)
+                withContext(Dispatchers.Main) {
+                    actionsAfter.invoke(newExercise.id)
+                }
+            }
+        }
     }
 
     override fun getFragmentLayoutId(): Int = R.layout.fragment_new_workout_1

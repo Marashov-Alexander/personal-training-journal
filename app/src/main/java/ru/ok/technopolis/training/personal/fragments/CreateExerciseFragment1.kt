@@ -83,7 +83,7 @@ class CreateExerciseFragment1 : BaseFragment(), ParameterDialogFragment.Paramete
                 levelsMap[currentLevel] = mutableListOf()
             }
             nextStepCard?.setOnClickListener {
-                saveParameters {
+                saveChanges {
                     router?.showNewExercisePage2()
                 }
             }
@@ -283,7 +283,7 @@ class CreateExerciseFragment1 : BaseFragment(), ParameterDialogFragment.Paramete
         if (select) levelSpinner?.setSelection(levelsCount - 1)
     }
 
-    private fun saveParameters(actionsAfter: () -> Unit) {
+    private fun saveChanges(actionsAfter: () -> Unit) {
         GlobalScope.launch(Dispatchers.IO) {
             database?.let { database ->
                 for (entry in levelsMap.entries) {
@@ -319,6 +319,9 @@ class CreateExerciseFragment1 : BaseFragment(), ParameterDialogFragment.Paramete
                 for (removedParameterId in removedParameters) {
                     database.exerciseParameterDao().delete(exerciseId, removedParameterId)
                 }
+                // сохранение упражнения
+                exercise.name = nameTextView.text.toString()
+                database.exerciseDao().update(exercise)
             }
             withContext(Dispatchers.Main) {
                 removedParameters.clear()

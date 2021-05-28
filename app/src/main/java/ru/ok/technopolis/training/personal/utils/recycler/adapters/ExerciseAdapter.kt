@@ -1,7 +1,6 @@
 package ru.ok.technopolis.training.personal.utils.recycler.adapters
 
 import android.view.View
-import android.view.View.*
 import androidx.annotation.LayoutRes
 import ru.ok.technopolis.training.personal.items.ExerciseItem
 import ru.ok.technopolis.training.personal.items.ItemsList

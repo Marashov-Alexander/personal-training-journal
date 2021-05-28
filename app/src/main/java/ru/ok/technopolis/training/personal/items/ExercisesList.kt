@@ -8,7 +8,7 @@ class ExercisesList(items: MutableList<ExerciseItem>): ItemsList<ExerciseItem>(i
 
     fun createSuperset() {
         for (i in 0 until items.size) {
-            if (items[i].supersetGroupId == null) {
+            if (items[i].workoutExercise.supersetGroupId == null) {
                 items[i].checked = false
             } else {
                 items[i].checked = null
@@ -35,7 +35,7 @@ class ExercisesList(items: MutableList<ExerciseItem>): ItemsList<ExerciseItem>(i
         left?.let {
             if (left.isSingleExerciseSuperset(prev, right)) {
                 // TODO: remove superset
-                left.supersetGroupId = null
+                left.workoutExercise.supersetGroupId = null
             }
             left.cornerMode = left.getCornerMode(prev, right)
             left.counterVisibility = left.getCounterMode(left.cornerMode)
@@ -45,7 +45,7 @@ class ExercisesList(items: MutableList<ExerciseItem>): ItemsList<ExerciseItem>(i
             print("wow")
             if (right.isSingleExerciseSuperset(left, next)) {
                 // TODO: remove superset
-                right.supersetGroupId = null
+                right.workoutExercise.supersetGroupId = null
             }
             right.cornerMode = right.getCornerMode(left, next)
             right.counterVisibility = right.getCounterMode(right.cornerMode)
@@ -68,8 +68,8 @@ class ExercisesList(items: MutableList<ExerciseItem>): ItemsList<ExerciseItem>(i
             var minPos = Int.MAX_VALUE
             for ((position, item) in superset) {
                 minPos = min(minPos, position)
-                item.supersetGroupId = groupId
-                item.counter = 1
+                item.workoutExercise.supersetGroupId = groupId
+                item.workoutExercise.counter = 1
             }
             others.addAll(minPos, superset.map { it.second })
             for (i in 0 until others.size) {
