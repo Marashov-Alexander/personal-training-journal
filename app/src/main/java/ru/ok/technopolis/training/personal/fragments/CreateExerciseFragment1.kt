@@ -51,7 +51,6 @@ class CreateExerciseFragment1 : BaseFragment(), ParameterDialogFragment.Paramete
     private var addLevelBtn: FloatingActionButton? = null
     private var removeLevelBtn: FloatingActionButton? = null
     private var currentLevel: Int = 0
-    private var isLoaded: Boolean = true
 
     private var userId: Long = -1L
     private var workoutId: Long = -1L
@@ -74,9 +73,19 @@ class CreateExerciseFragment1 : BaseFragment(), ParameterDialogFragment.Paramete
             exerciseId = (it.intent.extras?.get(EXERCISE_ID_KEY)) as Long
         }
 
-        loadExerciseInfo(workoutId, exerciseId) {
+        clearData()
+        loadExerciseInfo(userId, workoutId, exerciseId) { exercise, userLevel, levelsMap, maxLevel ->
+
+            this.userLevel = userLevel
+            this.exercise = exercise
+            this.levelsMap = levelsMap
+
+            for (i in 1..maxLevel) {
+                createNewLevel(false)
+            }
+            setCurrentLevel(userLevel.level)
+
             nameTextView.setText(exercise.name)
-//            exerciseTypeSpinner.setSelection()
 
             if (levelsList.isEmpty()) {
                 createNewLevel()
@@ -96,9 +105,7 @@ class CreateExerciseFragment1 : BaseFragment(), ParameterDialogFragment.Paramete
             levelSpinner?.onItemSelectedListener = object : AdapterView.OnItemSelectedListener {
                 override fun onNothingSelected(parent: AdapterView<*>?) {}
                 override fun onItemSelected(parent: AdapterView<*>?, view: View?, position: Int, id: Long) {
-                    isLoaded = false
                     setCurrentLevel(position + 1)
-                    isLoaded = true
                 }
             }
 
@@ -121,10 +128,8 @@ class CreateExerciseFragment1 : BaseFragment(), ParameterDialogFragment.Paramete
                         .show(requireActivity().supportFragmentManager, "ParameterDialogFragment")
                 },
                 onValueChanged = { newValue, item ->
-                    if (isLoaded) {
-                        println("Changed ${item?.id} to $newValue")
-                        item?.levelExerciseParameterEntity?.value = newValue
-                    }
+                    println("Changed ${item?.id} to $newValue")
+                    item?.levelExerciseParameterEntity?.value = newValue
                 }
             )
             val layoutManager = LinearLayoutManager(context, RecyclerView.VERTICAL, false)
@@ -142,6 +147,8 @@ class CreateExerciseFragment1 : BaseFragment(), ParameterDialogFragment.Paramete
             }
             val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
             itemTouchHelper.attachToRecyclerView(parametersRecycler)
+
+            levelSpinner?.setSelection(userLevel.level - 1)
         }
 
         exerciseTypeSpinner = exercise_type_spinner
@@ -153,14 +160,23 @@ class CreateExerciseFragment1 : BaseFragment(), ParameterDialogFragment.Paramete
         addParameterBtn = add_parameter_button
     }
 
-    private fun loadExerciseInfo(workoutId: Long, exerciseId: Long, actionsAfter: () -> Unit) {
-        clearData()
+    private fun loadExerciseInfo(
+        userId: Long,
+        workoutId: Long,
+        exerciseId: Long,
+        actionsAfter: (
+            exercise: ExerciseEntity,
+            userLevel: UserLevelEntity,
+            levelsMap: MutableMap<Int, MutableList<ParameterItem>>,
+            maxLevel: Int
+        ) -> Unit) {
         GlobalScope.launch(Dispatchers.IO) {
             var maxLevel = 0
             database!!.let {
-                exercise = it.exerciseDao().getById(exerciseId)
+                val exercise = it.exerciseDao().getById(exerciseId)
                 val exerciseParameters = it.exerciseParameterDao().getAllByExercise(exerciseId)
                 val parameters = it.exerciseParameterDao().getParametersForExercise(exerciseId)
+                val levelsMap = mutableMapOf<Int, MutableList<ParameterItem>>()
                 parameters.forEach { param ->
                     val exerciseParameter = exerciseParameters.find { exerciseParam -> exerciseParam.parameterId == param.id }!!
                     val levels = it.levelExerciseParameterDao().getAllByExerciseParameterId(exerciseParameter.id)
@@ -178,7 +194,7 @@ class CreateExerciseFragment1 : BaseFragment(), ParameterDialogFragment.Paramete
                 }
                 val workoutExercise = it.workoutExerciseDao().getById(workoutId, exerciseId)
                 val usrLvl = it.userLevelDao().getById(userId, workoutExercise.id)
-                userLevel =
+                val userLevel =
                     if (usrLvl == null) {
                         val newUserLevel = UserLevelEntity(userId, workoutExercise.id, 1)
                         it.userLevelDao().insert(newUserLevel)
@@ -186,15 +202,11 @@ class CreateExerciseFragment1 : BaseFragment(), ParameterDialogFragment.Paramete
                     } else {
                         usrLvl
                     }
-            }
-            withContext(Dispatchers.Main) {
-                for (i in 1..maxLevel) {
-                    createNewLevel(false)
+                withContext(Dispatchers.Main) {
+                    actionsAfter.invoke(exercise, userLevel, levelsMap, maxLevel)
                 }
-                setCurrentLevel(userLevel.level)
-                actionsAfter.invoke()
-                levelSpinner?.setSelection(userLevel.level - 1)
             }
+
         }
     }
 
@@ -224,10 +236,6 @@ class CreateExerciseFragment1 : BaseFragment(), ParameterDialogFragment.Paramete
             levelsCount--
             levelsList.removeAt(levelsCount)
             levelsMap.remove(levelsCount + 1)
-//            if (currentLevel >= levelsCount) {
-//                currentLevel = levelsCount
-//                levelSpinner?.setSelection(currentLevel - 1)
-//            }
             levelSpinner?.setSelection(levelsCount - 1)
         }
     }
@@ -246,6 +254,12 @@ class CreateExerciseFragment1 : BaseFragment(), ParameterDialogFragment.Paramete
         }
         levelsMap[currentLevel] = levelsList
         parametersList?.setData(levelsList)
+    }
+
+    private fun createNewLevel(select: Boolean = true) {
+        levelsCount++
+        levelsList.add("Уровень $levelsCount")
+        if (select) levelSpinner?.setSelection(levelsCount - 1)
     }
 
     override fun getFragmentLayoutId(): Int = R.layout.fragment_new_exercise_1
@@ -275,12 +289,6 @@ class CreateExerciseFragment1 : BaseFragment(), ParameterDialogFragment.Paramete
             ),
             this
         ).show(requireActivity().supportFragmentManager, "ParameterDialogFragment")
-    }
-
-    private fun createNewLevel(select: Boolean = true) {
-        levelsCount++
-        levelsList.add("Уровень $levelsCount")
-        if (select) levelSpinner?.setSelection(levelsCount - 1)
     }
 
     private fun saveChanges(actionsAfter: () -> Unit) {

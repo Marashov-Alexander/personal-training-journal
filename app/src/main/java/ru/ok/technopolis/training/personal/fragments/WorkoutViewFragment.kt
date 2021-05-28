@@ -15,7 +15,6 @@ import ru.ok.technopolis.training.personal.db.entity.WorkoutCategoryEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutEntity
 import ru.ok.technopolis.training.personal.fragments.dialogs.DescriptionDialogFragment
 import ru.ok.technopolis.training.personal.items.BundleItem
-import ru.ok.technopolis.training.personal.items.ExerciseItem
 import ru.ok.technopolis.training.personal.items.ExercisesList
 import ru.ok.technopolis.training.personal.items.ShortWorkoutItem
 import ru.ok.technopolis.training.personal.items.SingleSelectableList
@@ -61,7 +60,7 @@ class WorkoutViewFragment : WorkoutFragment() {
 
         shareText = view.share_text
 
-        loadWorkoutInfo(workoutId) { workout: WorkoutEntity, category: WorkoutCategoryEntity, exercises: MutableList<ExerciseItem> ->
+        loadWorkoutInfo(workoutId) { workout, category, exercises, author, redactor ->
             setWorkoutDummy(workout, category)
             exercisesList = ExercisesList(exercises)
             val adapter = ExerciseAdapter(

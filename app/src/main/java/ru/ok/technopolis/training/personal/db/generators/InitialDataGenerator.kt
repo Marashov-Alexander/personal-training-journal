@@ -5,6 +5,7 @@ import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.db.entity.ExerciseEntity
 import ru.ok.technopolis.training.personal.db.entity.ParameterEntity
 import ru.ok.technopolis.training.personal.db.entity.UserEntity
+import ru.ok.technopolis.training.personal.db.entity.WorkoutCategoryEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutExerciseEntity
 
@@ -24,7 +25,8 @@ class InitialDataGenerator {
                 "Testovich",
                 "test@test.test",
                 "Mail",
-                null
+                null,
+                1
             )
         }
 

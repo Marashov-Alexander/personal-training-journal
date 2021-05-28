@@ -38,7 +38,7 @@ object AuthRepository {
                     user.fatherName = userInfo.fatherName
                     user.email = userInfo.email
                     user.avatarUrl = userInfo.pictureUrlStr
-                    user.serverId = userInfo.id
+                    user.id = userInfo.id
                     database?.userDao()?.update(user)
                 }
                 withContext(Dispatchers.Main) {

@@ -125,7 +125,7 @@ class ViewAuthorFragment : BaseFragment() {
         val authorId = (activity?.intent?.extras?.get(Page.AUTHOR_ID_KEY)) as Long
         val prof = ProfileItem("1234", authorId, "Иванов Иван", list, true, null, 5, 10, 23, 6)
 
-        author = UserEntity(prof.name, prof.name, prof.name, "123", "f", "", -1, prof.userId)
+        author = UserEntity(prof.name, prof.name, prof.name, "123", "f", "", prof.userId)
         activity?.base_toolbar?.title = getString(R.string.author) + " ${prof.name}"
 
         var sportsList = ""

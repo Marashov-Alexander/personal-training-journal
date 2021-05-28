@@ -19,6 +19,9 @@ abstract class BaseActivity : AppCompatActivity() {
     var database: AppDatabase? = null
         private set
 
+    var userId: Long? = null
+        private set
+
     protected val taskContainer: CompositeDisposable = CompositeDisposable()
 
     override fun onStart() {
@@ -34,6 +37,7 @@ abstract class BaseActivity : AppCompatActivity() {
 
         router = Router(this)
         database = AppDatabase.getInstance(applicationContext)
+
 
         setContentView(getActivityLayoutId())
     }

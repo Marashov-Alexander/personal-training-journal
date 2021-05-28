@@ -9,13 +9,8 @@ data class UserEntity(
     @ColumnInfo var firstName: String,
     @ColumnInfo var lastName: String?,
     @ColumnInfo var fatherName: String?,
-    @ColumnInfo var email: String,
-    @ColumnInfo var gender: String,
+    @ColumnInfo var email: String?,
+    @ColumnInfo var gender: String?,
     @ColumnInfo var avatarUrl: String?,
-    @ColumnInfo var serverId: Long = -1L,
-    @PrimaryKey(autoGenerate = true) var id: Long = 0
-) : WithServerId {
-    override fun serverId(newId: Long) {
-        serverId = newId
-    }
-}
+    @PrimaryKey(autoGenerate = false) var id: Long
+)
