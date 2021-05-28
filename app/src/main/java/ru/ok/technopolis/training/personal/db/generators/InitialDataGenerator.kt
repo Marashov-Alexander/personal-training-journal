@@ -29,6 +29,11 @@ class InitialDataGenerator {
                 1
             )
         }
+        fun getTestCategory(): WorkoutCategoryEntity {
+            return WorkoutCategoryEntity(
+                    "category"
+            )
+        }
 
         fun getTestWorkout(): WorkoutEntity {
             return WorkoutEntity(
