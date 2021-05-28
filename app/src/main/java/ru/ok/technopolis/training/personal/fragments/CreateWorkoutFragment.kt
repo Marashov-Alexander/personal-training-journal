@@ -22,10 +22,9 @@ import ru.ok.technopolis.training.personal.items.ExerciseItem
 import ru.ok.technopolis.training.personal.items.ExercisesList
 import ru.ok.technopolis.training.personal.utils.recycler.adapters.ExerciseAdapter
 import ru.ok.technopolis.training.personal.viewholders.ExerciseItemViewHolder
-import kotlin.random.Random
 
 
-class CreateWorkoutFragment : BaseFragment() {
+class CreateWorkoutFragment : WorkoutFragment() {
 
     private var workoutName: TextInputLayout? = null
     private var exercisesRecycler: RecyclerView? = null
@@ -64,7 +63,7 @@ class CreateWorkoutFragment : BaseFragment() {
         val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
         itemTouchHelper.attachToRecyclerView(exercisesRecycler)
 
-        loadWorkoutInfo { exercises: MutableList<ExerciseItem> ->
+        loadWorkoutInfo(workoutId) { workout, category, exercises ->
             nextStepCard?.setOnClickListener {
                 router?.showNewWorkoutPage2()
             }
@@ -95,24 +94,6 @@ class CreateWorkoutFragment : BaseFragment() {
                 }
             )
             exercisesRecycler?.adapter = adapter
-        }
-    }
-
-    private fun loadWorkoutInfo(actionsAfter: (MutableList<ExerciseItem>) -> Unit) {
-        GlobalScope.launch(Dispatchers.IO) {
-            database!!.let {
-                val workoutExercisesByWorkout = it.workoutExerciseDao().getAllByWorkout(workoutId)
-                val exercises = workoutExercisesByWorkout.map { workoutExercise ->
-                    ExerciseItem(
-                        Random.nextInt().toString(),
-                        it.exerciseDao().getById(workoutExercise.exerciseId),
-                        workoutExercise
-                    )
-                }.toMutableList()
-                withContext(Dispatchers.Main) {
-                    actionsAfter.invoke(exercises)
-                }
-            }
         }
     }
 

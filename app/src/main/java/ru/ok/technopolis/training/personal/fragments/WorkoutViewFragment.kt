@@ -10,33 +10,21 @@ import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_view_workout.view.*
 import kotlinx.android.synthetic.main.item_media_viewer.view.*
 import kotlinx.android.synthetic.main.view_appbar.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
 import ru.ok.technopolis.training.personal.R
-import ru.ok.technopolis.training.personal.db.entity.ExerciseEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutCategoryEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutEntity
-import ru.ok.technopolis.training.personal.db.entity.WorkoutExerciseEntity
 import ru.ok.technopolis.training.personal.fragments.dialogs.DescriptionDialogFragment
 import ru.ok.technopolis.training.personal.items.BundleItem
 import ru.ok.technopolis.training.personal.items.ExerciseItem
 import ru.ok.technopolis.training.personal.items.ExercisesList
 import ru.ok.technopolis.training.personal.items.ShortWorkoutItem
 import ru.ok.technopolis.training.personal.items.SingleSelectableList
-import ru.ok.technopolis.training.personal.items.chatItems.MessageFromItem
-import ru.ok.technopolis.training.personal.items.chatItems.MessageToItem
-import ru.ok.technopolis.training.personal.lifecycle.Page
-import ru.ok.technopolis.training.personal.repository.CurrentUserRepository
 import ru.ok.technopolis.training.personal.utils.recycler.adapters.BundleAdapter
 import ru.ok.technopolis.training.personal.utils.recycler.adapters.ExerciseAdapter
 import ru.ok.technopolis.training.personal.viewholders.BundleItemViewHolder
 import ru.ok.technopolis.training.personal.viewholders.ExerciseItemViewHolder
-import java.sql.Time
-import kotlin.random.Random
 
-class WorkoutViewFragment : BaseFragment() {
+class WorkoutViewFragment : WorkoutFragment() {
     private var workoutShortInfoRecycler: RecyclerView? = null
     private var imageSwitcher: RecyclerView? = null
     private var startButton: ImageView? = null
@@ -73,11 +61,9 @@ class WorkoutViewFragment : BaseFragment() {
 
         shareText = view.share_text
 
-//        loadDummy()
-        loadWorkoutInfo { exercises: MutableList<ExerciseItem> ->
-
+        loadWorkoutInfo(workoutId) { workout: WorkoutEntity, category: WorkoutCategoryEntity, exercises: MutableList<ExerciseItem> ->
+            setWorkoutDummy(workout, category)
             exercisesList = ExercisesList(exercises)
-
             val adapter = ExerciseAdapter(
                 holderType = ExerciseItemViewHolder::class,
                 layoutId = R.layout.item_exercise,
@@ -97,25 +83,6 @@ class WorkoutViewFragment : BaseFragment() {
             exerciseRecycler?.adapter = adapter
             val workoutsLayoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
             exerciseRecycler?.layoutManager = workoutsLayoutManager
-        }
-    }
-
-    private fun loadWorkoutInfo(actionsAfter: (MutableList<ExerciseItem>) -> Unit) {
-        setWorkoutDummy()
-        GlobalScope.launch(Dispatchers.IO) {
-            database!!.let {
-                val workoutExercisesByWorkout = it.workoutExerciseDao().getAllByWorkout(workoutId)
-                val exercises = workoutExercisesByWorkout.map { workoutExercise ->
-                    ExerciseItem(
-                        Random.nextInt().toString(),
-                        it.exerciseDao().getById(workoutExercise.exerciseId),
-                        workoutExercise
-                    )
-                }.toMutableList()
-                withContext(Dispatchers.Main) {
-                    actionsAfter.invoke(exercises)
-                }
-            }
         }
     }
 
