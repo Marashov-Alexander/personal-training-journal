@@ -20,6 +20,7 @@ import ru.ok.technopolis.training.personal.db.dao.UserDao
 import ru.ok.technopolis.training.personal.db.dao.UserExerciseDao
 import ru.ok.technopolis.training.personal.db.dao.UserLevelDao
 import ru.ok.technopolis.training.personal.db.dao.UserWorkoutDao
+import ru.ok.technopolis.training.personal.db.dao.WorkoutCategoryDao
 import ru.ok.technopolis.training.personal.db.dao.WorkoutDao
 import ru.ok.technopolis.training.personal.db.dao.WorkoutExerciseDao
 import ru.ok.technopolis.training.personal.db.entity.ExerciseEntity
@@ -32,6 +33,7 @@ import ru.ok.technopolis.training.personal.db.entity.UserEntity
 import ru.ok.technopolis.training.personal.db.entity.UserExerciseEntity
 import ru.ok.technopolis.training.personal.db.entity.UserLevelEntity
 import ru.ok.technopolis.training.personal.db.entity.UserWorkoutEntity
+import ru.ok.technopolis.training.personal.db.entity.WorkoutCategoryEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutExerciseEntity
 import ru.ok.technopolis.training.personal.db.generators.InitialDataGenerator
@@ -48,6 +50,7 @@ import ru.ok.technopolis.training.personal.db.generators.InitialDataGenerator
         UserExerciseEntity::class,
         UserLevelEntity::class,
         UserWorkoutEntity::class,
+        WorkoutCategoryEntity::class,
         WorkoutEntity::class,
         WorkoutExerciseEntity::class
     ],
@@ -102,6 +105,7 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun userExerciseDao(): UserExerciseDao
     abstract fun userLevelDao(): UserLevelDao
     abstract fun userWorkoutDao(): UserWorkoutDao
+    abstract fun workoutCategoryDao(): WorkoutCategoryDao
     abstract fun workoutDao(): WorkoutDao
     abstract fun workoutExerciseDao(): WorkoutExerciseDao
 

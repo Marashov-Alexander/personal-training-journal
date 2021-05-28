@@ -7,12 +7,25 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.fragment_number.view.navigation_view_main_block
 import kotlinx.android.synthetic.main.item_personal_elements.view.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import ru.ok.technopolis.training.personal.R
+import ru.ok.technopolis.training.personal.db.entity.ExerciseEntity
+import ru.ok.technopolis.training.personal.db.entity.WorkoutEntity
+import ru.ok.technopolis.training.personal.db.entity.WorkoutExerciseEntity
 import ru.ok.technopolis.training.personal.items.CategoryWorkoutsItem
+import ru.ok.technopolis.training.personal.items.ExerciseItem
+import ru.ok.technopolis.training.personal.items.ExercisesList
 import ru.ok.technopolis.training.personal.items.ItemsList
 import ru.ok.technopolis.training.personal.items.ShortWorkoutItem
+import ru.ok.technopolis.training.personal.lifecycle.Page
+import ru.ok.technopolis.training.personal.repository.CurrentUserRepository
 import ru.ok.technopolis.training.personal.utils.recycler.adapters.CategoryWorkoutsAdapter
+import ru.ok.technopolis.training.personal.utils.recycler.adapters.ExerciseAdapter
 import ru.ok.technopolis.training.personal.viewholders.CategoryWorkoutsViewHolder
+import ru.ok.technopolis.training.personal.viewholders.ExerciseItemViewHolder
 import java.sql.Time
 
 class CategoryWorkoutsFragment : BaseFragment() {
@@ -37,6 +50,14 @@ class CategoryWorkoutsFragment : BaseFragment() {
     override fun getFragmentLayoutId() = R.layout.item_personal_elements
 
     private fun exDummyToRecView() {
+        GlobalScope.launch(Dispatchers.IO) {
+
+
+                withContext(Dispatchers.Main) {
+
+                }
+            }
+
 
         pushWorkout(0, "Тренировка 1", "Кардио", "", "Легкая атлетика", 0, 0.0)
         pushWorkout(1, "Любимая тренировка", "Круговая", "", "Легкая атлетика", 0, 0.0)

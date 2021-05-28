@@ -5,7 +5,7 @@ import android.content.Intent
 import android.os.Bundle
 import ru.ok.technopolis.training.personal.activities.BaseFragmentActivity
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.AUTHOR_ID_KEY
-import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.CHAT_ID_KEY
+import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.OPPONENT_ID_KEY
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.EXERCISE_ID_KEY
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.PAGE_KEY
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.USER_ID_KEY
@@ -112,7 +112,7 @@ class Router(private val activity: Activity) {
 
     fun showChatPage(chatId: Long){
         val chatIdBundle = Bundle(1)
-        chatIdBundle.putLong(CHAT_ID_KEY, chatId)
+        chatIdBundle.putLong(OPPONENT_ID_KEY, chatId)
         showPage(Page.Fragment.Chat, chatIdBundle)
     }
 

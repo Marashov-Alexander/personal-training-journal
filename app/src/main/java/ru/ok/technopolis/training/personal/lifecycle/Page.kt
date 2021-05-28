@@ -130,6 +130,6 @@ sealed class Page : Serializable {
         const val WORKOUT_ID_KEY = "WORKOUT_ID"
         const val EXERCISE_ID_KEY = "EXERCISE_ID"
         const val AUTHOR_ID_KEY = "AUTHOR_ID"
-        const val CHAT_ID_KEY = "CHAT_ID"
+        const val OPPONENT_ID_KEY = "OPPONENT_ID"
     }
 }
