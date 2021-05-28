@@ -62,6 +62,8 @@ class CreateExerciseFragment1 : BaseFragment(), ParameterDialogFragment.Paramete
     private lateinit var nameTextView: AutoCompleteTextView
     private lateinit var exerciseTypeSpinner: Spinner
 
+    private val removedParameters = mutableSetOf<Long>()
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
@@ -152,7 +154,7 @@ class CreateExerciseFragment1 : BaseFragment(), ParameterDialogFragment.Paramete
     }
 
     private fun loadExerciseInfo(workoutId: Long, exerciseId: Long, actionsAfter: () -> Unit) {
-        clearLevels()
+        clearData()
         GlobalScope.launch(Dispatchers.IO) {
             var maxLevel = 0
             database!!.let {
@@ -196,15 +198,23 @@ class CreateExerciseFragment1 : BaseFragment(), ParameterDialogFragment.Paramete
         }
     }
 
-    private fun clearLevels() {
+    private fun clearData() {
         levelsMap.clear()
         levelsCount = 0
         levelsList.clear()
+        removedParameters.clear()
     }
 
     private fun removeParameterAt(position: Int) {
         for (entry in levelsMap.entries) {
-            if (entry.key != currentLevel) entry.value.removeAt(position)
+            if (entry.key != currentLevel) {
+                entry.value.removeAt(position)
+            }
+        }
+        val parameterItem: ParameterItem? = parametersList?.items?.get(position)
+        // для удаления параметра из упражнения необходимо записать его id и при сохранении удалить связь между параметром и упражнением
+        parameterItem?.let {
+            removedParameters.add(it.parameter.id)
         }
         parametersList?.remove(position)
     }
@@ -213,11 +223,11 @@ class CreateExerciseFragment1 : BaseFragment(), ParameterDialogFragment.Paramete
         if (levelsCount > 1) {
             levelsCount--
             levelsList.removeAt(levelsCount)
-            levelsMap.remove(levelsCount)
-            if (currentLevel >= levelsCount) {
-                currentLevel = levelsCount
-                levelSpinner?.setSelection(currentLevel - 1)
-            }
+            levelsMap.remove(levelsCount + 1)
+//            if (currentLevel >= levelsCount) {
+//                currentLevel = levelsCount
+//                levelSpinner?.setSelection(currentLevel - 1)
+//            }
             levelSpinner?.setSelection(levelsCount - 1)
         }
     }
@@ -298,11 +308,20 @@ class CreateExerciseFragment1 : BaseFragment(), ParameterDialogFragment.Paramete
                         val levelExerciseParameterEntity = levelExerciseParameterEntityList.getOrNull(0)
                         if (levelExerciseParameterEntity == null) {
                             database.levelExerciseParameterDao().insert(levelEntity)
+                        } else {
+                            database.levelExerciseParameterDao().update(levelEntity)
                         }
                     }
                 }
+                // очистка удалённых уровней
+                database.levelExerciseParameterDao().deleteLevelsGreaterThan(levelsCount, exerciseId)
+                // очистка удалённых параметров
+                for (removedParameterId in removedParameters) {
+                    database.exerciseParameterDao().delete(exerciseId, removedParameterId)
+                }
             }
             withContext(Dispatchers.Main) {
+                removedParameters.clear()
                 actionsAfter.invoke()
             }
         }
