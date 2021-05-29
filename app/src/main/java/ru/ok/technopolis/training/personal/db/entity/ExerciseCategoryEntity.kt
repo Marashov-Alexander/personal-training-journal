@@ -5,7 +5,7 @@ import androidx.room.Entity
 import androidx.room.PrimaryKey
 
 @Entity
-data class WorkoutCategoryEntity (
+data class ExerciseCategoryEntity (
         @ColumnInfo var name: String,
         @ColumnInfo var serverId: Long = -1L,
         @PrimaryKey(autoGenerate = true) var id: Long = 0

@@ -27,16 +27,12 @@ import ru.ok.technopolis.training.personal.utils.recycler.adapters.ExerciseAdapt
 import ru.ok.technopolis.training.personal.viewholders.CategoryWorkoutsViewHolder
 import ru.ok.technopolis.training.personal.viewholders.ExerciseItemViewHolder
 import java.sql.Time
+import kotlin.random.Random
 
-class CategoryWorkoutsFragment : BaseFragment() {
+class CategoryWorkoutsFragment : CategoryWorkoutFragment() {
 
     private var recycler: RecyclerView? = null
     private var addButton: FloatingActionButton? = null
-    private var workoutsMutableList = mutableListOf<ShortWorkoutItem>()
-    private var workoutsMutableList2 = mutableListOf<ShortWorkoutItem>()
-    private var workoutsMutableList3 = mutableListOf<ShortWorkoutItem>()
-    private var workoutsMutableList4 = mutableListOf<ShortWorkoutItem>()
-    private var categoryElem = mutableListOf<CategoryWorkoutsItem>()
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         recycler = view.navigation_view_main_block
@@ -50,73 +46,23 @@ class CategoryWorkoutsFragment : BaseFragment() {
     override fun getFragmentLayoutId() = R.layout.item_personal_elements
 
     private fun exDummyToRecView() {
-        GlobalScope.launch(Dispatchers.IO) {
+                loadCategoryWorkouts { elementsList ->
+                val categoriesList = ItemsList(elementsList)
+                val catAdapter = CategoryWorkoutsAdapter(
+                        holderType = CategoryWorkoutsViewHolder::class,
+                        layoutId = R.layout.item_library_elements,
+                        dataSource = categoriesList,
+                        onClick = { workoutItem -> println("Треня ${workoutItem.id} clicked") },
+                        onStart = { workoutId->
+                            println("Элемент ${workoutId} started")
+                            router?.showWorkoutPage(workoutId)
+                        }
+                )
 
-
-                withContext(Dispatchers.Main) {
-
-                }
+                recycler?.adapter = catAdapter
+                val workoutsLayoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+                recycler?.layoutManager = workoutsLayoutManager
             }
-
-
-        pushWorkout(0, "Тренировка 1", "Кардио", "", "Легкая атлетика", 0, 0.0)
-        pushWorkout(1, "Любимая тренировка", "Круговая", "", "Легкая атлетика", 0, 0.0)
-        pushWorkout4(0, "Любимая тренировка", "Круговая", "", "Легкая атлетика", 0, 0.0)
-
-        pushWorkout2(0, "Тренировка 1", "Кардио", "", "Легкая атлетика", 0, 0.0)
-        pushWorkout2(1, "Тренировка 2", "Кардио", "", "Легкая атлетика", 0, 0.0)
-        pushWorkout2(2, "Тренировка 3", "Кардио", "", "Легкая атлетика", 0, 0.0)
-
-        pushWorkout3(1, "Тренировка 2", "Силовая", "", "Легкая атлетика", 0, 0.0)
-        pushWorkout3(2, "Тренировка 3", "Силовая", "", "Легкая атлетика", 0, 0.0)
-        pushWorkout3(3, "Тренировка 1", "Силовая", "", "Легкая атлетика", 0, 0.0)
-
-        pushCategory(0, "Популярное", workoutsMutableList)
-        pushCategory(1, "Кардио", workoutsMutableList2)
-        pushCategory(2, "Силовые", workoutsMutableList3)
-        pushCategory(3, "Круговые", workoutsMutableList4)
-
-        val categories = ItemsList(categoryElem)
-        val catAdapter = CategoryWorkoutsAdapter(
-                holderType = CategoryWorkoutsViewHolder::class,
-                layoutId = R.layout.item_library_elements,
-                dataSource = categories,
-                onClick = { workoutItem -> println("Треня ${workoutItem.id} clicked") },
-                onStart = { workoutId->
-                    println("Элемент ${workoutId} started")
-                    router?.showWorkoutPage(workoutId)
-                }
-        )
-        recycler?.adapter = catAdapter
-        val workoutsLayoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-        recycler?.layoutManager = workoutsLayoutManager
     }
 
-    private fun pushWorkout(id: Int, name: String, category: String, description: String, sport: String, sharedNumber: Int, rank: Double) {
-        workoutsMutableList.add(
-                ShortWorkoutItem(id.toString(), Time(System.currentTimeMillis()),name,description,category,sport, "40 min", sharedNumber, rank, true, false)
-        )
-    }
-
-    private fun pushWorkout2(id: Int, name: String, category: String, description: String, sport: String, sharedNumber: Int, rank: Double) {
-        workoutsMutableList2.add(
-                ShortWorkoutItem(id.toString(), Time(System.currentTimeMillis()), name, description, category, sport, "40 min", sharedNumber, rank, true, false)
-        )
-    }
-
-    private fun pushWorkout3(id: Int, name: String, category: String, description: String, sport: String, sharedNumber: Int, rank: Double) {
-        workoutsMutableList3.add(
-                ShortWorkoutItem(id.toString(), Time(System.currentTimeMillis()), name, description ,category, sport, "40 min", sharedNumber, rank, true, false)
-        )
-    }
-
-    private fun pushWorkout4(id: Int, name: String, category: String, description: String, sport: String, sharedNumber: Int, rank: Double) {
-        workoutsMutableList4.add(
-                ShortWorkoutItem(id.toString(), Time(System.currentTimeMillis()), name,description, category, sport, "40 min", sharedNumber, rank, false, false)
-        )
-    }
-
-    private fun pushCategory(id: Int, name: String, workouts: List<ShortWorkoutItem>) {
-        categoryElem.add(CategoryWorkoutsItem(id.toString(), name, workouts))
-    }
 }
