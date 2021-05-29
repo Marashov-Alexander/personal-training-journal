@@ -33,36 +33,41 @@
 
     <TextView
         android:id="@+id/title"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="@dimen/text_size_20"
         tools:text="Sample title"
         app:layout_constraintStart_toEndOf="@id/icon"
         app:layout_constraintTop_toTopOf="parent"
         app:layout_constraintBottom_toTopOf="@id/description"
-        android:layout_margin="@dimen/dimens_8dp"
+        app:layout_constraintEnd_toStartOf="@id/edit"
+        android:layout_marginHorizontal="@dimen/dimens_8dp"
         android:translationZ="3dp"
         android:textColor="@color/black"
         />
 
     <TextView
         android:id="@+id/description"
-        android:layout_width="wrap_content"
+        android:layout_width="0dp"
         android:layout_height="wrap_content"
         android:textSize="@dimen/text_size_14"
         tools:text="Sample description"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/icon"
         app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintEnd_toStartOf="@id/edit"
         android:layout_marginHorizontal="@dimen/dimens_8dp"
         android:translationZ="3dp"
-        android:textColor="@color/black"
+        android:textStyle="italic"
+        android:ellipsize="end"
+        android:maxLines="2"
+        android:textColor="@color/gray_2"
         />
 
 <!--    TODO: MaterialCardView     -->
     <androidx.cardview.widget.CardView
         android:id="@+id/superset_background"
-        android:layout_width="86dp"
+        android:layout_width="80dp"
         android:layout_height="42dp"
         app:cardBackgroundColor="@color/periwinkle"
         app:cardCornerRadius="@dimen/dimens_16dp"
@@ -71,7 +76,7 @@
         />
         <androidx.cardview.widget.CardView
             android:id="@+id/superset_counter_background"
-            android:layout_width="48dp"
+            android:layout_width="40dp"
             android:layout_height="30dp"
             android:layout_marginEnd="@dimen/dimens_24dp"
             app:cardCornerRadius="@dimen/dimens_8dp"
@@ -87,9 +92,10 @@
                 android:layout_height="match_parent"
                 android:layout_gravity="center"
                 android:background="@color/white"
-                android:text="1111"
+                tools:text="1111"
+                android:textSize="@dimen/text_size_15"
                 android:textAlignment="center"
-                android:inputType="numberDecimal"
+                android:inputType="number"
                 android:importantForAutofill="no"
                 />
         </androidx.cardview.widget.CardView>
@@ -108,5 +114,18 @@
         android:theme="@style/AppTheme"
         >
     </com.google.android.material.card.MaterialCardView>
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/edit"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:srcCompat="@drawable/ic_edit_element"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:fabSize="mini"
+        android:backgroundTint="@color/background"
+        android:layout_margin="12dp"
+        android:contentDescription="@string/edit_parameter" />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

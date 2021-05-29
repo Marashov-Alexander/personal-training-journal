@@ -21,6 +21,7 @@ class ExerciseItemViewHolder(
 ) : BaseViewHolder<ExerciseItem>(itemView) {
 
     private var icon: ImageView = itemView.icon
+    private var editBtn: FloatingActionButton = itemView.edit
     private var customCheckbox: FloatingActionButton = itemView.custom_checkbox
     private var title: TextView = itemView.title
     private var description: TextView = itemView.description
@@ -36,7 +37,7 @@ class ExerciseItemViewHolder(
     override fun bind(item: ExerciseItem) {
         cornerRadius = itemView.resources.getDimension(R.dimen.superset_corner_radius)
         title.text = item.exercise.name
-        description.text = item.exercise.description
+        description.text = item.description
         supersetCounter.setText("${item.workoutExercise.counter}")
         setCounter(item.counterVisibility)
         setColor(itemView.context.getColor(item.getColorId()))
@@ -75,17 +76,19 @@ class ExerciseItemViewHolder(
 
     private fun supersetModeOn(): ExerciseItemViewHolder {
         customCheckbox.visibility = INVISIBLE
+        editBtn.visibility = VISIBLE
         return this
     }
 
     private fun supersetModeOff(): ExerciseItemViewHolder {
         customCheckbox.visibility = INVISIBLE
+        editBtn.visibility = VISIBLE
         return this
     }
 
     private fun editableMode(): ExerciseItemViewHolder {
         customCheckbox.visibility = VISIBLE
-
+        editBtn.visibility = INVISIBLE
         return this
     }
 
@@ -134,6 +137,10 @@ class ExerciseItemViewHolder(
             onLongClick.invoke(it)
             true
         }
+    }
+
+    fun setOnEditListener(onClick: (View) -> Unit) {
+        editBtn.setOnClickListener(onClick)
     }
 
     fun setOnViewClickListener(onClick: () -> Boolean) {

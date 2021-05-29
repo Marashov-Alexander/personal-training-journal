@@ -27,10 +27,18 @@ abstract class WorkoutFragment : BaseFragment() {
                 val workout = it.workoutDao().getById(workoutId)
                 val author = it.userDao().getById(workout.authorId)
                 val exercises = workoutExercisesByWorkout.map { workoutExercise ->
+                    val exercise = it.exerciseDao().getById(workoutExercise.exerciseId)
+                    val importantParameters = it.parameterDao().getImportantParameters(exercise.id)
+                    val description =
+                        if (importantParameters.isEmpty())
+                            ""
+                        else
+                            importantParameters.map { info -> "${info.name}: ${info.value} ${info.units}" }.reduce { acc, str -> "$acc, $str" }
                     ExerciseItem(
                         Random.nextInt().toString(),
-                        it.exerciseDao().getById(workoutExercise.exerciseId),
-                        workoutExercise
+                        exercise,
+                        workoutExercise,
+                        description
                     )
                 }.toMutableList()
                 val category = it.workoutCategoryDao().getById(workout.categoryId)

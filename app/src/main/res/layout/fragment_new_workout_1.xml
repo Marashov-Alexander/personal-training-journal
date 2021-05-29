@@ -2,20 +2,8 @@
 <androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
     android:layout_width="match_parent"
     android:layout_height="match_parent"
-    android:layout_margin="@dimen/dimens_16dp"
+    android:layout_margin="@dimen/dimens_8dp"
     xmlns:app="http://schemas.android.com/apk/res-auto">
-
-    <TextView
-        android:id="@+id/enter_workout_name"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        app:layout_constraintTop_toTopOf="parent"
-        app:layout_constraintStart_toStartOf="parent"
-        android:text="@string/enter_workout_name"
-        android:textColor="@color/black"
-        android:textStyle="bold"
-        android:textSize="20sp"
-        />
 
     <com.google.android.material.textfield.TextInputLayout
         android:id="@+id/input_workout_name"
@@ -26,7 +14,7 @@
         android:textColorHint="@color/gray_3"
         app:layout_constraintStart_toStartOf="parent"
         app:layout_constraintEnd_toEndOf="parent"
-        app:layout_constraintTop_toBottomOf="@id/enter_workout_name"
+        app:layout_constraintTop_toTopOf="parent"
         >
 
         <AutoCompleteTextView
@@ -35,7 +23,7 @@
 
             android:layout_width="match_parent"
             android:layout_height="wrap_content"
-            android:hint="@string/workout" />
+            android:hint="@string/enter_workout_name"/>
     </com.google.android.material.textfield.TextInputLayout>
 
     <TextView
@@ -57,7 +45,7 @@
         app:layout_constraintEnd_toEndOf="parent"
         android:text="@string/exercises_list"
         android:textColor="@color/black"
-        android:textSize="28sp"
+        android:textSize="25sp"
         />
 
     <androidx.recyclerview.widget.RecyclerView
@@ -68,7 +56,7 @@
         app:layout_constraintBottom_toTopOf="@id/next_step_card"
         android:layout_marginBottom="8dp"
         android:background="@drawable/rounded_outline"
-        android:padding="@dimen/dimens_8dp"
+        android:padding="1dp"
         />
 
     <com.google.android.material.floatingactionbutton.FloatingActionButton

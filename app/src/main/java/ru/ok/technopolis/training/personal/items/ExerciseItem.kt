@@ -14,7 +14,8 @@ data class ExerciseItem(
     override val id: String,
     val exercise: ExerciseEntity,
     // id суперсета, к которому относится упражнение. Если null, то упражнение не включено в суперсет. По этому полю определяется цвет
-    var workoutExercise: WorkoutExerciseEntity
+    var workoutExercise: WorkoutExerciseEntity,
+    val description: String = ""
 
 ) : WithId {
     var checked: Boolean? = null
