@@ -1,10 +1,7 @@
 package ru.ok.technopolis.training.personal.items
 
-import ru.ok.technopolis.training.personal.items.interfaces.WithId
-import java.sql.Time
-
 data class ShortWorkoutItem(
-        override val id: String,
+        val id: Long,
 //        var timeStart: Time,
         var name: String,
 //        var description: String,
@@ -15,4 +12,4 @@ data class ShortWorkoutItem(
         val rank: Double
 //        val private: Boolean,
 //        val invisible: Boolean
-): WithId
+)

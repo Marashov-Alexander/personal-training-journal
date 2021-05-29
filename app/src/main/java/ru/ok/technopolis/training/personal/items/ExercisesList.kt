@@ -9,9 +9,12 @@ class ExercisesList(items: MutableList<ExerciseItem>): ItemsList<ExerciseItem>(i
 
     init {
         items.sortBy {it.workoutExercise.orderIndex}
-        maxSupersetGroupId = items
-            .map { it.workoutExercise.supersetGroupId ?: 0 }
-            .reduce { acc, i -> max(acc, i) } + 1
+        maxSupersetGroupId =
+            if (items.isEmpty())
+                0
+            else items
+                .map { it.workoutExercise.supersetGroupId ?: 0 }
+                .reduce { acc, i -> max(acc, i) } + 1
         configureSuperset(items)
     }
 

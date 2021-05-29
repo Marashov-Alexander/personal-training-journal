@@ -1,6 +1,9 @@
 package ru.ok.technopolis.training.personal.fragments
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -19,6 +22,7 @@ import ru.ok.technopolis.training.personal.items.BundleItem
 import ru.ok.technopolis.training.personal.items.ExercisesList
 import ru.ok.technopolis.training.personal.items.ShortWorkoutItem
 import ru.ok.technopolis.training.personal.items.SingleSelectableList
+import ru.ok.technopolis.training.personal.lifecycle.Page
 import ru.ok.technopolis.training.personal.utils.recycler.adapters.BundleAdapter
 import ru.ok.technopolis.training.personal.utils.recycler.adapters.ExerciseAdapter
 import ru.ok.technopolis.training.personal.viewholders.BundleItemViewHolder
@@ -41,10 +45,13 @@ class WorkoutViewFragment : WorkoutFragment() {
 
     private var workout: ShortWorkoutItem? = null
 
-    private var workoutId = 1L
+    private var workoutId: Long = -1L
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        workoutId = (activity?.intent?.extras?.get(Page.WORKOUT_ID_KEY)) as Long
+
         workoutShortInfoRecycler = view.workout_scroll_info
         startButton = view.workout_start_icon
         imageSwitcher = view.exercise_image_switcher
@@ -80,6 +87,17 @@ class WorkoutViewFragment : WorkoutFragment() {
             exerciseRecycler?.adapter = adapter
             val workoutsLayoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
             exerciseRecycler?.layoutManager = workoutsLayoutManager
+        }
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.edit_menu, menu)
+
+        val editButton: MenuItem = menu.findItem(R.id.edit_item)
+        editButton.setOnMenuItemClickListener {
+            router?.showNewWorkoutPage(workoutId)
+            true
         }
     }
 

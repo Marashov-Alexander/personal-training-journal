@@ -113,7 +113,7 @@ abstract class UserFragment : BaseFragment() {
                     val downloadsNumber = 0
                     val rank = 0.0
                     ShortWorkoutItem(
-                            workout.id.toString(),
+                            workout.id,
                             workout.name,
                             category.name,
                             sport.name,

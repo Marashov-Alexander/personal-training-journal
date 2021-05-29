@@ -20,6 +20,8 @@ import ru.ok.technopolis.training.personal.db.entity.ExerciseEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutExerciseEntity
 import ru.ok.technopolis.training.personal.items.ExerciseItem
 import ru.ok.technopolis.training.personal.items.ExercisesList
+import ru.ok.technopolis.training.personal.lifecycle.Page
+import ru.ok.technopolis.training.personal.repository.CurrentUserRepository
 import ru.ok.technopolis.training.personal.utils.recycler.adapters.ExerciseAdapter
 import ru.ok.technopolis.training.personal.viewholders.ExerciseItemViewHolder
 
@@ -32,13 +34,16 @@ class CreateWorkoutFragment : WorkoutFragment() {
     private var nextStepCard: MaterialCardView? = null
     private var addExerciseButton: FloatingActionButton? = null
 
-    private var userId = 1L
-    private var workoutId = 1L
+    private var userId = -1L
+    private var workoutId = -1L
 
     private var chooseMode: Boolean = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        workoutId = (requireActivity().intent.extras?.get(Page.WORKOUT_ID_KEY)) as Long
+        userId = CurrentUserRepository.currentUser.value!!.id
 
         activity?.base_toolbar?.title = getString(R.string.workout_creation)
         addExerciseButton = add_exercise_button

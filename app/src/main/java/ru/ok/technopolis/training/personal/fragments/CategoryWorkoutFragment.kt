@@ -44,7 +44,7 @@ abstract class CategoryWorkoutFragment : BaseFragment() {
             val downloadsNumber = 0
             val rank = 0.0
             ShortWorkoutItem(
-                    Random.nextInt().toString(),
+                    workout.id,
                     workout.name,
                     category.name,
                     sport.name,

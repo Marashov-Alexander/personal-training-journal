@@ -327,9 +327,9 @@ class ProfileFragment : UserFragment() {
         return exerciseMutableList.size
     }
 
-    private fun pushWorkout(id: Int, name: String, category: String, description: String, sport: String, sharedNumber: Int, rank: Double) {
+    private fun pushWorkout(id: Long, name: String, category: String, description: String, sport: String, sharedNumber: Int, rank: Double) {
         workoutsMutableList.add(
-                ShortWorkoutItem(id.toString(),name, category, sport, sharedNumber, rank)
+                ShortWorkoutItem(id,name, category, sport, sharedNumber, rank)
         )
     }
 

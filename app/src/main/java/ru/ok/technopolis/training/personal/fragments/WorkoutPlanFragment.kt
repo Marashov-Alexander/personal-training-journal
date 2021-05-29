@@ -7,8 +7,17 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.fragment_workout_plan.view.*
 import kotlinx.android.synthetic.main.view_appbar.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import ru.ok.technopolis.training.personal.R
+import ru.ok.technopolis.training.personal.db.entity.ExerciseEntity
+import ru.ok.technopolis.training.personal.db.entity.UserWorkoutEntity
+import ru.ok.technopolis.training.personal.db.entity.WorkoutEntity
+import ru.ok.technopolis.training.personal.db.entity.WorkoutExerciseEntity
 import ru.ok.technopolis.training.personal.items.*
+import ru.ok.technopolis.training.personal.repository.CurrentUserRepository
 import ru.ok.technopolis.training.personal.utils.recycler.adapters.DayListAdapter
 import ru.ok.technopolis.training.personal.utils.recycler.adapters.ScheduledWorkoutListAdapter
 import ru.ok.technopolis.training.personal.utils.recycler.listeners.InfinityScrollListener
@@ -37,13 +46,16 @@ class WorkoutPlanFragment : BaseFragment() {
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        val userId = CurrentUserRepository.currentUser.value!!.id
         recyclerView = view.days_recycler_view
         workoutsRecycler = view.scheduled_workouts_recycler
         addWorkoutButton = view.add_workout_button
         activity?.base_toolbar?.title = getString(R.string.workouts_plan)
         addWorkoutButton?.setOnClickListener {
             // TODO: create new workout here
-            router?.showNewWorkoutPage(1)
+            createNewWorkout(userId) { workoutId: Long ->
+                router?.showNewWorkoutPage(workoutId)
+            }
         }
 
         calendar.time = Date(System.currentTimeMillis())
@@ -92,6 +104,20 @@ class WorkoutPlanFragment : BaseFragment() {
         workoutsRecycler?.adapter = workoutAdapter
         val workoutLayoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         workoutsRecycler?.layoutManager = workoutLayoutManager
+    }
+
+    private fun createNewWorkout(userId: Long, actionsAfter: (Long) -> Unit?) {
+        GlobalScope.launch(Dispatchers.IO) {
+            database!!.let {
+                val newWorkout = WorkoutEntity("", "", 1L, 1L, 1, false, userId)
+                newWorkout.id = it.workoutDao().insert(newWorkout)
+                val newUserWorkout = UserWorkoutEntity(userId, newWorkout.id, true)
+                newUserWorkout.id = it.userWorkoutDao().insert(newUserWorkout)
+                withContext(Dispatchers.Main) {
+                    actionsAfter.invoke(newWorkout.id)
+                }
+            }
+        }
     }
 
     private fun pushDay(ahead: Boolean) {

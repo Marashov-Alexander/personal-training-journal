@@ -31,7 +31,7 @@ class StatisticsMainFragment : BaseFragment() {
     }
 
     private fun exDummyToRecView() {
-        for (i in 1..5) pushWorkout(i)
+        for (i in 1L..5L) pushWorkout(i)
         val workoutsList = ItemsList(workoutsMutableList)
         val workoutsAdapter = ShortWorkoutListAdapter(
                 holderType = ShortWorkoutViewHolder::class,
@@ -51,9 +51,9 @@ class StatisticsMainFragment : BaseFragment() {
     }
 
 
-    private fun pushWorkout(id: Int) {
+    private fun pushWorkout(id: Long) {
         workoutsMutableList.add(
-                ShortWorkoutItem(id.toString(),"MYвшпвшпвкпиквпшкивпквпвпквпивчмпч MY","kardio", "ofp", 0, 0.0)
+                ShortWorkoutItem(id,"MYвшпвшпвкпиквпшкивпквпвпквпивчмпч MY","kardio", "ofp", 0, 0.0)
         )
     }
 
