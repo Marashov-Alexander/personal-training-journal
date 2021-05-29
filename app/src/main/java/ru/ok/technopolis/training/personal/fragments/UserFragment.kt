@@ -69,7 +69,7 @@ abstract class UserFragment : BaseFragment() {
                 val authors = it.userDao().getAllExceptUser(userId)
                 val authorsList = mutableListOf<ProfileItem>()
                 for (author in authors) {
-                    val name = author.firstName + "${author.fatherName}"
+                    val name = author.firstName + " ${author.fatherName}"
                     val sportsList = formSportsList(it.userDao().getUserSports(author.id))
                     authorsList.add(ProfileItem(
                             author.id.toString(),

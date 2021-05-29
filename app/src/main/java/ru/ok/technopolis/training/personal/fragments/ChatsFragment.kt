@@ -9,12 +9,12 @@ import kotlinx.android.synthetic.main.view_appbar.*
 import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.items.ChatItem
 import ru.ok.technopolis.training.personal.items.ItemsList
-import ru.ok.technopolis.training.personal.items.ProfileItem
+import ru.ok.technopolis.training.personal.repository.CurrentUserRepository
 import ru.ok.technopolis.training.personal.utils.recycler.adapters.ChatAdapter
 import ru.ok.technopolis.training.personal.viewholders.ChatViewHolder
 import java.sql.Time
 
-class ChatsFragment : BaseFragment() {
+class ChatsFragment : UserFragment() {
     private var chatsRecycler: RecyclerView? = null
 
     private var chatsMutableList = mutableListOf<ChatItem>()
@@ -24,32 +24,31 @@ class ChatsFragment : BaseFragment() {
         super.onViewCreated(view, savedInstanceState)
         activity?.base_toolbar?.title = getString(R.string.chats)
         chatsRecycler = view.chats_list
-        val list = listOf("Легкая атлетика", "Бейсбол", "Теннис")
-        val prof = ProfileItem("1234", 123,"Иванов Иван", list, true, null, 5, 10, 23,6)
-        chatsMutableList.clear()
-        pushChat(0,"Dev", "Null", 5, prof)
-        pushChat(1,"Java", "Forever", 0, prof)
-        pushChat(2,"Kotlin", "Null", 10, prof)
-        val chats = ItemsList(chatsMutableList)
-        val chatAdapter = ChatAdapter(
-                holderType = ChatViewHolder::class,
-                layoutId = R.layout.item_chat,
-                dataSource = chats,
-                onClick = {item-> println("item ${item.id} clicked")
-                router?.showChatPage(item.chatId)},
-                onStart = { item ->
-                    println("item ${item.id} started")
-                    router?.showChatPage(item.chatId)
-                }
-        )
-        chatsRecycler?.adapter = chatAdapter
-        val workoutsLayoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-        chatsRecycler?.layoutManager = workoutsLayoutManager
-
-    }
-
-    private fun pushChat(id: Int, name: String, description: String, unreadMessages: Int, profile: ProfileItem) {
-        chatsMutableList.add(ChatItem(id.toString(), id.toLong(), name, null, description, unreadMessages, Time(System.currentTimeMillis()), mutableListOf(),profile ))
+        val userId  = CurrentUserRepository.currentUser.value?.id
+        getAuthors(userId!!) { authors ->
+            chatsMutableList.clear()
+            for (author in authors!!) {
+                //TODO:TIME OF LAST MESSAGE
+                chatsMutableList.add(ChatItem(author.id,author.userId, author.name, author.pictureUrlStr, " ", 0,Time(System.currentTimeMillis()), userId))
+            }
+            val chats = ItemsList(chatsMutableList)
+            val chatAdapter = ChatAdapter(
+                    holderType = ChatViewHolder::class,
+                    layoutId = R.layout.item_chat,
+                    dataSource = chats,
+                    onClick = { item ->
+                        println("item ${item.id} clicked")
+                        router?.showChatPage(item.chatId)
+                    },
+                    onStart = { item ->
+                        println("item ${item.id} started")
+                        router?.showChatPage(item.chatId)
+                    }
+            )
+            chatsRecycler?.adapter = chatAdapter
+            val workoutsLayoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
+            chatsRecycler?.layoutManager = workoutsLayoutManager
+        }
 
     }
 

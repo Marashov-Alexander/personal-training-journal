@@ -12,6 +12,5 @@ data class ChatItem (
         val description: String?,
         val unreadMessages: Int,
         val lastMessageTime: Time?,
-        val participants: List<ProfileItem>,
-        val owner: ProfileItem
+        val owner: Long
 ) : WithId
