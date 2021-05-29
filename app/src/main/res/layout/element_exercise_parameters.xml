@@ -1,0 +1,92 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="match_parent"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/decrease_level"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:fabSize="mini"
+        app:srcCompat="@drawable/ic_baseline_remove_24"
+        android:tint="@color/white"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/level_value"
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/increase_difficulty_button"
+        android:layout_marginVertical="@dimen/dimens_8dp"
+        android:theme="@style/AppTheme"
+        android:padding="4dp"
+        />
+
+    <Spinner
+        android:id="@+id/level_value"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        android:entries="@array/levels_dummy"
+        app:layout_constraintTop_toTopOf="@id/increase_level"
+        app:layout_constraintBottom_toBottomOf="@id/increase_level"
+        app:layout_constraintStart_toEndOf="@id/decrease_level"
+        app:layout_constraintEnd_toStartOf="@id/increase_level"
+        android:background="@drawable/rounded_outline"
+        android:layout_margin="@dimen/dimens_8dp"
+        android:textAlignment="center"
+        />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/increase_level"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:fabSize="mini"
+        android:src="@drawable/ic_add_black_24dp"
+        app:layout_constraintStart_toEndOf="@id/level_value"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        android:contentDescription="@string/decrease_difficulty_button"
+        android:layout_marginVertical="@dimen/dimens_8dp"
+        android:theme="@style/AppTheme"
+        android:padding="4dp"
+        />
+
+
+    <TextView
+        android:id="@+id/parameters_list_label"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/increase_level"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        android:text="@string/parameters_list"
+
+        android:textColor="@color/black"
+        android:textSize="28sp"
+        />
+
+    <androidx.recyclerview.widget.RecyclerView
+        android:id="@+id/parameters_recycler"
+        android:layout_width="match_parent"
+        android:layout_height="0dp"
+        android:nestedScrollingEnabled="false"
+        app:layout_constraintTop_toBottomOf="@id/parameters_list_label"
+        app:layout_constraintBottom_toBottomOf="parent"
+        android:layout_marginBottom="8dp"
+        android:background="@drawable/rounded_outline"
+        android:padding="@dimen/dimens_8dp"
+        />
+
+    <com.google.android.material.floatingactionbutton.FloatingActionButton
+        android:id="@+id/add_parameter_button"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        app:layout_constraintBottom_toBottomOf="@id/parameters_recycler"
+        app:layout_constraintEnd_toEndOf="@id/parameters_recycler"
+        android:backgroundTint="@color/light_blue"
+        android:tint="@color/white"
+        app:srcCompat="@drawable/ic_add_black_24dp"
+        style="@style/RoundedCornerButton"
+        android:layout_margin="16dp"
+        android:visibility="invisible"
+        android:contentDescription="@string/add_new_parameter" />
+
+</androidx.constraintlayout.widget.ConstraintLayout>

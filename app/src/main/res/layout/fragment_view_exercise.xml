@@ -7,16 +7,43 @@
 
     <androidx.constraintlayout.widget.ConstraintLayout
         android:layout_width="match_parent"
-        android:layout_height="wrap_content">
+        android:layout_height="wrap_content"
+        android:padding="@dimen/dimens_8dp"
+        >
+
+        <TextView
+            android:id="@+id/author_text"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:layout_marginHorizontal="@dimen/padding_10"
+            android:text="@string/author"
+            android:textSize="16sp"
+            app:layout_constraintBottom_toBottomOf="@id/author_name"
+            app:layout_constraintStart_toStartOf="parent"
+            app:layout_constraintTop_toTopOf="@id/author_name" />
+
+        <TextView
+            android:id="@+id/author_name"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:paddingHorizontal="@dimen/padding_10"
+            android:textSize="@dimen/text_size_18"
+            android:textStyle="bold"
+            app:layout_constraintBottom_toTopOf="@id/exercise_scroll_info"
+            app:layout_constraintStart_toEndOf="@id/author_text"
+            app:layout_constraintTop_toTopOf="parent"
+            tools:text="Author Name" />
 
         <androidx.recyclerview.widget.RecyclerView
             android:id="@+id/exercise_scroll_info"
-            android:layout_width="match_parent"
+            android:layout_width="0dp"
             android:layout_height="wrap_content"
             android:orientation="horizontal"
-            android:paddingVertical="@dimen/dimens_16dp"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="parent"
+            android:paddingVertical="@dimen/dimens_8dp"
+            android:layout_marginHorizontal="@dimen/dimens_8dp"
+            app:layout_constraintStart_toEndOf="@id/downloads_number"
+            app:layout_constraintEnd_toStartOf="@id/rank_number"
+            app:layout_constraintTop_toBottomOf="@id/author_name"
             tools:itemCount="@integer/integer_1" />
 
         <include
@@ -25,53 +52,10 @@
             android:layout_width="match_parent"
             android:layout_height="300dp"
             android:layout_marginBottom="@dimen/dimens_16dp"
-            app:layout_constraintBottom_toTopOf="@id/level_value"
+            app:layout_constraintBottom_toTopOf="@id/exercise_parameters"
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent"
             app:layout_constraintTop_toBottomOf="@id/short_workout_downloads" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/decrease_level"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/dimens_8dp"
-            android:contentDescription="@string/increase_difficulty_button"
-            android:padding="4dp"
-            android:theme="@style/AppTheme"
-            android:tint="@color/white"
-            app:fabSize="mini"
-            app:layout_constraintEnd_toStartOf="@id/level_value"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/image_switcher"
-            app:srcCompat="@drawable/ic_baseline_remove_24" />
-
-        <Spinner
-            android:id="@+id/level_value"
-            android:layout_width="0dp"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/dimens_8dp"
-            android:background="@drawable/rounded_outline"
-            android:entries="@array/levels_dummy"
-            android:textAlignment="center"
-            app:layout_constraintBottom_toBottomOf="@+id/decrease_level"
-            app:layout_constraintEnd_toStartOf="@id/increase_level"
-            app:layout_constraintStart_toEndOf="@id/decrease_level"
-            app:layout_constraintTop_toTopOf="@id/decrease_level" />
-
-        <com.google.android.material.floatingactionbutton.FloatingActionButton
-            android:id="@+id/increase_level"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/dimens_8dp"
-            android:contentDescription="@string/decrease_difficulty_button"
-            android:padding="4dp"
-            android:src="@drawable/ic_add_black_24dp"
-            android:theme="@style/AppTheme"
-            app:fabSize="mini"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toEndOf="@id/level_value"
-            app:layout_constraintTop_toBottomOf="@id/image_switcher" />
-
 
         <TextView
             android:id="@+id/downloads_number"
@@ -92,9 +76,10 @@
             android:layout_margin="@dimen/padding_5"
             android:contentDescription="@string/workout_downloads"
             android:src="@drawable/ic_baseline_group_theme_24"
-            app:layout_constraintBottom_toTopOf="@id/image_switcher"
+            app:layout_constraintTop_toTopOf="@id/exercise_scroll_info"
+            app:layout_constraintBottom_toBottomOf="@id/exercise_scroll_info"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toBottomOf="@id/exercise_scroll_info" />
+            />
 
         <ImageView
             android:id="@+id/short_workout_star"
@@ -119,17 +104,6 @@
             app:layout_constraintTop_toTopOf="@id/short_workout_star"
             tools:text="9.8" />
 
-        <TextView
-            android:id="@+id/author_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/padding_10"
-            android:text="@string/author"
-            android:textSize="16sp"
-            app:layout_constraintBottom_toBottomOf="@id/author_name"
-            app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/author_name" />
-
         <ImageView
             android:id="@+id/workout_start_icon"
             android:layout_width="@dimen/padding_70"
@@ -140,114 +114,65 @@
             app:layout_constraintEnd_toEndOf="parent"
             app:layout_constraintStart_toStartOf="parent" />
 
-        <ImageView
-            android:id="@+id/share_icon"
-            android:layout_width="30dp"
-            android:layout_height="30dp"
-            android:layout_margin="@dimen/padding_5"
-            android:contentDescription="@string/share"
-            android:scaleX="-1"
-            android:src="@drawable/ic_reply_black_24dp"
-            app:layout_constraintBottom_toTopOf="@+id/share_text"
-            app:layout_constraintEnd_toEndOf="@id/share_text"
-            app:layout_constraintStart_toStartOf="@id/share_text" />
-
-        <TextView
-            android:id="@+id/share_text"
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/share_card"
             android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_margin="@dimen/padding_5"
-            android:text="@string/share"
-            android:textSize="12sp"
-            android:textStyle="italic"
-            app:layout_constraintBottom_toBottomOf="@id/image_switcher"
-            app:layout_constraintStart_toStartOf="parent" />
-
-
-        <TextView
-            android:id="@+id/author_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:paddingHorizontal="@dimen/padding_10"
-            android:textSize="@dimen/text_size_18"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@id/redactor_name"
-            app:layout_constraintStart_toEndOf="@id/author_text"
-            app:layout_constraintTop_toBottomOf="@+id/decrease_level"
-            tools:text="Author Name" />
-
-        <TextView
-            android:id="@+id/redaction_text"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginHorizontal="@dimen/padding_10"
-            android:text="@string/redactor"
-            android:textSize="@dimen/text_size_14"
-            app:layout_constraintBottom_toBottomOf="@id/redactor_name"
+            android:layout_height="0dp"
+            android:clickable="true"
+            android:theme="@style/AppTheme"
+            app:strokeWidth="0dp"
+            app:cardBackgroundColor="@color/background"
+            app:cardCornerRadius="@dimen/dimens_16dp"
+            app:layout_constraintTop_toTopOf="@id/info_card"
+            app:layout_constraintBottom_toBottomOf="@id/info_card"
             app:layout_constraintStart_toStartOf="parent"
-            app:layout_constraintTop_toTopOf="@id/redactor_name" />
+            >
 
-        <TextView
-            android:id="@+id/redactor_name"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:layout_marginVertical="@dimen/padding_5"
-            android:paddingHorizontal="@dimen/padding_10"
-            android:textSize="@dimen/dimens_16dp"
-            android:textStyle="bold"
-            app:layout_constraintBottom_toTopOf="@id/exercise_param_list"
-            app:layout_constraintStart_toEndOf="@id/redaction_text"
-            app:layout_constraintTop_toBottomOf="@+id/author_name"
-            tools:text="Author Name" />
+            <TextView
+                android:id="@+id/share_text"
+                android:layout_width="wrap_content"
+                android:layout_height="wrap_content"
+                android:layout_margin="@dimen/padding_5"
+                android:text="@string/share"
+                android:textSize="12sp"
+                android:textStyle="italic"
+                android:drawableTop="@drawable/ic_reply_black_24dp"
+                />
+        </com.google.android.material.card.MaterialCardView>
 
-        <androidx.constraintlayout.widget.ConstraintLayout
+        <com.google.android.material.card.MaterialCardView
             android:id="@+id/info_card"
             android:layout_width="wrap_content"
             android:layout_height="wrap_content"
+            android:clickable="true"
+            android:theme="@style/AppTheme"
+            app:strokeWidth="0dp"
+            app:cardBackgroundColor="@color/background"
+            app:cardCornerRadius="@dimen/dimens_16dp"
+            android:layout_marginBottom="@dimen/padding_10"
             app:layout_constraintBottom_toBottomOf="@id/image_switcher"
             app:layout_constraintEnd_toEndOf="parent">
-
-            <ImageView
-                android:id="@+id/info_icon"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:contentDescription="@string/description"
-                android:paddingVertical="@dimen/padding_5"
-                android:src="@drawable/ic_info"
-                app:layout_constraintBottom_toTopOf="@id/info_text"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintStart_toStartOf="@id/info_text" />
 
             <TextView
                 android:id="@+id/info_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:layout_marginBottom="@dimen/padding_10"
-                android:paddingHorizontal="@dimen/padding_5"
+                android:padding="@dimen/padding_5"
                 android:text="@string/description"
                 android:textSize="12sp"
                 android:textStyle="italic"
-                app:layout_constraintBottom_toBottomOf="parent"
-                app:layout_constraintEnd_toEndOf="parent" />
-        </androidx.constraintlayout.widget.ConstraintLayout>
+                android:drawableTop="@drawable/ic_info"
+                />
+        </com.google.android.material.card.MaterialCardView>
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/exercise_param_list"
+        <include
+            android:id="@+id/exercise_parameters"
             android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:isScrollContainer="false"
-            android:nestedScrollingEnabled="false"
-            app:layout_constraintBottom_toTopOf="@id/reviews_list"
-            app:layout_constraintStart_toStartOf="parent" />
+            android:layout_height="500dp"
+            app:layout_constraintTop_toBottomOf="@id/image_switcher"
+            layout="@layout/element_exercise_parameters"
+            />
 
-        <androidx.recyclerview.widget.RecyclerView
-            android:id="@+id/reviews_list"
-            android:layout_width="match_parent"
-            android:layout_height="wrap_content"
-            android:isScrollContainer="false"
-            android:nestedScrollingEnabled="false"
-            app:layout_constraintBottom_toBottomOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
     </androidx.constraintlayout.widget.ConstraintLayout>
 
 </ScrollView>

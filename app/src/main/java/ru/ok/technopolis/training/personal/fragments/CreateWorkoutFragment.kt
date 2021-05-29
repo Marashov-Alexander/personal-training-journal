@@ -82,9 +82,9 @@ class CreateWorkoutFragment : WorkoutFragment() {
                 onClick = { exercise ->
                     print("Exercise $exercise clicked")
                 },
-                onStart = {exercise ->
-                    print("Exercise $exercise started")
-                    router?.showExercisePage(exercise.id.toLong())
+                onStart = {exerciseItem ->
+                    print("Exercise $exerciseItem started")
+                    router?.showExercisePage(exerciseItem.exercise.id)
                 },
                 onLongExerciseClick = { item, itemView ->
                     val popup = PopupMenu(requireContext(), itemView)

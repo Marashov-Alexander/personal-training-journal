@@ -11,11 +11,14 @@ class ParameterAdapter(
     holderType: KClass<out ParameterViewHolder>,
     @LayoutRes layoutId: Int,
     dataSource: ItemsList<ParameterItem>,
+    private val editable: Boolean,
     private val onEdit: (ParameterItem) -> Unit,
     private val onValueChanged: (Float, ParameterItem?) -> Unit = {_, _ -> },
     onClick: (ParameterItem) -> Unit = {}
 ) : BaseListAdapter<ParameterItem>(holderType, layoutId, dataSource, onClick) {
     override fun onBindViewHolder(holder: BaseViewHolder<ParameterItem>, position: Int) {
+        val item = data[position]
+        item.editable = editable
         super.onBindViewHolder(holder, position)
         (holder as ParameterViewHolder).setOnEditListener(onEdit)
         holder.setOnValueChangedListener(onValueChanged)

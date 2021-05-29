@@ -54,7 +54,7 @@ class InitialDataGenerator {
                 "Description",
                 "My category",
                 true,
-                1,
+                1L,
                 null
             )
         }
