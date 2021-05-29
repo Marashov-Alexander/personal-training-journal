@@ -5,6 +5,7 @@ import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.db.entity.ExerciseEntity
 import ru.ok.technopolis.training.personal.db.entity.ParameterEntity
 import ru.ok.technopolis.training.personal.db.entity.UserEntity
+import ru.ok.technopolis.training.personal.db.entity.UserWorkoutEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutCategoryEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutExerciseEntity
@@ -91,6 +92,14 @@ class InitialDataGenerator {
 
         fun getTestWorkoutExercise(): WorkoutExerciseEntity {
             return WorkoutExerciseEntity(1, 1)
+        }
+
+        fun getTestUserWorkout(): UserWorkoutEntity {
+            return UserWorkoutEntity(1, 1, true)
+        }
+
+        fun getTestAuthorWorkout(): UserWorkoutEntity {
+            return UserWorkoutEntity(10, 2, true)
         }
 
     }

@@ -6,7 +6,7 @@ data class ProfileItem (
     override val id: String,
     val userId: Long,
     val name: String,
-    val sports: List<String>?,
+    val sports: List<String>,
     val isUser: Boolean,
     val pictureUrlStr: String?,
     val subscribersNumber: Int,

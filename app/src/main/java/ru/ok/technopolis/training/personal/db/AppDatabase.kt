@@ -92,6 +92,8 @@ abstract class AppDatabase : RoomDatabase() {
                                 instance?.workoutDao()?.insert(InitialDataGenerator.getAuthorTestWorkout())
                                 instance?.exerciseDao()?.insert(InitialDataGenerator.getTestExercise())
                                 instance?.workoutExerciseDao()?.insert(InitialDataGenerator.getTestWorkoutExercise())
+                                instance?.userWorkoutDao()?.insert(InitialDataGenerator.getTestUserWorkout())
+                                instance?.userWorkoutDao()?.insert(InitialDataGenerator. getTestAuthorWorkout())
                             }
                         }
                     })

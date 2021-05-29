@@ -20,6 +20,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
+import okhttp3.internal.notify
 import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.db.entity.UserEntity
 import ru.ok.technopolis.training.personal.items.ItemsList
@@ -36,7 +37,7 @@ import ru.ok.technopolis.training.personal.viewholders.ShortExerciseViewHolder
 import ru.ok.technopolis.training.personal.viewholders.ShortWorkoutViewHolder
 import java.sql.Time
 
-class ViewAuthorFragment : BaseFragment() {
+class ViewAuthorFragment :UserFragment() {
     private var profileNameAndIcon: View? = null
     private var subscribersNumber: TextView? = null
     private var subscriptionsNumber: TextView? = null
@@ -46,8 +47,6 @@ class ViewAuthorFragment : BaseFragment() {
     private var recyclerView: RecyclerView? = null
     private var workoutsMutableList = mutableListOf<ShortWorkoutItem>()
     private var exerciseMutableList = mutableListOf<ShortExerciseItem>()
-
-    private var author: UserEntity? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -61,92 +60,47 @@ class ViewAuthorFragment : BaseFragment() {
         val exSwitchLine = view.ex_switch_line
 
         //TODO:Get chat id for the author from db of create new one
-        sendMessage?.setOnClickListener {
-            router?.showChatPage(123)
-        }
-
-        trainSwitcher = view.switcher
-        var flag = true
-        loadWorkoutItems()
-
-        val clL = View.OnClickListener { elem ->
-            flag = !flag
-            print(flag)
-            if (flag) {
-                if (elem.id == R.id.train_switch_button) {
-                    elem.train_switch_button.setTextColor(Color.rgb(24, 120, 103))
-                    trSwLine.setBackgroundResource(R.color.design_default_color_secondary_variant)
-                    trainSwitcher!!.ex_switch_button.setTextColor(Color.rgb(119, 119, 119))
-                    exSwitchLine.setBackgroundResource(R.color.gray_4)
-                }
-
-            } else {
-                if (elem.id == R.id.train_switch_button) {
-                    elem.train_switch_button.setTextColor(Color.rgb(119, 119, 119))
-                    trSwLine.setBackgroundResource(R.color.gray_4)
-                    trainSwitcher!!.ex_switch_button.setTextColor(Color.rgb(24, 120, 103))
-                    exSwitchLine.setBackgroundResource(R.color.design_default_color_secondary_variant)
-
-                }
-            }
-            loadItems(flag)
-        }
-
-        val exCll = View.OnClickListener { elem ->
-            flag = !flag
-            if (!flag) {
-                if (elem.id == R.id.ex_switch_button) {
-                    elem.ex_switch_button.setTextColor(Color.rgb(24, 120, 103))
-                    exSwitchLine.setBackgroundResource(R.color.design_default_color_secondary_variant)
-                    trainSwitcher!!.train_switch_button.setTextColor(Color.rgb(119, 119, 119))
-                    train_switch_line.setBackgroundResource(R.color.gray_4)
-                }
-
-            } else {
-                if (elem.id == R.id.ex_switch_button) {
-                    elem.ex_switch_button.setTextColor(Color.rgb(119, 119, 119))
-                    exSwitchLine.setBackgroundResource(R.color.gray_4)
-                    trainSwitcher!!.train_switch_button.setTextColor(Color.rgb(24, 120, 103))
-                    train_switch_line.setBackgroundResource(R.color.design_default_color_secondary_variant)
-                }
-            }
-            loadItems(flag)
-        }
-
-        trainSwitcher!!.train_switch_button.setOnClickListener(clL)
-        trainSwitcher!!.ex_switch_button.setOnClickListener(exCll)
         pushExercise(0, "Мое упражнение", "Кардио", "Офп", 0, 0.0)
         pushExercise(1, "Бег на месте", "Кардио", "Офп", 0, 0.0)
         pushExercise(2, "Приседания", "Силовые", "Базовые", 3, 5.0)
+
         val text = getString(R.string.ex_switcher_text) + " (" + exerciseMutableList.size + ")"
         trainSwitcher?.ex_switch_button?.text = text
 
-        val list = listOf("Легкая атлетика", "Бейсбол", "Теннис")
-        val authorId = (activity?.intent?.extras?.get(Page.AUTHOR_ID_KEY)) as Long
-        val prof = ProfileItem("1234", authorId, "Иванов Иван", list, true, null, 5, 10, 23, 6)
-
-        author = UserEntity(prof.name, prof.name, prof.name, "123", "f", "", prof.userId)
-        activity?.base_toolbar?.title = getString(R.string.author) + " ${prof.name}"
-
-        var sportsList = ""
-        for (sport in prof.sports!!) {
-            sportsList += if (sport != prof.sports.last()) {
-                "$sport, "
-            } else {
-                "$sport "
+        trainSwitcher = view.switcher
+        val flag = true
+        val id = (activity?.intent?.extras?.get(Page.AUTHOR_ID_KEY)) as Long
+        loadAuthorAndSportsInfo(id) { author, list ->
+            var sportsList = ""
+            for (sport in list) {
+                sportsList += if (sport != list.last()) {
+                    "${sport.name}, "
+                } else {
+                    "${sport.name} "
+                }
             }
+            profileNameAndIcon?.profile_name?.text = author.name
+            profileNameAndIcon?.complaint?.visibility = View.VISIBLE
+            profileNameAndIcon?.profile_description?.text = sportsList
+            subscribersNumber?.text = author.subscribersNumber.toString()
+            subscriptionsNumber?.text = author.subscriptionsNumber.toString()
         }
-        profileNameAndIcon?.profile_name?.text = prof.name
-        profileNameAndIcon?.complaint?.visibility = View.VISIBLE
-        profileNameAndIcon?.profile_description?.text = sportsList
-        subscribersNumber?.text = prof.subscribersNumber.toString()
-        subscriptionsNumber?.text = prof.subscriptionsNumber.toString()
+            getUserWorkouts(id) { workouts ->
+                 workoutsMutableList = workouts
+                loadWorkoutItems(id)
+                setButtonsLogic(id, flag, trSwLine, exSwitchLine)
+                sendMessage?.setOnClickListener {
+                    router?.showChatPage(id)
+                }
+            }
     }
 
-    private fun loadItems(flag: Boolean) {
+
+
+    private fun loadItems(id: Long, flag: Boolean) {
         clearRecView(flag)
         if (flag) {
-            loadWorkoutItems()
+            loadWorkoutItems(id)
         } else {
             loadExItems()
         }
@@ -164,16 +118,15 @@ class ViewAuthorFragment : BaseFragment() {
         }
     }
 
-    private fun loadWorkoutItems() {
-        exDummyToRecView()
+    private fun loadWorkoutItems(id: Long) {
+        getUserWorkouts(id) { workouts ->
+            workoutsMutableList = workouts
+            exDummyToRecView()
+        }
     }
 
     private fun exDummyToRecView() {
-        pushWorkout(0, "Тренировка 1", "Кардио", "", "Легкая атлетика", 123, 4.0)
-        pushWorkout(1, "Тренировка 2", "Силовая", "", "Легкая атлетика", 200, 3.5)
-        pushWorkout(1, "Тренировка 3", "Силовая", "", "Легкая атлетика", 240, 4.5)
-        pushWorkout(0, "Любимая тренировка", "Кардио", "", "Легкая атлетика", 0, 0.0)
-        pushWorkout(1, "Тренировка 1", "Силовая", "", "Легкая атлетика", 0, 0.0)
+
         val text = getString(R.string.training_switcher_text) + " (" + workoutsMutableList.size + ")"
         trainSwitcher?.train_switch_button?.text = text
         val workoutsList = ItemsList(workoutsMutableList)
@@ -218,12 +171,6 @@ class ViewAuthorFragment : BaseFragment() {
         exerciseDummyAll()
     }
 
-    private fun pushWorkout(id: Int, name: String, category: String, description: String, sport: String, sharedNumber: Int, rank: Double) {
-        workoutsMutableList.add(
-                ShortWorkoutItem(id.toString(), name, category, sport, sharedNumber, rank)
-        )
-    }
-
     private fun pushExercise(id: Int, name: String, category: String, description: String, sharedNumber: Int, rank: Double) {
         exerciseMutableList.add(
                 ShortExerciseItem(id.toString(), Time(System.currentTimeMillis()), name, category, description,  sharedNumber, rank)
@@ -251,6 +198,55 @@ class ViewAuthorFragment : BaseFragment() {
             true
         }
 
+    }
+    private fun setButtonsLogic(id: Long, flag: Boolean, trSwLine: View, exSwitchLine: View) {
+        var flag1 = flag
+        val clL = View.OnClickListener { elem ->
+            flag1 = !flag1
+            print(flag1)
+            if (flag1) {
+                if (elem.id == R.id.train_switch_button) {
+                    elem.train_switch_button.setTextColor(Color.rgb(24, 120, 103))
+                    trSwLine.setBackgroundResource(R.color.design_default_color_secondary_variant)
+                    trainSwitcher!!.ex_switch_button.setTextColor(Color.rgb(119, 119, 119))
+                    exSwitchLine.setBackgroundResource(R.color.gray_4)
+                }
+
+            } else {
+                if (elem.id == R.id.train_switch_button) {
+                    elem.train_switch_button.setTextColor(Color.rgb(119, 119, 119))
+                    trSwLine.setBackgroundResource(R.color.gray_4)
+                    trainSwitcher!!.ex_switch_button.setTextColor(Color.rgb(24, 120, 103))
+                    exSwitchLine.setBackgroundResource(R.color.design_default_color_secondary_variant)
+
+                }
+            }
+            loadItems(id, flag1)
+        }
+
+        val exCll = View.OnClickListener { elem ->
+            flag1 = !flag1
+            if (!flag1) {
+                if (elem.id == R.id.ex_switch_button) {
+                    elem.ex_switch_button.setTextColor(Color.rgb(24, 120, 103))
+                    exSwitchLine.setBackgroundResource(R.color.design_default_color_secondary_variant)
+                    trainSwitcher!!.train_switch_button.setTextColor(Color.rgb(119, 119, 119))
+                    train_switch_line.setBackgroundResource(R.color.gray_4)
+                }
+
+            } else {
+                if (elem.id == R.id.ex_switch_button) {
+                    elem.ex_switch_button.setTextColor(Color.rgb(119, 119, 119))
+                    exSwitchLine.setBackgroundResource(R.color.gray_4)
+                    trainSwitcher!!.train_switch_button.setTextColor(Color.rgb(24, 120, 103))
+                    train_switch_line.setBackgroundResource(R.color.design_default_color_secondary_variant)
+                }
+            }
+            loadItems(id, flag1)
+        }
+
+        trainSwitcher!!.train_switch_button.setOnClickListener(clL)
+        trainSwitcher!!.ex_switch_button.setOnClickListener(exCll)
     }
 
     override fun getFragmentLayoutId() = R.layout.fragment_view_author
