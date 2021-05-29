@@ -12,12 +12,6 @@ import androidx.room.PrimaryKey
             parentColumns = ["id"],
             childColumns = ["authorId"],
             onDelete = ForeignKey.CASCADE
-        ),
-        ForeignKey(
-            entity = UserEntity::class,
-            parentColumns = ["id"],
-            childColumns = ["redactorId"],
-            onDelete = ForeignKey.CASCADE
         )
     ]
 )
@@ -27,7 +21,6 @@ data class ExerciseEntity(
     @ColumnInfo var category: String?,
     @ColumnInfo var isPublic: Boolean,
     @ColumnInfo var authorId: Long,
-    @ColumnInfo var redactorId: Long?,
     @ColumnInfo var serverId: Long = -1L,
     @PrimaryKey(autoGenerate = true) var id: Long = 0
 ) : WithServerId {

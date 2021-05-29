@@ -43,8 +43,7 @@ class InitialDataGenerator {
                 "My sport",
                 0,
                 true,
-                1,
-                null
+                1
             )
         }
 
@@ -54,8 +53,7 @@ class InitialDataGenerator {
                 "Description",
                 "My category",
                 true,
-                1L,
-                null
+                1L
             )
         }
 

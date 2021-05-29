@@ -20,7 +20,6 @@ abstract class ExerciseFragment : BaseFragment() {
         actionsAfter: (
             exercise: ExerciseEntity,
             author: UserEntity,
-            redactor: UserEntity?,
             userLevel: UserLevelEntity?,
             levelsMap: MutableMap<Int, MutableList<ParameterItem>>,
             maxLevel: Int
@@ -30,10 +29,6 @@ abstract class ExerciseFragment : BaseFragment() {
             database!!.let {
                 val exercise = it.exerciseDao().getById(exerciseId)
                 val author = it.userDao().getById(exercise.authorId)
-                var redactor: UserEntity? = null
-                exercise.redactorId?.let { redactorId ->
-                    redactor = it.userDao().getById(redactorId)
-                }
                 val exerciseParameters = it.exerciseParameterDao().getAllByExercise(exerciseId)
                 val parameters = it.exerciseParameterDao().getParametersForExercise(exerciseId)
                 val levelsMap = mutableMapOf<Int, MutableList<ParameterItem>>()
@@ -62,7 +57,7 @@ abstract class ExerciseFragment : BaseFragment() {
                     }
                 }
                 withContext(Dispatchers.Main) {
-                    actionsAfter.invoke(exercise, author, redactor, userLevel, levelsMap, maxLevel)
+                    actionsAfter.invoke(exercise, author, userLevel, levelsMap, maxLevel)
                 }
             }
 

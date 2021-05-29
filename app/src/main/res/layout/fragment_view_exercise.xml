@@ -104,15 +104,33 @@
             app:layout_constraintTop_toTopOf="@id/short_workout_star"
             tools:text="9.8" />
 
-        <ImageView
-            android:id="@+id/workout_start_icon"
-            android:layout_width="@dimen/padding_70"
-            android:layout_height="@dimen/padding_70"
-            android:contentDescription="@string/start_workout"
-            android:src="@drawable/ic_baseline_play_circle_outline_24"
+
+        <com.google.android.material.card.MaterialCardView
+            android:id="@+id/workout_start_card"
+            android:layout_width="wrap_content"
+            android:layout_height="wrap_content"
+            android:clickable="true"
+            android:theme="@style/AppTheme"
+            app:strokeWidth="@dimen/dimens_4dp"
+            app:strokeColor="@color/gray_2"
+            app:cardBackgroundColor="@color/background"
+            app:cardCornerRadius="96dp"
             app:layout_constraintBottom_toBottomOf="@id/image_switcher"
             app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent" />
+            app:layout_constraintStart_toStartOf="parent"
+            >
+            <ImageView
+                android:id="@+id/workout_start_icon"
+                android:layout_width="45dp"
+                android:layout_height="45dp"
+                android:layout_margin="@dimen/padding_16"
+                android:contentDescription="@string/start_workout"
+                android:src="@drawable/ic_play_arrow_black_24dp"
+                android:tint="@color/gray_2"
+                />
+        </com.google.android.material.card.MaterialCardView>
+
+
 
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/share_card"
@@ -136,6 +154,8 @@
                 android:text="@string/share"
                 android:textSize="12sp"
                 android:textStyle="italic"
+                android:paddingHorizontal="@dimen/dimens_8dp"
+                android:layout_gravity="center"
                 android:drawableTop="@drawable/ic_reply_black_24dp"
                 />
         </com.google.android.material.card.MaterialCardView>
@@ -157,11 +177,11 @@
                 android:id="@+id/info_text"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                android:padding="@dimen/padding_5"
                 android:text="@string/description"
                 android:textSize="12sp"
                 android:textStyle="italic"
                 android:drawableTop="@drawable/ic_info"
+                android:padding="@dimen/dimens_8dp"
                 />
         </com.google.android.material.card.MaterialCardView>
 
