@@ -17,7 +17,6 @@ abstract class WorkoutFragment : BaseFragment() {
             WorkoutEntity,
             WorkoutCategoryEntity,
             MutableList<ExerciseItem>,
-            UserEntity,
             UserEntity?
         ) -> Unit) {
         GlobalScope.launch(Dispatchers.IO) {
@@ -25,10 +24,6 @@ abstract class WorkoutFragment : BaseFragment() {
                 val workoutExercisesByWorkout = it.workoutExerciseDao().getAllByWorkout(workoutId)
                 val workout = it.workoutDao().getById(workoutId)
                 val author = it.userDao().getById(workout.authorId)
-                var redactor: UserEntity? = null
-                workout.redactorId?.let { redactorId ->
-                    redactor = it.userDao().getById(redactorId)
-                }
                 val exercises = workoutExercisesByWorkout.map { workoutExercise ->
                     ExerciseItem(
                         Random.nextInt().toString(),
@@ -38,7 +33,7 @@ abstract class WorkoutFragment : BaseFragment() {
                 }.toMutableList()
                 val category = it.workoutCategoryDao().getById(workout.categoryId)
                 withContext(Dispatchers.Main) {
-                    actionsAfter.invoke(workout, category, exercises, author, redactor)
+                    actionsAfter.invoke(workout, category, exercises, author)
                 }
             }
         }

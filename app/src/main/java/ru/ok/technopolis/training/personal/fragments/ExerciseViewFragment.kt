@@ -58,7 +58,7 @@ class ExerciseViewFragment : ExerciseFragment() {
         info = view.info_card
         val userId = CurrentUserRepository.currentUser.value?.id!!
 
-        loadExerciseInfo(userId, workoutId, exerciseId) { exercise, author, redactor, userLevel, levelsMap, maxLevel ->
+        loadExerciseInfo(userId, workoutId, exerciseId) { exercise, author, userLevel, levelsMap, maxLevel ->
             setWorkoutDummy()
 
             ExerciseParametersWrapper(
@@ -93,9 +93,8 @@ class ExerciseViewFragment : ExerciseFragment() {
             showExerciseDescription(exercise!!.name, exercise!!.description)
         }
 
-        //TODO:load author and redactor from db
+        //TODO:load author from db
 //        authorName?.text =
-//        redactorName?.text =
         setWorkoutShortInfo()
     }
 

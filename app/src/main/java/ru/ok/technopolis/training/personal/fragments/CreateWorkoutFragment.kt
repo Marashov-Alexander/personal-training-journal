@@ -63,7 +63,7 @@ class CreateWorkoutFragment : WorkoutFragment() {
         val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
         itemTouchHelper.attachToRecyclerView(exercisesRecycler)
 
-        loadWorkoutInfo(workoutId) { workout, category, exercises, author, redactor ->
+        loadWorkoutInfo(workoutId) { workout, category, exercises, author ->
             nextStepCard?.setOnClickListener {
                 router?.showNewWorkoutPage2()
             }
@@ -100,7 +100,7 @@ class CreateWorkoutFragment : WorkoutFragment() {
     private fun createNewExercise(actionsAfter: (Long) -> Unit?) {
         GlobalScope.launch(Dispatchers.IO) {
             database!!.let {
-                val newExercise = ExerciseEntity("", "", "", false, userId, null)
+                val newExercise = ExerciseEntity("", "", "", false, userId)
                 newExercise.id = it.exerciseDao().insert(newExercise)
                 val newWorkoutExercise = WorkoutExerciseEntity(workoutId, newExercise.id)
                 newWorkoutExercise.id = it.workoutExerciseDao().insert(newWorkoutExercise)

@@ -4,9 +4,9 @@ import android.os.Bundle
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
-import androidx.constraintlayout.widget.ConstraintLayout
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
+import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.fragment_view_workout.view.*
 import kotlinx.android.synthetic.main.item_media_viewer.view.*
 import kotlinx.android.synthetic.main.view_appbar.*
@@ -28,17 +28,15 @@ class WorkoutViewFragment : WorkoutFragment() {
     private var imageSwitcher: RecyclerView? = null
     private var startButton: ImageView? = null
     private var shareText: TextView? = null
-    private var shareButton: ImageView? = null
     private var downloadsNumber: TextView? = null
     private var raiting: TextView? = null
     private var difficulty: TextView? = null
     private var nextSwitch: ImageView? =null
     private var prevSwitch: ImageView? = null
     private var authorName: TextView? = null
-    private var redactorName: TextView? = null
     private var exerciseRecycler: RecyclerView? = null
     private var exercisesList: ExercisesList? = null
-    private var info: ConstraintLayout? = null
+    private var info: MaterialCardView? = null
 
     private var workout: ShortWorkoutItem? = null
 
@@ -48,19 +46,17 @@ class WorkoutViewFragment : WorkoutFragment() {
         super.onViewCreated(view, savedInstanceState)
         workoutShortInfoRecycler = view.workout_scroll_info
         startButton = view.workout_start_icon
-        shareButton = view.share_icon
         imageSwitcher = view.exercise_image_switcher
         downloadsNumber = view.downloads_number
         raiting = view.rank_number
         difficulty = view.difficulty_value
         authorName = view.author_name
-        redactorName = view.redactor_name
         exerciseRecycler = view.workout_ex_list
         info = view.info_card
 
         shareText = view.share_text
 
-        loadWorkoutInfo(workoutId) { workout, category, exercises, author, redactor ->
+        loadWorkoutInfo(workoutId) { workout, category, exercises, author ->
             setWorkoutDummy(workout, category)
             exercisesList = ExercisesList(exercises)
             val adapter = ExerciseAdapter(
@@ -88,7 +84,7 @@ class WorkoutViewFragment : WorkoutFragment() {
     private fun setWorkoutDummy(workout: WorkoutEntity, category: WorkoutCategoryEntity){
 //        val workoutId = (activity?.intent?.extras?.get(Page.WORKOUT_ID_KEY) as Long)
 //        workout = ShortWorkoutItem(workoutId.toString(), Time(System.currentTimeMillis()), "name", "description","category", "sport", "40 min",  123, 3.5, false, false)
-        activity?.base_toolbar?.title = getString(R.string.workout) + " \"${workout?.name}\" "
+        activity?.base_toolbar?.title = getString(R.string.workout) + " \"${workout.name}\" "
 //        raiting?.text = workout.
         difficulty?.text = workout.difficulty.toString()
 //        downloadsNumber?.text = workout?.downloadsNumber.toString()
@@ -101,9 +97,8 @@ class WorkoutViewFragment : WorkoutFragment() {
         info?.setOnClickListener {
             showExerciseDescription(workout.name, workout.description.toString())
         }
-        //TODO:load author and redactor from db
+        //TODO:load author from db
 //        authorName?.text =
-//        redactorName?.text =
         setWorkoutShortInfo(workout, category)
     }
 

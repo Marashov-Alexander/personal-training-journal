@@ -41,7 +41,7 @@ class CreateExerciseFragment1 : ExerciseFragment() {
         }
 
 
-        loadExerciseInfo(userId, workoutId, exerciseId) { exercise, author, redactor, userLevel, levelsMap, maxLevel ->
+        loadExerciseInfo(userId, workoutId, exerciseId) { exercise, author, userLevel, levelsMap, maxLevel ->
 
             nameTextView.setText(exercise.name)
             nextStepCard?.setOnClickListener {
