@@ -46,7 +46,8 @@ class CategoryWorkoutsFragment : CategoryWorkoutFragment() {
     override fun getFragmentLayoutId() = R.layout.item_personal_elements
 
     private fun exDummyToRecView() {
-                loadCategoryWorkouts { elementsList ->
+        val userId = CurrentUserRepository.currentUser.value?.id
+                loadCategoryWorkouts(userId!!, false) { elementsList ->
                 val categoriesList = ItemsList(elementsList)
                 val catAdapter = CategoryWorkoutsAdapter(
                         holderType = CategoryWorkoutsViewHolder::class,

@@ -85,8 +85,10 @@ abstract class AppDatabase : RoomDatabase() {
                             GlobalScope.launch(Dispatchers.IO) {
                                 instance?.parameterDao()?.insert(InitialDataGenerator.getParameters(context))
                                 instance?.userDao()?.insert(InitialDataGenerator.getTestUser())
+                                instance?.userDao()?.insert(InitialDataGenerator.getTestAuthor())
                                 instance?.workoutCategoryDao()?.insert(InitialDataGenerator.getTestCategory())
                                 instance?.workoutDao()?.insert(InitialDataGenerator.getTestWorkout())
+                                instance?.workoutDao()?.insert(InitialDataGenerator.getAuthorTestWorkout())
                                 instance?.exerciseDao()?.insert(InitialDataGenerator.getTestExercise())
                                 instance?.workoutExerciseDao()?.insert(InitialDataGenerator.getTestWorkoutExercise())
                             }

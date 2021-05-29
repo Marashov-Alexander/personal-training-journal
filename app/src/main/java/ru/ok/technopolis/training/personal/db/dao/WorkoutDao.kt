@@ -22,6 +22,12 @@ interface WorkoutDao {
     @Query("SELECT * FROM WorkoutEntity WHERE categoryId = :categoryId")
     fun getByCategoryId(categoryId: Long): List<WorkoutEntity>
 
+    @Query("SELECT * FROM WorkoutEntity WHERE categoryId = :categoryId and authorId = :authorId")
+    fun getByCategoryIdAndAuthorId(categoryId: Long, authorId: Long): List<WorkoutEntity>
+
+    @Query("SELECT * FROM WorkoutEntity WHERE categoryId = :categoryId and authorId <> :authorId")
+    fun getByCategoryIdNotForAuthor(categoryId: Long, authorId: Long): List<WorkoutEntity>
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(workoutEntity: WorkoutEntity): Long
 

@@ -29,6 +29,19 @@ class InitialDataGenerator {
                 1
             )
         }
+
+        fun getTestAuthor(): UserEntity {
+            return UserEntity(
+                    "Author",
+                    "Testov",
+                    "Testovich",
+                    "test@test.test",
+                    "Mail",
+                    null,
+                    10
+            )
+        }
+
         fun getTestCategory(): WorkoutCategoryEntity {
             return WorkoutCategoryEntity(
                     "category"
@@ -45,6 +58,19 @@ class InitialDataGenerator {
                 true,
                 1,
                 null
+            )
+        }
+
+        fun getAuthorTestWorkout(): WorkoutEntity {
+            return WorkoutEntity(
+                    "Author workout",
+                    "Description",
+                    1,
+                    "My sport",
+                    0,
+                    true,
+                    10,
+                    null
             )
         }
 
