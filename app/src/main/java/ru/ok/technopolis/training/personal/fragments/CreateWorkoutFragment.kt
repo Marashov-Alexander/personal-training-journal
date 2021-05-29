@@ -95,6 +95,13 @@ class CreateWorkoutFragment : WorkoutFragment() {
                     }
                     chooseMode
                 },
+                onEdit = {exerciseItem: ExerciseItem ->
+                    if (!chooseMode) {
+                        print("View exercise $exerciseItem clicked")
+                        router?.showNewExercisePage1(userId, workoutId, exerciseItem.exercise.id)
+                    }
+                    chooseMode
+                },
                 onLongExerciseClick = { item, itemView ->
                     val popup = PopupMenu(requireContext(), itemView)
                     popup.inflate(R.menu.exercise_menu)

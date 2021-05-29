@@ -14,6 +14,7 @@ class ExerciseAdapter(
     dataSource: ItemsList<ExerciseItem>,
     onClick: (ExerciseItem) -> Unit = {},
     private val onView: (ExerciseItem) -> Boolean,
+    private val onEdit: (ExerciseItem) -> Unit = {},
     private val onLongExerciseClick: (ExerciseItem, View) -> Unit = { _, _ -> }
 ) : BaseListAdapter<ExerciseItem>(holderType, layoutId, dataSource, onClick) {
 
@@ -33,6 +34,10 @@ class ExerciseAdapter(
 
         exerciseHolder.setLongClickListener { view ->
             onLongExerciseClick.invoke(item, view)
+        }
+
+        exerciseHolder.setOnEditListener { view ->
+            onEdit.invoke(item)
         }
     }
 }
