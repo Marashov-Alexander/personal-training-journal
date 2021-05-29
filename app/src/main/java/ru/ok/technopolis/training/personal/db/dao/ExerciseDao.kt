@@ -7,6 +7,7 @@ import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
 import ru.ok.technopolis.training.personal.db.entity.ExerciseEntity
+import ru.ok.technopolis.training.personal.db.entity.WorkoutEntity
 
 @Dao
 interface ExerciseDao {
@@ -18,6 +19,15 @@ interface ExerciseDao {
 
     @Query("SELECT * FROM ExerciseEntity WHERE serverId = :id")
     fun getByServerId(id: Long): ExerciseEntity
+
+    @Query("SELECT * FROM ExerciseEntity WHERE categoryId = :categoryId")
+    fun getByCategoryId(categoryId: Long): List<ExerciseEntity>
+
+    @Query("SELECT * FROM ExerciseEntity WHERE categoryId = :categoryId and authorId = :authorId")
+    fun getByCategoryIdAndAuthorId(categoryId: Long, authorId: Long): List<ExerciseEntity>
+
+    @Query("SELECT * FROM ExerciseEntity WHERE categoryId = :categoryId and authorId <> :authorId")
+    fun getByCategoryIdNotForAuthor(categoryId: Long, authorId: Long): List<ExerciseEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(exerciseEntity: ExerciseEntity): Long

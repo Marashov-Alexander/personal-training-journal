@@ -12,13 +12,19 @@ import androidx.room.PrimaryKey
             parentColumns = ["id"],
             childColumns = ["authorId"],
             onDelete = ForeignKey.CASCADE
+        ),
+        ForeignKey(
+                entity = ExerciseCategoryEntity::class,
+                parentColumns = ["id"],
+                childColumns = ["categoryId"],
+                onDelete = ForeignKey.CASCADE
         )
     ]
 )
 data class ExerciseEntity(
     @ColumnInfo var name: String,
     @ColumnInfo var description: String?,
-    @ColumnInfo var category: String?,
+    @ColumnInfo var categoryId: Long,
     @ColumnInfo var isPublic: Boolean,
     @ColumnInfo var authorId: Long,
     @ColumnInfo var serverId: Long = -1L,

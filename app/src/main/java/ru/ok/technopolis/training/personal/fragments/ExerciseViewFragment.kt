@@ -79,7 +79,7 @@ class ExerciseViewFragment : ExerciseFragment() {
 
     private fun setWorkoutDummy(){
         val exerciseId = (activity?.intent?.extras?.get(Page.EXERCISE_ID_KEY) as Long)
-        exercise = ShortExerciseItem(exerciseId.toString(), Time(System.currentTimeMillis()), "name", "category", "sport", 123, 3.5)
+        exercise = ShortExerciseItem(exerciseId.toString(), "name", "category", 123, 3.5)
         activity?.base_toolbar?.title = getString(R.string.exercise) + " \"${exercise?.name}\" "
         raiting?.text = exercise?.rank.toString()
         downloadsNumber?.text = exercise?.downloadsNumber.toString()
@@ -90,7 +90,7 @@ class ExerciseViewFragment : ExerciseFragment() {
 //        }
 
         info?.setOnClickListener {
-            showExerciseDescription(exercise!!.name, exercise!!.description)
+//            showExerciseDescription(exercise!!.name, exercise!!.description)
         }
 
         //TODO:load author from db

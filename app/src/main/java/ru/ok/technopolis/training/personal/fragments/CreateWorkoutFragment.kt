@@ -109,7 +109,7 @@ class CreateWorkoutFragment : WorkoutFragment() {
     private fun createNewExercise(orderNumber: Int, actionsAfter: (Long) -> Unit?) {
         GlobalScope.launch(Dispatchers.IO) {
             database!!.let {
-                val newExercise = ExerciseEntity("", "", "", false, userId)
+                val newExercise = ExerciseEntity("", "", 1, false, userId)
                 newExercise.id = it.exerciseDao().insert(newExercise)
                 val newWorkoutExercise = WorkoutExerciseEntity(workoutId, newExercise.id, orderNumber)
                 newWorkoutExercise.id = it.workoutExerciseDao().insert(newWorkoutExercise)

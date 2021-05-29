@@ -2,9 +2,11 @@ package ru.ok.technopolis.training.personal.db.generators
 
 import android.content.Context
 import ru.ok.technopolis.training.personal.R
+import ru.ok.technopolis.training.personal.db.entity.ExerciseCategoryEntity
 import ru.ok.technopolis.training.personal.db.entity.ExerciseEntity
 import ru.ok.technopolis.training.personal.db.entity.ParameterEntity
 import ru.ok.technopolis.training.personal.db.entity.UserEntity
+import ru.ok.technopolis.training.personal.db.entity.UserExerciseEntity
 import ru.ok.technopolis.training.personal.db.entity.UserWorkoutEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutCategoryEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutEntity
@@ -50,6 +52,12 @@ class InitialDataGenerator {
             )
         }
 
+        fun getTestExerciseCategory(): ExerciseCategoryEntity {
+            return ExerciseCategoryEntity(
+                    "category"
+            )
+        }
+
         fun getTestSport(): WorkoutSportEntity {
             return WorkoutSportEntity(
                     "sport"
@@ -80,11 +88,21 @@ class InitialDataGenerator {
             )
         }
 
+        fun getAuthorTestExercise(): ExerciseEntity {
+            return ExerciseEntity(
+                    "Author exercise",
+                    "Description",
+                    1,
+                    true,
+                    10
+            )
+        }
+
         fun getTestExercise(): ExerciseEntity {
             return ExerciseEntity(
                 "My exercise 1",
                 "Description",
-                "My category",
+                1,
                 true,
                 1L
             )
@@ -100,6 +118,10 @@ class InitialDataGenerator {
 
         fun getTestAuthorWorkout(): UserWorkoutEntity {
             return UserWorkoutEntity(10, 2, true)
+        }
+
+        fun getTestAuthorExercise(): UserExerciseEntity {
+            return UserExerciseEntity(10, 2, true)
         }
 
     }

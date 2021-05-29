@@ -11,7 +11,6 @@ import kotlin.math.roundToInt
 class ShortExerciseViewHolder (
         itemView: View
 ) : BaseViewHolder<ShortExerciseItem>(itemView) {
-//TODO:description
     private var imageCard: CardView = itemView.short_ex_image_card
     private var image: ImageView = itemView.short_ex_image
     private var name: TextView = itemView.short_ex_name
@@ -35,7 +34,6 @@ class ShortExerciseViewHolder (
         } else {
             rank.visibility = View.VISIBLE
             starIcon.visibility = View.VISIBLE
-//            update(item)
         }
         update(item)
     }
@@ -43,7 +41,6 @@ class ShortExerciseViewHolder (
     fun update(item: ShortExerciseItem) {
         name.text = item.name
         category.text = item.category
-//        d.text = item.sport
         rank.text = item.rank.toString()
         downloads.text = item.downloadsNumber.toString()
     }

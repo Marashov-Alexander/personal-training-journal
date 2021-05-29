@@ -173,7 +173,7 @@ class ViewAuthorFragment :UserFragment() {
 
     private fun pushExercise(id: Int, name: String, category: String, description: String, sharedNumber: Int, rank: Double) {
         exerciseMutableList.add(
-                ShortExerciseItem(id.toString(), Time(System.currentTimeMillis()), name, category, description,  sharedNumber, rank)
+                ShortExerciseItem(id.toString(), name, category, sharedNumber, rank)
         )
     }
 
