@@ -28,13 +28,14 @@ class CreateWorkoutFragment : WorkoutFragment() {
 
     private var workoutName: TextInputLayout? = null
     private var exercisesRecycler: RecyclerView? = null
-    private var actionButton: FloatingActionButton? = null
     private var exercisesList: ExercisesList? = null
     private var nextStepCard: MaterialCardView? = null
     private var addExerciseButton: FloatingActionButton? = null
 
     private var userId = 1L
     private var workoutId = 1L
+
+    private var chooseMode: Boolean = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -43,7 +44,6 @@ class CreateWorkoutFragment : WorkoutFragment() {
         addExerciseButton = add_exercise_button
         workoutName = input_workout_name
         exercisesRecycler = exercises_recycler
-        actionButton = add_exercise_button
         nextStepCard = next_step_card
 
         val layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
@@ -56,7 +56,10 @@ class CreateWorkoutFragment : WorkoutFragment() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
                 val position = viewHolder.adapterPosition
-                exercisesList?.remove(position)
+                val exerciseItem = exercisesList!!.items[position]
+                removeExercise(exerciseItem) {
+                    exercisesList?.remove(exerciseItem)
+                }
             }
         }
 
@@ -65,11 +68,14 @@ class CreateWorkoutFragment : WorkoutFragment() {
 
         loadWorkoutInfo(workoutId) { workout, category, sport, exercises, author ->
             nextStepCard?.setOnClickListener {
-                router?.showNewWorkoutPage2()
+                saveWorkoutInfo { workoutId ->
+                    // TODO: go to next step
+//                    router?.showNewWorkoutPage2(workoutId)
+                }
             }
 
             addExerciseButton?.setOnClickListener {
-                createNewExercise { exerciseId: Long ->
+                createNewExercise(exercisesList!!.items.size) { exerciseId: Long ->
                     router?.showNewExercisePage1(userId, workoutId, exerciseId)
                 }
             }
@@ -82,9 +88,12 @@ class CreateWorkoutFragment : WorkoutFragment() {
                 onClick = { exercise ->
                     print("Exercise $exercise clicked")
                 },
-                onStart = {exerciseItem ->
-                    print("Exercise $exerciseItem started")
-                    router?.showExercisePage(exerciseItem.exercise.id)
+                onView = {exerciseItem ->
+                    if (!chooseMode) {
+                        print("View exercise $exerciseItem clicked")
+                        router?.showExercisePage(exerciseItem.exercise.id)
+                    }
+                    chooseMode
                 },
                 onLongExerciseClick = { item, itemView ->
                     val popup = PopupMenu(requireContext(), itemView)
@@ -97,15 +106,49 @@ class CreateWorkoutFragment : WorkoutFragment() {
         }
     }
 
-    private fun createNewExercise(actionsAfter: (Long) -> Unit?) {
+    private fun createNewExercise(orderNumber: Int, actionsAfter: (Long) -> Unit?) {
         GlobalScope.launch(Dispatchers.IO) {
             database!!.let {
                 val newExercise = ExerciseEntity("", "", "", false, userId)
                 newExercise.id = it.exerciseDao().insert(newExercise)
-                val newWorkoutExercise = WorkoutExerciseEntity(workoutId, newExercise.id)
+                val newWorkoutExercise = WorkoutExerciseEntity(workoutId, newExercise.id, orderNumber)
                 newWorkoutExercise.id = it.workoutExerciseDao().insert(newWorkoutExercise)
                 withContext(Dispatchers.Main) {
                     actionsAfter.invoke(newExercise.id)
+                }
+            }
+        }
+    }
+
+    private fun removeExercise(exerciseItem: ExerciseItem, actionsAfter: () -> Unit?) {
+        GlobalScope.launch(Dispatchers.IO) {
+            database!!.workoutExerciseDao().delete(exerciseItem.workoutExercise)
+            withContext(Dispatchers.Main) {
+                actionsAfter.invoke()
+            }
+        }
+    }
+
+    private fun saveWorkoutInfo(actionsAfter: (Long) -> Unit?) {
+        GlobalScope.launch(Dispatchers.IO) {
+            database!!.let {
+
+                var orderNumber = 1
+                exercisesList?.items?.forEach { exerciseItem ->
+                    val exercise = exerciseItem.exercise
+                    val workoutExercise = exerciseItem.workoutExercise
+                    if (workoutExercise.supersetGroupId == null) {
+                        workoutExercise.counter = 1
+                    }
+                    workoutExercise.orderIndex = orderNumber
+                    orderNumber++
+                    println("On save $exercise: $workoutExercise")
+                    it.workoutExerciseDao().update(workoutExercise)
+                    it.exerciseDao().update(exercise)
+                }
+
+                withContext(Dispatchers.Main) {
+                    actionsAfter.invoke(workoutId)
                 }
             }
         }
@@ -117,11 +160,18 @@ class CreateWorkoutFragment : WorkoutFragment() {
         return PopupMenu.OnMenuItemClickListener {
             when (it.itemId) {
                 R.id.superset_item -> {
-                    exercisesList?.createSuperset()
-                    actionButton?.setImageResource(R.drawable.ic_baseline_check_24)
-                    actionButton?.setOnClickListener {
-                        exercisesList?.saveSuperset()
-                        actionButton?.setImageResource(R.drawable.ic_add_black_24dp)
+                    chooseMode = true
+                    exercisesList?.newSupersetMode()
+                    addExerciseButton?.setImageResource(R.drawable.ic_baseline_check_24)
+                    addExerciseButton?.setOnClickListener {
+                        chooseMode = false
+                        exercisesList?.supersetFromChosen()
+                        addExerciseButton?.setImageResource(R.drawable.ic_add_black_24dp)
+                        addExerciseButton?.setOnClickListener {
+                            createNewExercise(exercisesList!!.items.size) { exerciseId: Long ->
+                                router?.showNewExercisePage1(userId, workoutId, exerciseId)
+                            }
+                        }
                     }
                 }
                 R.id.remove_exercise_item -> exercisesList?.remove(item)

@@ -42,7 +42,8 @@ class WorkoutPlanFragment : BaseFragment() {
         addWorkoutButton = view.add_workout_button
         activity?.base_toolbar?.title = getString(R.string.workouts_plan)
         addWorkoutButton?.setOnClickListener {
-            router?.showNewWorkoutPage()
+            // TODO: create new workout here
+            router?.showNewWorkoutPage(1)
         }
 
         calendar.time = Date(System.currentTimeMillis())

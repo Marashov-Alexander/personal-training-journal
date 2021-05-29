@@ -1,12 +1,22 @@
 package ru.ok.technopolis.training.personal.items
 
-import java.lang.Integer.min
+import kotlin.math.max
+import kotlin.math.min
 
 class ExercisesList(items: MutableList<ExerciseItem>): ItemsList<ExerciseItem>(items) {
 
     private var maxSupersetGroupId = 0
 
-    fun createSuperset() {
+    init {
+        items.sortBy {it.workoutExercise.orderIndex}
+        maxSupersetGroupId = items
+            .map { it.workoutExercise.supersetGroupId ?: 0 }
+            .reduce { acc, i -> max(acc, i) } + 1
+        configureSuperset(items)
+    }
+
+
+    fun newSupersetMode() {
         for (i in 0 until items.size) {
             if (items[i].workoutExercise.supersetGroupId == null) {
                 items[i].checked = false
@@ -53,7 +63,7 @@ class ExercisesList(items: MutableList<ExerciseItem>): ItemsList<ExerciseItem>(i
         }
     }
 
-    fun saveSuperset() {
+    fun supersetFromChosen() {
         val superset = mutableListOf<Pair<Int, ExerciseItem>>()
         val others = mutableListOf<ExerciseItem>()
         for (i in 0 until items.size) {
@@ -72,21 +82,25 @@ class ExercisesList(items: MutableList<ExerciseItem>): ItemsList<ExerciseItem>(i
                 item.workoutExercise.counter = 1
             }
             others.addAll(minPos, superset.map { it.second })
-            for (i in 0 until others.size) {
-                val item = others[i]
-                val prevItem = if (i == 0) null else others[i - 1]
-                val nextItem = if (i == others.size - 1) null else others[i + 1]
-                item.cornerMode = item.getCornerMode(prevItem, nextItem)
-                item.counterVisibility = item.getCounterMode(item.cornerMode)
-                item.checked = null
-            }
-            setData(others)
+            configureSuperset(others)
         } else {
             for (i in 0 until items.size) {
                 items[i].checked = null
             }
             rangeUpdate(0, items.size)
         }
+    }
+
+    private fun configureSuperset(data: MutableList<ExerciseItem>) {
+        for (i in 0 until data.size) {
+            val item = data[i]
+            val prevItem = if (i == 0) null else data[i - 1]
+            val nextItem = if (i == data.size - 1) null else data[i + 1]
+            item.cornerMode = item.getCornerMode(prevItem, nextItem)
+            item.counterVisibility = item.getCounterMode(item.cornerMode)
+            item.checked = null
+        }
+        setData(data)
     }
 
 }

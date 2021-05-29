@@ -31,12 +31,16 @@ class Router(private val activity: Activity) {
         showPage(Page.Fragment.Chats)
     }
 
-    fun showNewWorkoutPage() {
-        showPage(Page.Fragment.NewWorkout)
+    fun showNewWorkoutPage(workoutId: Long) {
+        val bundle = Bundle(1)
+        bundle.putLong(WORKOUT_ID_KEY, workoutId)
+        showPage(Page.Fragment.NewWorkout, bundle)
     }
 
-    fun showNewWorkoutPage2() {
-        showPage(Page.Fragment.NewWorkout2)
+    fun showNewWorkoutPage2(workoutId: Long) {
+        val bundle = Bundle(1)
+        bundle.putLong(WORKOUT_ID_KEY, workoutId)
+        showPage(Page.Fragment.NewWorkout2, bundle)
     }
 
     fun showNewExercisePage1(userId: Long, workoutId: Long, exerciseId: Long) {

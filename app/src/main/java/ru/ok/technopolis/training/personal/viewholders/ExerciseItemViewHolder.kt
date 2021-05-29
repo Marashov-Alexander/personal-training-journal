@@ -1,5 +1,7 @@
 package ru.ok.technopolis.training.personal.viewholders
 
+import android.text.Editable
+import android.text.TextWatcher
 import android.view.View
 import android.view.View.*
 import android.widget.EditText
@@ -28,6 +30,8 @@ class ExerciseItemViewHolder(
     private var exerciseBackground: MaterialCardView = itemView.exercise_background
     private var cornerRadius: Float = 0f
 
+    private lateinit var chooseListener: () -> Unit
+
     // TODO: обновлять item при изменениях?
     override fun bind(item: ExerciseItem) {
         cornerRadius = itemView.resources.getDimension(R.dimen.superset_corner_radius)
@@ -38,15 +42,27 @@ class ExerciseItemViewHolder(
         setColor(itemView.context.getColor(item.getColorId()))
         setCornerMode(item.cornerMode)
         setItemMode(item.itemMode())
-        exerciseBackground.setOnClickListener {
+        item.checked?.let { checked ->
+            setItemChecked(checked)
+        }
+        chooseListener = {
             item.checked?.let { checked ->
                 item.checked = !checked
                 setItemChecked(!checked)
             }
         }
-        item.checked?.let { checked ->
-            setItemChecked(checked)
-        }
+        supersetCounter.addTextChangedListener(object : TextWatcher {
+            override fun afterTextChanged(s: Editable?) {
+                if (s != null && s.isNotEmpty()) {
+                    val newValue: Int? = s.toString().toIntOrNull()
+                    if (newValue != null) {
+                        item.workoutExercise.counter = newValue
+                    }
+                }
+            }
+            override fun beforeTextChanged(s: CharSequence?, start: Int, count: Int, after: Int) {}
+            override fun onTextChanged(s: CharSequence?, start: Int, before: Int, count: Int) {}
+        })
     }
 
     private fun setItemChecked(checked: Boolean) {
@@ -120,9 +136,12 @@ class ExerciseItemViewHolder(
         }
     }
 
-    fun setOnStartClickListener(onClick: () -> Unit) {
+    fun setOnViewClickListener(onClick: () -> Boolean) {
         exerciseBackground.setOnClickListener {
-          onClick()
+            val chooseMode = onClick()
+            if (chooseMode) {
+                chooseListener.invoke()
+            }
         }
     }
 

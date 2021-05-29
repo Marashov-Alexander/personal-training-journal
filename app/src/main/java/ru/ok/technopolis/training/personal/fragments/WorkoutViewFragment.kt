@@ -68,9 +68,10 @@ class WorkoutViewFragment : WorkoutFragment() {
                     print("Exercise $exercise clicked")
                     router?.showExercisePage(exercise.id.toLong())
                 },
-                onStart = {exercise ->
-                    print("Exercise $exercise started")
-                    router?.showExercisePage(exercise.id.toLong())
+                onView = {exercise ->
+                    print("View exercise $exercise clicked")
+                    router?.showExercisePage(exercise.exercise.id)
+                    false
                 },
                 onLongExerciseClick = {  item, itemView  ->
                     print("Exercise $item clicked")

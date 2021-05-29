@@ -9,12 +9,12 @@ import ru.ok.technopolis.training.personal.viewholders.ExerciseItemViewHolder
 import kotlin.reflect.KClass
 
 class ExerciseAdapter(
-        holderType: KClass<out ExerciseItemViewHolder>,
-        @LayoutRes layoutId: Int,
-        dataSource: ItemsList<ExerciseItem>,
-        onClick: (ExerciseItem) -> Unit = {},
-        private val onStart: (ExerciseItem) -> Unit = {},
-        private val onLongExerciseClick: (ExerciseItem, View) -> Unit = { _, _ -> }
+    holderType: KClass<out ExerciseItemViewHolder>,
+    @LayoutRes layoutId: Int,
+    dataSource: ItemsList<ExerciseItem>,
+    onClick: (ExerciseItem) -> Unit = {},
+    private val onView: (ExerciseItem) -> Boolean,
+    private val onLongExerciseClick: (ExerciseItem, View) -> Unit = { _, _ -> }
 ) : BaseListAdapter<ExerciseItem>(holderType, layoutId, dataSource, onClick) {
 
     override fun onBindViewHolder(holder: BaseViewHolder<ExerciseItem>, position: Int) {
@@ -27,8 +27,8 @@ class ExerciseAdapter(
         item.cornerMode = item.getCornerMode(prevItem, nextItem)
         item.counterVisibility = item.getCounterMode(item.cornerMode)
 
-        exerciseHolder.setOnStartClickListener {
-            onStart.invoke(item)
+        exerciseHolder.setOnViewClickListener {
+            onView.invoke(item)
         }
 
         exerciseHolder.setLongClickListener { view ->

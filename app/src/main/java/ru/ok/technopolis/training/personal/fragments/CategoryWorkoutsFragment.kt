@@ -39,7 +39,8 @@ class CategoryWorkoutsFragment : CategoryWorkoutFragment() {
         addButton = view.add_element_button
         exDummyToRecView()
         addButton?.setOnClickListener {
-            router?.showNewWorkoutPage()
+            // TODO: create new workout here
+            router?.showNewWorkoutPage(1)
         }
     }
 
