@@ -7,6 +7,7 @@ import kotlinx.coroutines.withContext
 import ru.ok.technopolis.training.personal.db.entity.UserEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutCategoryEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutEntity
+import ru.ok.technopolis.training.personal.db.entity.WorkoutSportEntity
 import ru.ok.technopolis.training.personal.items.ExerciseItem
 import kotlin.random.Random
 
@@ -16,6 +17,7 @@ abstract class WorkoutFragment : BaseFragment() {
         actionsAfter: (
             WorkoutEntity,
             WorkoutCategoryEntity,
+            WorkoutSportEntity,
             MutableList<ExerciseItem>,
             UserEntity?
         ) -> Unit) {
@@ -32,8 +34,9 @@ abstract class WorkoutFragment : BaseFragment() {
                     )
                 }.toMutableList()
                 val category = it.workoutCategoryDao().getById(workout.categoryId)
+                val sport = it.workoutSportDao().getById(workout.sportId)
                 withContext(Dispatchers.Main) {
-                    actionsAfter.invoke(workout, category, exercises, author)
+                    actionsAfter.invoke(workout, category, sport, exercises, author)
                 }
             }
         }

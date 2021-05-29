@@ -63,7 +63,7 @@ class CreateWorkoutFragment : WorkoutFragment() {
         val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
         itemTouchHelper.attachToRecyclerView(exercisesRecycler)
 
-        loadWorkoutInfo(workoutId) { workout, category, exercises, author ->
+        loadWorkoutInfo(workoutId) { workout, category, sport, exercises, author ->
             nextStepCard?.setOnClickListener {
                 router?.showNewWorkoutPage2()
             }

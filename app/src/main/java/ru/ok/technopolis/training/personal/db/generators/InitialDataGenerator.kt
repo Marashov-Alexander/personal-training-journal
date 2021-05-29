@@ -8,6 +8,7 @@ import ru.ok.technopolis.training.personal.db.entity.UserEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutCategoryEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutExerciseEntity
+import ru.ok.technopolis.training.personal.db.entity.WorkoutSportEntity
 
 class InitialDataGenerator {
     companion object {
@@ -48,12 +49,18 @@ class InitialDataGenerator {
             )
         }
 
+        fun getTestSport(): WorkoutSportEntity {
+            return WorkoutSportEntity(
+                    "sport"
+            )
+        }
+
         fun getTestWorkout(): WorkoutEntity {
             return WorkoutEntity(
                 "My workout 1",
                 "Description",
                 1,
-                "My sport",
+                1,
                 0,
                 true,
                 1
@@ -65,11 +72,10 @@ class InitialDataGenerator {
                     "Author workout",
                     "Description",
                     1,
-                    "My sport",
+                    1,
                     0,
                     true,
-                    10,
-                    null
+                    10
             )
         }
 
@@ -86,5 +92,6 @@ class InitialDataGenerator {
         fun getTestWorkoutExercise(): WorkoutExerciseEntity {
             return WorkoutExerciseEntity(1, 1)
         }
+
     }
 }

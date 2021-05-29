@@ -13,6 +13,7 @@ import kotlinx.android.synthetic.main.view_appbar.*
 import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.db.entity.WorkoutCategoryEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutEntity
+import ru.ok.technopolis.training.personal.db.entity.WorkoutSportEntity
 import ru.ok.technopolis.training.personal.fragments.dialogs.DescriptionDialogFragment
 import ru.ok.technopolis.training.personal.items.BundleItem
 import ru.ok.technopolis.training.personal.items.ExercisesList
@@ -56,8 +57,8 @@ class WorkoutViewFragment : WorkoutFragment() {
 
         shareText = view.share_text
 
-        loadWorkoutInfo(workoutId) { workout, category, exercises, author ->
-            setWorkoutDummy(workout, category)
+        loadWorkoutInfo(workoutId) { workout, category, sport, exercises, author ->
+            setWorkoutDummy(workout, category, sport)
             exercisesList = ExercisesList(exercises)
             val adapter = ExerciseAdapter(
                 holderType = ExerciseItemViewHolder::class,
@@ -81,7 +82,7 @@ class WorkoutViewFragment : WorkoutFragment() {
         }
     }
 
-    private fun setWorkoutDummy(workout: WorkoutEntity, category: WorkoutCategoryEntity){
+    private fun setWorkoutDummy(workout: WorkoutEntity, category: WorkoutCategoryEntity, sport: WorkoutSportEntity){
 //        val workoutId = (activity?.intent?.extras?.get(Page.WORKOUT_ID_KEY) as Long)
 //        workout = ShortWorkoutItem(workoutId.toString(), Time(System.currentTimeMillis()), "name", "description","category", "sport", "40 min",  123, 3.5, false, false)
         activity?.base_toolbar?.title = getString(R.string.workout) + " \"${workout.name}\" "
@@ -99,7 +100,7 @@ class WorkoutViewFragment : WorkoutFragment() {
         }
         //TODO:load author from db
 //        authorName?.text =
-        setWorkoutShortInfo(workout, category)
+        setWorkoutShortInfo(workout, category, sport)
     }
 
     private fun showExerciseDescription(title: String, description: String) {
@@ -107,11 +108,11 @@ class WorkoutViewFragment : WorkoutFragment() {
                 .show(requireActivity().supportFragmentManager, "ParameterDialogFragment")
     }
 
-    private fun setWorkoutShortInfo(workout: WorkoutEntity, category: WorkoutCategoryEntity){
+    private fun setWorkoutShortInfo(workout: WorkoutEntity, category: WorkoutCategoryEntity, sport: WorkoutSportEntity){
         val itemsList = SingleSelectableList(mutableListOf(
 //                BundleItem("0", 0, "Сложность 3"),
                 BundleItem("0", 0, category.name),
-                BundleItem("1", 1, workout.sport.toString())
+                BundleItem("1", 1, sport.name)
         ))
         val exerciseAdapter = BundleAdapter(
                 holderType = BundleItemViewHolder::class,

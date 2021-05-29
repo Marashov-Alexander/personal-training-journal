@@ -14,6 +14,12 @@ import androidx.room.PrimaryKey
                     onDelete = ForeignKey.CASCADE
             ),
             ForeignKey(
+                    entity = WorkoutSportEntity::class,
+                    parentColumns = ["id"],
+                    childColumns = ["sportId"],
+                    onDelete = ForeignKey.CASCADE
+            ),
+            ForeignKey(
                 entity = UserEntity::class,
                 parentColumns = ["id"],
                 childColumns = ["authorId"],
@@ -25,7 +31,7 @@ data class WorkoutEntity(
     @ColumnInfo var name: String,
     @ColumnInfo var description: String,
     @ColumnInfo var categoryId: Long,
-    @ColumnInfo var sport: String,
+    @ColumnInfo var sportId: Long,
     @ColumnInfo var difficulty: Int,
     @ColumnInfo var isPublic: Boolean,
     @ColumnInfo var authorId: Long,
