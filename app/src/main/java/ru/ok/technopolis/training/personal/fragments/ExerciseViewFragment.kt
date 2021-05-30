@@ -14,6 +14,7 @@ import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.element_exercise_parameters.*
 import kotlinx.android.synthetic.main.fragment_view_exercise.view.*
 import kotlinx.android.synthetic.main.item_media_viewer.view.*
+import kotlinx.android.synthetic.main.scheduled_workout_item.*
 import kotlinx.android.synthetic.main.view_appbar.*
 import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.db.entity.ExerciseEntity
@@ -28,7 +29,6 @@ import ru.ok.technopolis.training.personal.utils.logger.Logger
 import ru.ok.technopolis.training.personal.utils.recycler.adapters.BundleAdapter
 import ru.ok.technopolis.training.personal.viewholders.BundleItemViewHolder
 import ru.ok.technopolis.training.personal.views.ExerciseParametersWrapper
-import java.sql.Time
 
 class ExerciseViewFragment : ExerciseFragment() {
     private var exerciseShortInfoRecycler: RecyclerView? = null
@@ -50,7 +50,7 @@ class ExerciseViewFragment : ExerciseFragment() {
 
         super.onViewCreated(view, savedInstanceState)
         exerciseShortInfoRecycler = view.exercise_scroll_info
-        startButton = view.workout_start_icon
+        startButton = workout_start_icon
         imageSwitcher = view.exercise_image_switcher
         downloadsNumber = view.downloads_number
         raiting = view.rank_number

@@ -104,34 +104,6 @@
             app:layout_constraintTop_toTopOf="@id/short_workout_star"
             tools:text="9.8" />
 
-
-        <com.google.android.material.card.MaterialCardView
-            android:id="@+id/workout_start_card"
-            android:layout_width="wrap_content"
-            android:layout_height="wrap_content"
-            android:clickable="true"
-            android:theme="@style/AppTheme"
-            app:strokeWidth="@dimen/dimens_4dp"
-            app:strokeColor="@color/gray_2"
-            app:cardBackgroundColor="@color/background"
-            app:cardCornerRadius="96dp"
-            app:layout_constraintBottom_toBottomOf="@id/image_switcher"
-            app:layout_constraintEnd_toEndOf="parent"
-            app:layout_constraintStart_toStartOf="parent"
-            >
-            <ImageView
-                android:id="@+id/workout_start_icon"
-                android:layout_width="45dp"
-                android:layout_height="45dp"
-                android:layout_margin="@dimen/padding_16"
-                android:contentDescription="@string/start_workout"
-                android:src="@drawable/ic_play_arrow_black_24dp"
-                android:tint="@color/gray_2"
-                />
-        </com.google.android.material.card.MaterialCardView>
-
-
-
         <com.google.android.material.card.MaterialCardView
             android:id="@+id/share_card"
             android:layout_width="wrap_content"
