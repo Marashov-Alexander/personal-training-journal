@@ -2,13 +2,13 @@ package ru.ok.technopolis.training.personal.fragments
 
 import android.os.Bundle
 import android.view.View
+import android.widget.AutoCompleteTextView
 import androidx.appcompat.widget.PopupMenu
 import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
-import com.google.android.material.textfield.TextInputLayout
 import kotlinx.android.synthetic.main.fragment_new_workout_1.*
 import kotlinx.android.synthetic.main.view_appbar.*
 import kotlinx.coroutines.Dispatchers
@@ -17,6 +17,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.db.entity.ExerciseEntity
+import ru.ok.technopolis.training.personal.db.entity.WorkoutEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutExerciseEntity
 import ru.ok.technopolis.training.personal.items.ExerciseItem
 import ru.ok.technopolis.training.personal.items.ExercisesList
@@ -28,11 +29,11 @@ import ru.ok.technopolis.training.personal.viewholders.ExerciseItemViewHolder
 
 class CreateWorkoutFragment : WorkoutFragment() {
 
-    private var workoutName: TextInputLayout? = null
-    private var exercisesRecycler: RecyclerView? = null
-    private var exercisesList: ExercisesList? = null
-    private var nextStepCard: MaterialCardView? = null
-    private var addExerciseButton: FloatingActionButton? = null
+    private lateinit var workoutName: AutoCompleteTextView
+    private lateinit var exercisesRecycler: RecyclerView
+    private lateinit var exercisesList: ExercisesList
+    private lateinit var nextStepCard: MaterialCardView
+    private lateinit var addExerciseButton: FloatingActionButton
 
     private var userId = -1L
     private var workoutId = -1L
@@ -47,12 +48,12 @@ class CreateWorkoutFragment : WorkoutFragment() {
 
         activity?.base_toolbar?.title = getString(R.string.workout_creation)
         addExerciseButton = add_exercise_button
-        workoutName = input_workout_name
+        workoutName = workout_name_text
         exercisesRecycler = exercises_recycler
         nextStepCard = next_step_card
 
         val layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
-        exercisesRecycler?.layoutManager = layoutManager
+        exercisesRecycler.layoutManager = layoutManager
 
         val simpleItemTouchCallback: ItemTouchHelper.SimpleCallback = object : ItemTouchHelper.SimpleCallback(0, ItemTouchHelper.LEFT) {
             override fun onMove(recyclerView: RecyclerView, viewHolder: RecyclerView.ViewHolder, target: RecyclerView.ViewHolder): Boolean {
@@ -61,9 +62,9 @@ class CreateWorkoutFragment : WorkoutFragment() {
 
             override fun onSwiped(viewHolder: RecyclerView.ViewHolder, swipeDir: Int) {
                 val position = viewHolder.adapterPosition
-                val exerciseItem = exercisesList!!.items[position]
+                val exerciseItem = exercisesList.items[position]
                 removeExercise(exerciseItem) {
-                    exercisesList?.remove(exerciseItem)
+                    exercisesList.remove(exerciseItem)
                 }
             }
         }
@@ -72,15 +73,16 @@ class CreateWorkoutFragment : WorkoutFragment() {
         itemTouchHelper.attachToRecyclerView(exercisesRecycler)
 
         loadWorkoutInfo(workoutId) { workout, category, sport, exercises, author ->
-            nextStepCard?.setOnClickListener {
-                saveWorkoutInfo { workoutId ->
+            nextStepCard.setOnClickListener {
+                workout.name = workoutName.text.toString()
+                saveWorkoutInfo(workout) { workoutId ->
                     // TODO: go to next step
 //                    router?.showNewWorkoutPage2(workoutId)
                 }
             }
 
-            addExerciseButton?.setOnClickListener {
-                createNewExercise(exercisesList!!.items.size) { exerciseId: Long ->
+            addExerciseButton.setOnClickListener {
+                createNewExercise(exercisesList.items.size) { exerciseId: Long ->
                     router?.showNewExercisePage1(userId, workoutId, exerciseId)
                 }
             }
@@ -89,7 +91,7 @@ class CreateWorkoutFragment : WorkoutFragment() {
             val adapter = ExerciseAdapter(
                 holderType = ExerciseItemViewHolder::class,
                 layoutId = R.layout.item_exercise,
-                dataSource = exercisesList!!,
+                dataSource = exercisesList,
                 onClick = { exercise ->
                     print("Exercise $exercise clicked")
                 },
@@ -114,7 +116,7 @@ class CreateWorkoutFragment : WorkoutFragment() {
                     popup.show()
                 }
             )
-            exercisesRecycler?.adapter = adapter
+            exercisesRecycler.adapter = adapter
         }
     }
 
@@ -141,12 +143,12 @@ class CreateWorkoutFragment : WorkoutFragment() {
         }
     }
 
-    private fun saveWorkoutInfo(actionsAfter: (Long) -> Unit?) {
+    private fun saveWorkoutInfo(workout: WorkoutEntity, actionsAfter: (Long) -> Unit?) {
         GlobalScope.launch(Dispatchers.IO) {
             database!!.let {
-
+                it.workoutDao().update(workout)
                 var orderNumber = 1
-                exercisesList?.items?.forEach { exerciseItem ->
+                exercisesList.items.forEach { exerciseItem ->
                     val exercise = exerciseItem.exercise
                     val workoutExercise = exerciseItem.workoutExercise
                     if (workoutExercise.supersetGroupId == null) {
@@ -173,20 +175,20 @@ class CreateWorkoutFragment : WorkoutFragment() {
             when (it.itemId) {
                 R.id.superset_item -> {
                     chooseMode = true
-                    exercisesList?.newSupersetMode()
-                    addExerciseButton?.setImageResource(R.drawable.ic_baseline_check_24)
-                    addExerciseButton?.setOnClickListener {
+                    exercisesList.newSupersetMode()
+                    addExerciseButton.setImageResource(R.drawable.ic_baseline_check_24)
+                    addExerciseButton.setOnClickListener {
                         chooseMode = false
-                        exercisesList?.supersetFromChosen()
-                        addExerciseButton?.setImageResource(R.drawable.ic_add_black_24dp)
-                        addExerciseButton?.setOnClickListener {
-                            createNewExercise(exercisesList!!.items.size) { exerciseId: Long ->
+                        exercisesList.supersetFromChosen()
+                        addExerciseButton.setImageResource(R.drawable.ic_add_black_24dp)
+                        addExerciseButton.setOnClickListener {
+                            createNewExercise(exercisesList.items.size) { exerciseId: Long ->
                                 router?.showNewExercisePage1(userId, workoutId, exerciseId)
                             }
                         }
                     }
                 }
-                R.id.remove_exercise_item -> exercisesList?.remove(item)
+                R.id.remove_exercise_item -> exercisesList.remove(item)
             }
             true
         }

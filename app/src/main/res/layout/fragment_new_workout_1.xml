@@ -18,7 +18,7 @@
         >
 
         <AutoCompleteTextView
-            android:id="@+id/email_et"
+            android:id="@+id/workout_name_text"
             style="@style/Input"
 
             android:layout_width="match_parent"
