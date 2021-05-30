@@ -19,20 +19,21 @@ class InitialDataGenerator {
     companion object {
         fun getParameters(context: Context): List<ParameterEntity> {
             return listOf(
-                ParameterEntity(context.resources.getString(R.string.time), context.resources.getString(R.string.sec)),
-                ParameterEntity(context.resources.getString(R.string.distance), context.resources.getString(R.string.m)),
-                ParameterEntity(context.resources.getString(R.string.weight), context.resources.getString(R.string.kg))
+                    ParameterEntity(context.resources.getString(R.string.time), context.resources.getString(R.string.sec)),
+                    ParameterEntity(context.resources.getString(R.string.distance), context.resources.getString(R.string.m)),
+                    ParameterEntity(context.resources.getString(R.string.weight), context.resources.getString(R.string.kg))
             )
         }
+
         fun getTestUser(): UserEntity {
             return UserEntity(
-                "Tester",
-                "Testov",
-                "Testovich",
-                "test@test.test",
-                "Mail",
-                null,
-                1
+                    "Tester",
+                    "Testov",
+                    "Testovich",
+                    "test@test.test",
+                    "Mail",
+                    null,
+                    1
             )
         }
 
@@ -48,7 +49,6 @@ class InitialDataGenerator {
             )
         }
 
-
         fun getTestUserSubscriptionEntity(): SubscriptionEntity {
             return SubscriptionEntity(1, 10)
         }
@@ -56,33 +56,30 @@ class InitialDataGenerator {
             return SubscriptionEntity(10, 1)
         }
 
-        fun getTestCategory(): WorkoutCategoryEntity {
-            return WorkoutCategoryEntity(
-                    "category"
-            )
+        fun getTestCategories(context: Context): List<WorkoutCategoryEntity> {
+            val stringArray = context.resources.getStringArray(R.array.workout_types)
+            return stringArray.map { WorkoutCategoryEntity(it) }
         }
 
-        fun getTestExerciseCategory(): ExerciseCategoryEntity {
-            return ExerciseCategoryEntity(
-                    "category"
-            )
+        fun getTestExerciseCategories(context: Context): List<ExerciseCategoryEntity> {
+            val stringArray = context.resources.getStringArray(R.array.exercise_types)
+            return stringArray.map { ExerciseCategoryEntity(it) }
         }
 
-        fun getTestSport(): WorkoutSportEntity {
-            return WorkoutSportEntity(
-                    "sport"
-            )
+        fun getTestSports(context: Context): List<WorkoutSportEntity> {
+            val stringArray = context.resources.getStringArray(R.array.sport_types)
+            return stringArray.map { WorkoutSportEntity(it) }
         }
 
         fun getTestWorkout(): WorkoutEntity {
             return WorkoutEntity(
-                "My workout 1",
-                "Description",
-                1,
-                1,
-                0,
-                true,
-                1
+                    "My workout 1",
+                    "Description",
+                    1,
+                    1,
+                    0,
+                    true,
+                    1
             )
         }
 
@@ -100,11 +97,11 @@ class InitialDataGenerator {
 
         fun getTestExercise(): ExerciseEntity {
             return ExerciseEntity(
-                "My exercise 1",
-                "Description",
-                1,
-                true,
-                1L
+                    "My exercise 1",
+                    "Description",
+                    1,
+                    true,
+                    1L
             )
         }
 
@@ -142,7 +139,7 @@ class InitialDataGenerator {
             return UserWorkoutEntity(1, 1, true)
         }
 
-        fun getTestUserExercise(): UserExerciseEntity{
+        fun getTestUserExercise(): UserExerciseEntity {
             return UserExerciseEntity(1, 1, true)
         }
 

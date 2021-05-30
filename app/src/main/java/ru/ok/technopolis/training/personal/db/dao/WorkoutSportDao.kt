@@ -22,6 +22,9 @@ interface WorkoutSportDao {
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(workoutSportEntity: WorkoutSportEntity): Long
 
+    @Insert
+    fun insert(workoutSportEntityList: List<WorkoutSportEntity>): List<Long>
+
     @Update
     fun update(workoutSportEntity: WorkoutSportEntity): Int
 

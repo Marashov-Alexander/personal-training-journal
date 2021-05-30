@@ -4,15 +4,10 @@
     android:layout_height="192dp"
     xmlns:app="http://schemas.android.com/apk/res-auto"
     xmlns:tools="http://schemas.android.com/tools"
-    android:layout_margin="@dimen/dimens_16dp"
+    android:layout_marginVertical="@dimen/dimens_8dp"
+    android:layout_marginHorizontal="@dimen/dimens_16dp"
     android:padding="@dimen/dimens_8dp"
-    android:background="@drawable/border">
-
-    <ImageView
-        android:id="@+id/workout_background"
-        android:layout_width="match_parent"
-        android:layout_height="match_parent"
-        />
+    android:background="@drawable/rounded_outline">
 
     <TextView
         android:id="@+id/workout_time"
@@ -90,39 +85,32 @@
             />
     </androidx.cardview.widget.CardView>
 
-    <ImageView
-        android:id="@+id/workout_duration_icon"
-        android:layout_width="@dimen/dimens_24dp"
-        android:layout_height="@dimen/dimens_24dp"
-        app:layout_constraintStart_toStartOf="parent"
-        app:layout_constraintBottom_toBottomOf="@id/workout_duration"
-        app:layout_constraintTop_toTopOf="@id/workout_duration"
-        app:layout_constraintEnd_toStartOf="@id/workout_duration"
-        android:src="@drawable/ic_alarm_black_24dp"
-        android:contentDescription="@string/workout_duration"
-        />
-    <TextView
-        android:id="@+id/workout_duration"
-        android:layout_height="wrap_content"
-        android:layout_width="0dp"
-        tools:text="40 минут"
-        android:textSize="@dimen/text_size_15"
-        app:layout_constraintStart_toEndOf="@id/workout_duration_icon"
-        app:layout_constraintEnd_toStartOf="@id/workout_start"
-        app:layout_constraintBottom_toBottomOf="parent"
-        android:layout_marginStart="@dimen/dimens_8dp"
-        android:textColor="@color/black"
-        />
-    <ImageView
-        android:id="@+id/workout_start_icon"
-        android:layout_height="48dp"
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/workout_start_card"
         android:layout_width="48dp"
-        android:src="@drawable/ic_baseline_play_circle_outline_24"
+        android:layout_height="48dp"
+        android:clickable="true"
+        android:theme="@style/AppTheme"
+        app:strokeWidth="2dp"
+        app:strokeColor="@color/gray_2"
+        app:cardBackgroundColor="@color/background"
+        app:cardCornerRadius="96dp"
         app:layout_constraintEnd_toEndOf="@id/workout_start"
         app:layout_constraintStart_toStartOf="@id/workout_start"
         app:layout_constraintBottom_toTopOf="@id/workout_start"
-        android:contentDescription="@string/start_workout"
-        />
+        >
+        <ImageView
+            android:id="@+id/workout_start_icon"
+            android:layout_width="match_parent"
+            android:layout_height="match_parent"
+            android:layout_margin="@dimen/dimens_8dp"
+            android:contentDescription="@string/start_workout"
+            android:src="@drawable/ic_play_arrow_black_24dp"
+            android:layout_gravity="center"
+            android:tint="@color/gray_2"
+            />
+    </com.google.android.material.card.MaterialCardView>
+
     <TextView
         android:id="@+id/workout_start"
         android:layout_width="wrap_content"
@@ -130,10 +118,12 @@
         android:textSize="@dimen/text_size_13"
         android:text="@string/start"
         android:gravity="bottom"
+        android:textStyle="italic"
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         android:paddingEnd="8dp"
         android:paddingStart="8dp"
         android:textColor="@color/black"
+        android:labelFor="@id/workout_start_card"
         />
 </androidx.constraintlayout.widget.ConstraintLayout>

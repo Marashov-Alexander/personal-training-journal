@@ -10,6 +10,7 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
+import kotlinx.android.synthetic.main.element_start_button.*
 import kotlinx.android.synthetic.main.fragment_view_workout.view.*
 import kotlinx.android.synthetic.main.item_media_viewer.view.*
 import kotlinx.android.synthetic.main.view_appbar.*
@@ -53,7 +54,7 @@ class WorkoutViewFragment : WorkoutFragment() {
         workoutId = (activity?.intent?.extras?.get(Page.WORKOUT_ID_KEY)) as Long
 
         workoutShortInfoRecycler = view.workout_scroll_info
-        startButton = view.workout_start_icon
+        startButton = workout_start_icon
         imageSwitcher = view.exercise_image_switcher
         downloadsNumber = view.downloads_number
         raiting = view.rank_number
@@ -64,7 +65,7 @@ class WorkoutViewFragment : WorkoutFragment() {
 
         shareText = view.share_text
 
-        loadWorkoutInfo(workoutId) { workout, category, sport, exercises, author ->
+        loadWorkoutInfo(workoutId, loadCategories = false, loadSports = false) { workout, category, sport, exercises, author, _, _ ->
             setWorkoutDummy(workout, category, sport)
             exercisesList = ExercisesList(exercises)
             val adapter = ExerciseAdapter(

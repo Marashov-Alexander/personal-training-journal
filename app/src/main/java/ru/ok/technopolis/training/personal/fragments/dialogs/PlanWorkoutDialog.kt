@@ -33,7 +33,7 @@ import ru.ok.technopolis.training.personal.viewholders.PlanDayViewHolder
 import java.sql.Time
 
 
-class PlanWorkoutDialog(private val workout: WorkoutEntity, private val listener: PlanWorkoutListener) : DialogFragment() {
+class PlanWorkoutDialog(private val workout: WorkoutEntity) : DialogFragment() {
     private var workoutRepetitionSpinner: Spinner? = null
     private var everyDayPart: ConstraintLayout? = null
 //    private var oneDayPart: ConstraintLayout? = null
@@ -235,9 +235,5 @@ class PlanWorkoutDialog(private val workout: WorkoutEntity, private val listener
         daysRecyclerView?.adapter = daysAdapter
         val layoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         daysRecyclerView?.layoutManager = layoutManager
-    }
-
-    interface PlanWorkoutListener {
-
     }
 }

@@ -39,7 +39,6 @@
         app:layout_constraintEnd_toStartOf="@id/sport_type_spinner"
         android:layout_marginBottom="@dimen/dimens_8dp"
         android:background="@drawable/rounded_outline"
-        android:padding="@dimen/dimens_8dp"
         android:layout_marginEnd="8dp"
         android:textAlignment="center"
         />
@@ -66,7 +65,6 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintStart_toEndOf="@id/workout_type_spinner"
         android:background="@drawable/rounded_outline"
-        android:padding="@dimen/dimens_8dp"
         android:textAlignment="center"
         />
 
@@ -119,7 +117,7 @@
                 android:id="@+id/difficulty_value"
                 android:layout_width="wrap_content"
                 android:layout_height="wrap_content"
-                tools:text="5"
+                android:text="@string/_1"
                 android:textSize="@dimen/text_size_20"
                 android:layout_gravity="center"
                 app:layout_constraintStart_toEndOf="@id/decrease_difficulty"
