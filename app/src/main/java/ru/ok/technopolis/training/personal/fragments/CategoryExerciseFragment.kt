@@ -12,32 +12,33 @@ import ru.ok.technopolis.training.personal.items.ShortExerciseItem
 import kotlin.random.Random
 
 abstract class CategoryExerciseFragment : BaseFragment() {
-    protected fun loadCategoryExercises( userId: Long, library: Boolean,
+    protected fun loadCategoryExercises(userId: Long, library: Boolean,
                                         actionsAfter: (
                                                 MutableList<CategoryExerciseItem>
                                         ) -> Unit) {
         GlobalScope.launch(Dispatchers.IO) {
             database!!.let {
-                val categoryElem = mutableListOf<CategoryExerciseItem>()
+                val categoryElements = mutableListOf<CategoryExerciseItem>()
                 val categories = it.exerciseCategoryDao().getAll()
-                categories.map { category ->
+                categories.forEach { category ->
                     val workouts: List<ExerciseEntity> = if (library) {
                         it.exerciseDao().getByCategoryIdNotForAuthor(category.id, userId)
                     } else {
                         it.exerciseDao().getByCategoryIdAndAuthorId(category.id, userId)
 
                     }
-                    formList(workouts, category, categoryElem)
+                    formList(workouts, category, categoryElements)
                 }
+                val filtered = categoryElements.filter { cat -> cat.exercises.isNotEmpty() }.toMutableList()
                 withContext(Dispatchers.Main) {
-                    actionsAfter.invoke(categoryElem)
+                    actionsAfter.invoke(filtered)
                 }
             }
 
         }
     }
 
-    private fun formList(exercises: List<ExerciseEntity>, category: ExerciseCategoryEntity, categoryElem: MutableList<CategoryExerciseItem>): Boolean {
+    private fun formList(exercises: List<ExerciseEntity>, category: ExerciseCategoryEntity, categoryElem: MutableList<CategoryExerciseItem>) {
         val exercisesList = exercises.map { entity ->
             val downloadsNumber = 0
             val rank = 0.0
@@ -49,6 +50,6 @@ abstract class CategoryExerciseFragment : BaseFragment() {
                     rank
             )
         }.toMutableList()
-        return categoryElem.add(CategoryExerciseItem(category.id.toString(), category.name, exercisesList))
+        categoryElem.add(CategoryExerciseItem(category.id.toString(), category.name, exercisesList))
     }
 }
