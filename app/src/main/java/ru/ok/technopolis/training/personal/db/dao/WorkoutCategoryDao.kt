@@ -6,6 +6,7 @@ import androidx.room.Insert
 import androidx.room.OnConflictStrategy
 import androidx.room.Query
 import androidx.room.Update
+import ru.ok.technopolis.training.personal.db.entity.UserEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutCategoryEntity
 
 @Dao
@@ -21,6 +22,9 @@ interface WorkoutCategoryDao {
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(workoutCategoryEntity: WorkoutCategoryEntity): Long
+
+    @Insert
+    fun insert(workoutCategoryEntityList: List<WorkoutCategoryEntity>): List<Long>
 
     @Update
     fun update(workoutCategoryEntity: WorkoutCategoryEntity): Int

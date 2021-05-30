@@ -14,12 +14,16 @@ import kotlin.random.Random
 abstract class WorkoutFragment : BaseFragment() {
     protected fun loadWorkoutInfo(
         workoutId: Long,
+        loadCategories: Boolean,
+        loadSports: Boolean,
         actionsAfter: (
             WorkoutEntity,
             WorkoutCategoryEntity,
             WorkoutSportEntity,
             MutableList<ExerciseItem>,
-            UserEntity?
+            UserEntity?,
+            List<WorkoutCategoryEntity>,
+            List<WorkoutSportEntity>
         ) -> Unit) {
         GlobalScope.launch(Dispatchers.IO) {
             database!!.let {
@@ -43,8 +47,10 @@ abstract class WorkoutFragment : BaseFragment() {
                 }.toMutableList()
                 val category = it.workoutCategoryDao().getById(workout.categoryId)
                 val sport = it.workoutSportDao().getById(workout.sportId)
+                val categories = if (loadCategories) it.workoutCategoryDao().getAll() else listOf()
+                val sports = if (loadSports) it.workoutSportDao().getAll() else listOf()
                 withContext(Dispatchers.Main) {
-                    actionsAfter.invoke(workout, category, sport, exercises, author)
+                    actionsAfter.invoke(workout, category, sport, exercises, author, categories, sports)
                 }
             }
         }

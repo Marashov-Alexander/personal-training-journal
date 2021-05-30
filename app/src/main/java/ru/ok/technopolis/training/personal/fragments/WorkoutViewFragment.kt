@@ -65,7 +65,7 @@ class WorkoutViewFragment : WorkoutFragment() {
 
         shareText = view.share_text
 
-        loadWorkoutInfo(workoutId) { workout, category, sport, exercises, author ->
+        loadWorkoutInfo(workoutId, loadCategories = false, loadSports = false) { workout, category, sport, exercises, author, _, _ ->
             setWorkoutDummy(workout, category, sport)
             exercisesList = ExercisesList(exercises)
             val adapter = ExerciseAdapter(

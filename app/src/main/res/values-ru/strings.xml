@@ -105,7 +105,7 @@
     <string name="results">Результаты</string>
 
     <string-array name="workout_types">
-        <item>Не указано</item>
+        <item>Без категории</item>
         <item>Аэробная</item>
         <item>Анаэробная</item>
         <item>Силовая</item>
@@ -120,7 +120,7 @@
     </string-array>
 
     <string-array name="sport_types">
-        <item>Не указано</item>
+        <item>Не указан</item>
         <item>Бадминтон</item>
         <item>Баскетбол</item>
         <item>Бейсбол</item>
