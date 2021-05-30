@@ -14,6 +14,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.ok.technopolis.training.personal.R
+import ru.ok.technopolis.training.personal.db.entity.UserWorkoutEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutCategoryEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutSportEntity
@@ -61,7 +62,7 @@ class CreateWorkoutFragment2 : WorkoutFragment() {
         sportSpinner = sport_type_spinner
         workoutDescription = workout_description
 
-        loadWorkoutInfo(workoutId, loadCategories = true, loadSports = true) { workoutEntity, workoutCategoryEntity, workoutSportEntity, exercises, author, categories, sports ->
+        loadWorkoutInfo(userId, workoutId, loadCategories = true, loadSports = true) { workoutEntity, userWorkout, workoutCategoryEntity, workoutSportEntity, exercises, author, categories, sports ->
             this.workout = workoutEntity
             setDifficulty(this.workout.difficulty)
             difficultyPlus.setOnClickListener { changeDifficulty(1) }
@@ -72,7 +73,7 @@ class CreateWorkoutFragment2 : WorkoutFragment() {
                 workout.description = workoutDescription.text.toString()
                 saveWorkoutInfo(workout) {
                     router?.showWorkoutPlanPage()
-                    PlanWorkoutDialog(workout)
+                    PlanWorkoutDialog(userWorkout!!, this::savePlan)
                             .show(requireActivity().supportFragmentManager, "ParameterDialogFragment")
                 }
             }
@@ -113,8 +114,17 @@ class CreateWorkoutFragment2 : WorkoutFragment() {
             sportSpinner.setSelection(sports.indexOfFirst {it.id == workout.sportId})
         }
 
+    }
 
-
+    private fun savePlan(userWorkout: UserWorkoutEntity, actionsAfter: () -> Unit) {
+        GlobalScope.launch(Dispatchers.IO) {
+            database!!.let {
+                it.userWorkoutDao().update(userWorkout)
+                withContext(Dispatchers.Main) {
+                    actionsAfter.invoke()
+                }
+            }
+        }
     }
 
     private fun saveWorkoutInfo(workout: WorkoutEntity, actionsAfter: (Long) -> Unit?) {

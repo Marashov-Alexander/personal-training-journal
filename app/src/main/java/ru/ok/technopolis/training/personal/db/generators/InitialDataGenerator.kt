@@ -147,7 +147,7 @@ class InitialDataGenerator {
         }
 
         fun getTestUserWorkout(): UserWorkoutEntity {
-            return UserWorkoutEntity(1, 1, true)
+            return UserWorkoutEntity(1, 1, true, System.currentTimeMillis())
         }
 
         fun getTestUserExercise(): UserExerciseEntity {
@@ -155,7 +155,7 @@ class InitialDataGenerator {
         }
 
         fun getTestAuthorWorkout(): UserWorkoutEntity {
-            return UserWorkoutEntity(10, 2, true)
+            return UserWorkoutEntity(10, 2, true, System.currentTimeMillis())
         }
 
         fun getTestAuthorExercise(): UserExerciseEntity {

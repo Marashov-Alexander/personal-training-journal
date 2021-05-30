@@ -75,7 +75,7 @@ class WorkoutViewFragment : WorkoutFragment() {
                     .show(requireActivity().supportFragmentManager, "ShareDialog")
         }
 
-        loadWorkoutInfo(workoutId, loadCategories = false, loadSports = false) { workout, category, sport, exercises, author, _, _ ->
+        loadWorkoutInfo(null, workoutId, loadCategories = false, loadSports = false) { workout, userWorkout, category, sport, exercises, author, _, _ ->
             setWorkoutDummy(workout, category, sport)
             exercisesList = ExercisesList(exercises)
             val adapter = ExerciseAdapter(
