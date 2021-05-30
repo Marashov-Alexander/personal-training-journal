@@ -4,7 +4,6 @@ import android.graphics.Color
 import android.os.Bundle
 import android.view.View
 import android.widget.TextView
-import androidx.recyclerview.widget.GridLayoutManager
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_profile.view.*
@@ -53,9 +52,6 @@ class ProfileFragment : UserFragment() {
         val trSwLine = view.train_switch_line
         val exSwitchLine = view.ex_switch_line
 
-        //TODO: change to real
-
-
         id = CurrentUserRepository.currentUser.value?.id
         loadSportsInfo(id!!) { list ->
 
@@ -71,6 +67,7 @@ class ProfileFragment : UserFragment() {
                     "${sport.name} "
                 }
             }
+            //TODO: change to real
             val prof = ProfileItem(id.toString(),
                     id!!,
                     name,
@@ -82,7 +79,6 @@ class ProfileFragment : UserFragment() {
                     2,
                     3
             )
-
 
             profileNameAndIcon?.profile_name?.text = prof.name
             profileNameAndIcon?.complaint?.visibility = View.INVISIBLE
@@ -102,8 +98,6 @@ class ProfileFragment : UserFragment() {
         }
 
             val flag = true
-//            putNumbers(flag)
-//            exDummyToRecView()
             val sharedFlag = false
             val privateFlag = false
             getUserWorkouts(id!!) { workouts ->
@@ -165,24 +159,27 @@ class ProfileFragment : UserFragment() {
     private fun allWorkouts(id: Long) {
         getUserWorkouts(id) { workouts ->
             workoutsMutableList = workouts
-//            val text = getString(R.string.training_switcher_text) + " (" + workouts.size + ")"
-//            trainSwitcher?.train_switch_button?.text = text
+            val all = workoutsMutableList.size
+            val text = getString(R.string.all_filter_text) + "(" + all + ")"
+            filterButtons?.all_filter_button?.text = text
             loadWorkouts(workouts)
         }
     }
     private fun privateWorkouts(id: Long) {
         getUserWorkoutsPrivate(id) { workouts ->
             workoutsMutableList = workouts
-//            val text = getString(R.string.training_switcher_text) + " (" + workouts.size + ")"
-//            trainSwitcher?.train_switch_button?.text = text
+            val private = workoutsMutableList.size
+            val text = getString(R.string.private_filter_text) + "(" + private + ")"
+            filterButtons?.private_filter_button?.text = text
             loadWorkouts(workouts)
         }
     }
     private fun sharedWorkouts(id: Long) {
         getUserWorkoutsShared(id) { workouts ->
             workoutsMutableList = workouts
-//            val text = getString(R.string.training_switcher_text) + " (" + workouts.size + ")"
-//            trainSwitcher?.train_switch_button?.text = text
+            val shared = workoutsMutableList.size
+            val text = getString(R.string.shared_filter_text) + "(" + shared + ")"
+            filterButtons?.shared_filter_button?.text = text
             loadWorkouts(workouts)
         }
     }
@@ -190,24 +187,27 @@ class ProfileFragment : UserFragment() {
     private fun allExercises(id: Long) {
         getUserExercises(id) { workouts ->
             exerciseMutableList = workouts
-//            val text = getString(R.string.training_switcher_text) + " (" + workouts.size + ")"
-//            trainSwitcher?.train_switch_button?.text = text
+            val all = exerciseMutableList.size
+            val text = getString(R.string.all_filter_text) + "(" + all + ")"
+            filterButtons?.all_filter_button?.text = text
             loadExercises(workouts)
         }
     }
     private fun privateExercises(id: Long) {
         getUserExercisesPrivate(id) { workouts ->
             exerciseMutableList = workouts
-//            val text = getString(R.string.training_switcher_text) + " (" + workouts.size + ")"
-//            trainSwitcher?.train_switch_button?.text = text
             loadExercises(workouts)
+            val private = exerciseMutableList.size
+            val text = getString(R.string.private_filter_text) + "(" + private + ")"
+            filterButtons?.private_filter_button?.text = text
         }
     }
     private fun sharedExercises(id: Long) {
         getUserExercisesShared(id) { workouts ->
             exerciseMutableList = workouts
-//            val text = getString(R.string.training_switcher_text) + " (" + workouts.size + ")"
-//            trainSwitcher?.train_switch_button?.text = text
+            val shared = exerciseMutableList.size
+            val text = getString(R.string.shared_filter_text) + "(" + shared + ")"
+            filterButtons?.shared_filter_button?.text = text
             loadExercises(workouts)
         }
     }
@@ -245,40 +245,6 @@ class ProfileFragment : UserFragment() {
         recyclerView?.layoutManager = exLayoutManager
     }
 
-
-    private fun putNumbers(flag: Boolean) {
-        if (flag) {
-            workoutsMutableList.clear()
-            val private = 0
-//                    pushWorkoutPrivate()
-            var text = getString(R.string.private_filter_text) + "(" + private + ")"
-            filterButtons?.private_filter_button?.text = text
-            workoutsMutableList.clear()
-            val shared = 0
-//                    pushWorkoutShared()
-            workoutsMutableList.clear()
-            text = getString(R.string.shared_filter_text) + "(" + shared + ")"
-            filterButtons?.shared_filter_button?.text = text
-            val all = private + shared
-            text = getString(R.string.all_filter_text) + "(" + all + ")"
-            filterButtons?.all_filter_button?.text = text
-        } else {
-            exerciseMutableList.clear()
-            val private = 0
-//                    pushExPrivate()
-            var text = getString(R.string.private_filter_text) + "(" + private + ")"
-            filterButtons?.private_filter_button?.text = text
-            exerciseMutableList.clear()
-            val shared = 0
-//                    pushExShared()
-            exerciseMutableList.clear()
-            text = getString(R.string.shared_filter_text) + "(" + shared + ")"
-            filterButtons?.shared_filter_button?.text = text
-            val all = private + shared
-            text = getString(R.string.all_filter_text) + "(" + all + ")"
-            filterButtons?.all_filter_button?.text = text
-        }
-    }
 
     private fun setButtonslogic(sharedFlag: Boolean, privateFlag: Boolean, flag: Boolean, trSwLine: View, exSwitchLine: View) {
         var sharedFlag1 = sharedFlag
@@ -358,7 +324,6 @@ class ProfileFragment : UserFragment() {
 
                 }
             }
-            putNumbers(flag1)
             loadItems(flag1, privateFlag1, sharedFlag1, id!!)
         }
 
@@ -380,7 +345,6 @@ class ProfileFragment : UserFragment() {
                     train_switch_line.setBackgroundResource(R.color.design_default_color_secondary_variant)
                 }
             }
-            putNumbers(flag1)
             loadItems(flag1, privateFlag1, sharedFlag1, id!!)
         }
 
