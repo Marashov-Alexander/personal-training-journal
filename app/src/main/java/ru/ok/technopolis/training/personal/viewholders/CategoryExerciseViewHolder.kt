@@ -31,7 +31,7 @@ class CategoryExerciseViewHolder(
         val exercises = ItemsList(item.exercises.toMutableList())
         val workoutsAdapter = ShortExerciseListAdapter(
                 holderType = ShortExerciseViewHolder::class,
-                layoutId = R.layout.item_short_exercice,
+                layoutId = R.layout.item_short_exercise,
                 dataSource = exercises,
                 onClick = { workoutItem -> println("workout ${workoutItem.id} clicked") },
                 onStart = { exerciseItem ->

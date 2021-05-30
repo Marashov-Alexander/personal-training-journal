@@ -25,9 +25,9 @@ class ChatsFragment : UserFragment() {
         activity?.base_toolbar?.title = getString(R.string.chats)
         chatsRecycler = view.chats_list
         val userId  = CurrentUserRepository.currentUser.value?.id
-        getAuthors(userId!!) { authors ->
+        getUserSubscribers(userId!!) { authors ->
             chatsMutableList.clear()
-            for (author in authors!!) {
+            for (author in authors) {
                 //TODO:TIME OF LAST MESSAGE
                 chatsMutableList.add(ChatItem(author.id,author.userId, author.name, author.pictureUrlStr, " ", 0,Time(System.currentTimeMillis()), userId))
             }

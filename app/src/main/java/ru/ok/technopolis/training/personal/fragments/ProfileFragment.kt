@@ -53,40 +53,39 @@ class ProfileFragment : UserFragment() {
         val exSwitchLine = view.ex_switch_line
 
         id = CurrentUserRepository.currentUser.value?.id
-        loadSportsInfo(id!!) { list ->
+        getUser(id!!) { prof ->
 
 
-            val name = CurrentUserRepository.currentUser.value?.firstName + " ${CurrentUserRepository.currentUser.value?.lastName}"
-            val picture = CurrentUserRepository.currentUser.value?.pictureUrlStr
-
+//            val name = CurrentUserRepository.currentUser.value?.firstName + " ${CurrentUserRepository.currentUser.value?.lastName}"
+//            val picture = CurrentUserRepository.currentUser.value?.pictureUrlStr
+//
             var sportsList = ""
-            for (sport in list) {
-                sportsList += if (sport != list.last()) {
-                    "${sport.name}, "
+            for (sport in prof.sports) {
+                sportsList += if (sport != prof.sports.last()) {
+                    "${sport}, "
                 } else {
-                    "${sport.name} "
+                    "$sport "
                 }
             }
-            //TODO: change to real
-            val prof = ProfileItem(id.toString(),
-                    id!!,
-                    name,
-                    listOf(sportsList),
-                    true,
-                    picture,
-                    0,
-                    0,
-                    2,
-                    3
-            )
+//            //TODO: change to real
+//            val prof = ProfileItem(id.toString(),
+//                    id!!,
+//                    name,
+//                    listOf(sportsList),
+//                    true,
+//                    picture,
+//                    0,
+//                    0,
+//                    2,
+//                    3
+//            )
 
             profileNameAndIcon?.profile_name?.text = prof.name
             profileNameAndIcon?.complaint?.visibility = View.INVISIBLE
             profileNameAndIcon?.profile_description?.text = sportsList
             subscribersNumber?.text = prof.subscribersNumber.toString()
             subscriptionsNumber?.text = prof.subscriptionsNumber.toString()
-            sharedTrainingsNumber?.text = prof.sharedTrainingsNumber.toString()
-            sharedExercisesNumber?.text = prof.sharedExercisesNumber.toString()
+
 
             subscribersNumber?.setOnClickListener {
                 router?.showSubscribersPage(prof.userId)
@@ -101,6 +100,7 @@ class ProfileFragment : UserFragment() {
         val sharedFlag = false
         val privateFlag = false
         setNumbers(id!!, flag)
+        loadItems(flag = false, privateFlag = false, sharedFlag = true, id = id!!)
         setButtonsLogic(sharedFlag, privateFlag, flag, trSwLine, exSwitchLine)
     }
 
@@ -192,6 +192,7 @@ class ProfileFragment : UserFragment() {
             val shared = workoutsMutableList.size
             val text = getString(R.string.shared_filter_text) + "(" + shared + ")"
             filterButtons?.shared_filter_button?.text = text
+            sharedTrainingsNumber?.text = workoutsMutableList.size.toString()
             loadWorkouts(workouts)
         }
     }
@@ -222,6 +223,7 @@ class ProfileFragment : UserFragment() {
             val shared = exerciseMutableList.size
             val text = getString(R.string.shared_filter_text) + "(" + shared + ")"
             filterButtons?.shared_filter_button?.text = text
+            sharedExercisesNumber?.text = exerciseMutableList.size.toString()
             loadExercises(workouts)
         }
     }
@@ -247,7 +249,7 @@ class ProfileFragment : UserFragment() {
         val exList = ItemsList(exercises)
         val exAdapter = ShortExerciseListAdapter(
                 holderType = ShortExerciseViewHolder::class,
-                layoutId = R.layout.item_short_exercice,
+                layoutId = R.layout.item_short_exercise,
                 dataSource = exList,
                 onClick = { exItem -> println("workout ${exItem.id} clicked") },
                 onStart = { exItem ->

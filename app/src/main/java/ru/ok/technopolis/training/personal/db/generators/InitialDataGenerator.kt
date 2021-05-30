@@ -4,7 +4,9 @@ import android.content.Context
 import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.db.entity.ExerciseCategoryEntity
 import ru.ok.technopolis.training.personal.db.entity.ExerciseEntity
+import ru.ok.technopolis.training.personal.db.entity.MessageEntity
 import ru.ok.technopolis.training.personal.db.entity.ParameterEntity
+import ru.ok.technopolis.training.personal.db.entity.SubscriptionEntity
 import ru.ok.technopolis.training.personal.db.entity.UserEntity
 import ru.ok.technopolis.training.personal.db.entity.UserExerciseEntity
 import ru.ok.technopolis.training.personal.db.entity.UserWorkoutEntity
@@ -45,6 +47,13 @@ class InitialDataGenerator {
                     null,
                     10
             )
+        }
+
+        fun getTestUserSubscriptionEntity(): SubscriptionEntity {
+            return SubscriptionEntity(1, 10)
+        }
+        fun getTestAuthorSubscriptionEntity(): SubscriptionEntity {
+            return SubscriptionEntity(10, 1)
         }
 
         fun getTestCategories(context: Context): List<WorkoutCategoryEntity> {
@@ -103,6 +112,18 @@ class InitialDataGenerator {
                     1,
                     true,
                     10
+            )
+        }
+
+        fun getTestMessage(): MessageEntity {
+            return MessageEntity(
+                    "Test Message",
+                    System.currentTimeMillis(),
+                    10,
+                    1,
+                    1,
+                    null,
+                    true
             )
         }
 
