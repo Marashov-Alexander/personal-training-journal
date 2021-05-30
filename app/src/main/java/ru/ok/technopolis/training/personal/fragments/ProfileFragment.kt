@@ -85,8 +85,7 @@ class ProfileFragment : UserFragment() {
             profileNameAndIcon?.profile_description?.text = sportsList
             subscribersNumber?.text = prof.subscribersNumber.toString()
             subscriptionsNumber?.text = prof.subscriptionsNumber.toString()
-            sharedTrainingsNumber?.text = prof.sharedTrainingsNumber.toString()
-            sharedExercisesNumber?.text = prof.sharedExercisesNumber.toString()
+
 
             subscribersNumber?.setOnClickListener {
                 router?.showSubscribersPage(prof.userId)
@@ -101,6 +100,7 @@ class ProfileFragment : UserFragment() {
         val sharedFlag = false
         val privateFlag = false
         setNumbers(id!!, flag)
+        loadItems(flag = false, privateFlag = false, sharedFlag = true, id = id!!)
         setButtonsLogic(sharedFlag, privateFlag, flag, trSwLine, exSwitchLine)
     }
 
@@ -192,6 +192,7 @@ class ProfileFragment : UserFragment() {
             val shared = workoutsMutableList.size
             val text = getString(R.string.shared_filter_text) + "(" + shared + ")"
             filterButtons?.shared_filter_button?.text = text
+            sharedTrainingsNumber?.text = workoutsMutableList.size.toString()
             loadWorkouts(workouts)
         }
     }
@@ -222,6 +223,7 @@ class ProfileFragment : UserFragment() {
             val shared = exerciseMutableList.size
             val text = getString(R.string.shared_filter_text) + "(" + shared + ")"
             filterButtons?.shared_filter_button?.text = text
+            sharedExercisesNumber?.text = exerciseMutableList.size.toString()
             loadExercises(workouts)
         }
     }
