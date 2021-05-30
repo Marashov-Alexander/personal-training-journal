@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="utf-8"?>
+<androidx.constraintlayout.widget.ConstraintLayout xmlns:android="http://schemas.android.com/apk/res/android"
+    android:layout_width="match_parent"
+    android:layout_height="wrap_content"
+    android:paddingTop="@dimen/dimens_8dp"
+    android:background="@drawable/rounded_filled_white_outline"
+    xmlns:app="http://schemas.android.com/apk/res-auto">
+
+    <TextView
+        android:id="@+id/title"
+        android:layout_width="wrap_content"
+        android:layout_height="wrap_content"
+        android:text="Выберите способ чтобы поделиться"
+        android:textAlignment="center"
+        android:textSize="@dimen/text_size_25"
+        android:textColor="@color/black"
+        android:textStyle="bold"
+        android:layout_marginTop="10dp"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintTop_toTopOf="parent"
+        />
+
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/make_public_card"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintStart_toStartOf="parent"
+        app:layout_constraintEnd_toStartOf="@id/send_card"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:strokeColor="@color/gray_2_1"
+        app:strokeWidth="1dp"
+        app:cardCornerRadius="@dimen/dimens_16dp"
+        android:theme="@style/AppTheme"
+        app:cardBackgroundColor="@color/background"
+        android:clickable="true"
+        android:layout_margin="@dimen/dimens_16dp"
+        app:layout_constraintHorizontal_weight="@integer/integer_1"
+        >
+
+        <TextView
+            android:id="@+id/make_public_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Сделать публичной"
+            android:textColor="@color/black"
+            android:textAlignment="center"
+            android:textSize="@dimen/text_size_18"
+            android:layout_marginHorizontal="@dimen/dimens_16dp"
+            android:layout_marginVertical="@dimen/dimens_4dp"
+            />
+
+    </com.google.android.material.card.MaterialCardView>
+    <com.google.android.material.card.MaterialCardView
+        android:id="@+id/send_card"
+        android:layout_width="0dp"
+        android:layout_height="wrap_content"
+        app:layout_constraintTop_toBottomOf="@id/title"
+        app:layout_constraintStart_toEndOf="@id/make_public_card"
+        app:layout_constraintEnd_toEndOf="parent"
+        app:layout_constraintBottom_toBottomOf="parent"
+        app:strokeColor="@color/gray_2_1"
+        app:strokeWidth="1dp"
+        app:cardCornerRadius="@dimen/dimens_16dp"
+        android:theme="@style/AppTheme"
+        app:cardBackgroundColor="@color/background"
+        android:clickable="true"
+        android:layout_margin="@dimen/dimens_16dp"
+        app:layout_constraintHorizontal_weight="@integer/integer_1"
+        >
+
+        <TextView
+            android:id="@+id/configure_text"
+            android:layout_width="match_parent"
+            android:layout_height="wrap_content"
+            android:text="Отправить в чате"
+            android:textColor="@color/black"
+            android:textAlignment="center"
+            android:textSize="@dimen/text_size_18"
+            android:layout_marginHorizontal="@dimen/dimens_16dp"
+            android:layout_marginVertical="@dimen/dimens_4dp"
+            />
+
+    </com.google.android.material.card.MaterialCardView>
+
+
+</androidx.constraintlayout.widget.ConstraintLayout>

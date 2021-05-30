@@ -7,6 +7,7 @@ import ru.ok.technopolis.training.personal.activities.BaseFragmentActivity
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.AUTHOR_ID_KEY
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.OPPONENT_ID_KEY
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.EXERCISE_ID_KEY
+import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.MESSAGE_ID_KEY
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.PAGE_KEY
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.USER_ID_KEY
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.WORKOUT_ID_KEY
@@ -114,10 +115,26 @@ class Router(private val activity: Activity) {
         showPage(Page.Fragment.Exercise, exerciseIdBundle)
     }
 
-    fun showChatPage(chatId: Long){
-        val chatIdBundle = Bundle(1)
+    fun showChatPage(chatId: Long, messageId: Long?){
+        val chatIdBundle = Bundle(2)
         chatIdBundle.putLong(OPPONENT_ID_KEY, chatId)
+        messageId?.or(0L)?.let { chatIdBundle.putLong(MESSAGE_ID_KEY, it) }
         showPage(Page.Fragment.Chat, chatIdBundle)
+    }
+
+    fun shareElement(exerciseId: Long?, workoutId: Long?){
+        val shareIdBundle = Bundle(2)
+        if (exerciseId != null) {
+            shareIdBundle.putLong(EXERCISE_ID_KEY, exerciseId)
+        } else {
+            shareIdBundle.putLong(EXERCISE_ID_KEY, 0)
+        }
+        if (workoutId != null) {
+            shareIdBundle.putLong(WORKOUT_ID_KEY, workoutId)
+        } else {
+            shareIdBundle.putLong(WORKOUT_ID_KEY, 0)
+        }
+        showPage(Page.Fragment.Share, shareIdBundle)
     }
 
     fun showResultsPage() {

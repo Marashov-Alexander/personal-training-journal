@@ -30,7 +30,7 @@ class ViewSubscriptionsFragment : UserFragment() {
         recycler = view.authors_list
         buttonsScroll = view.scrollview
         buttonsGroup = view.author_categories_buttons
-        activity?.base_toolbar?.title = getString(R.string.subscriptions_text)
+        activity?.base_toolbar?.title = getString(R.string.subscription_text)
         exDummyToRecView()
     }
 

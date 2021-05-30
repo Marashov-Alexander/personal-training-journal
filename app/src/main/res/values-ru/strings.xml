@@ -328,4 +328,8 @@
     <string name="change_difficulty">Изменить\nнагрузку</string>
     <string name="send_results">Отправить\nрезультаты</string>
     <string name="choose_workout">Выберите тренировку</string>
+    <string name="choose_recipient">Выберите получателя</string>
+    <string name="subscription_text">Подписки</string>
+    <string name="subscriber_text">Подписчики</string>
+    <string name="want_to_share">Хочу поделиться: </string>
 </resources>
