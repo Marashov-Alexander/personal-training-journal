@@ -43,6 +43,9 @@ interface UserDao {
     @Query("SELECT * FROM UserEntity WHERE id in (SELECT subscriberId FROM SubscriptionEntity WHERE subscriptionId = :userId)")
     fun getAllUSerSubscribers(userId: Long): List<UserEntity>
 
+    @Query("SELECT subscriptionId FROM SubscriptionEntity WHERE subscriberId = :userId")
+    fun getAllUserSubscriptionsIdList(userId: Long): List<Long>
+
     @Query("SELECT * FROM UserEntity WHERE id in (SELECT subscriptionId FROM SubscriptionEntity WHERE subscriberId = :userId)")
     fun getAllUSerSubscriptions(userId: Long): List<UserEntity>
 

@@ -6,10 +6,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.ok.technopolis.training.personal.db.AppDatabase
 import ru.ok.technopolis.training.personal.db.entity.ExerciseEntity
+import ru.ok.technopolis.training.personal.db.entity.SubscriptionEntity
 import ru.ok.technopolis.training.personal.db.entity.UserEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutSportEntity
-import ru.ok.technopolis.training.personal.items.ChatItem
 import ru.ok.technopolis.training.personal.items.ProfileItem
 import ru.ok.technopolis.training.personal.items.ShortExerciseItem
 import ru.ok.technopolis.training.personal.items.ShortWorkoutItem
@@ -208,6 +208,34 @@ abstract class UserFragment : BaseFragment() {
                 val subscribers = formProfiles(allSubscribers, it)
                 withContext(Dispatchers.Main) {
                     actionsAfter.invoke(subscribers)
+                }
+            }
+        }
+    }
+
+    protected fun getUserSubscribtionsIdList (userId: Long,
+                                              actionsAfter: (
+                                              List<Long>
+                                      ) -> Unit) {
+        GlobalScope.launch(Dispatchers.IO) {
+            database!!.let {
+                val allSubscribers = it.userDao().getAllUserSubscriptionsIdList(userId)
+                withContext(Dispatchers.Main) {
+                    actionsAfter.invoke(allSubscribers)
+                }
+            }
+        }
+    }
+
+    protected fun subscribeToAuthor(userId: Long, authorId: Long,
+                                            actionsAfter: (
+                                                    Long
+                                            ) -> Unit) {
+        GlobalScope.launch(Dispatchers.IO) {
+            database!!.let {
+                val id = it.subscriptionDao().insert(SubscriptionEntity(authorId, userId))
+                withContext(Dispatchers.Main) {
+                    actionsAfter.invoke(id)
                 }
             }
         }

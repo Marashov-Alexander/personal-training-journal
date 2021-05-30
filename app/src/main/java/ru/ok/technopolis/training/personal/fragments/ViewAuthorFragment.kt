@@ -21,6 +21,7 @@ import ru.ok.technopolis.training.personal.items.ItemsList
 import ru.ok.technopolis.training.personal.items.ShortExerciseItem
 import ru.ok.technopolis.training.personal.items.ShortWorkoutItem
 import ru.ok.technopolis.training.personal.lifecycle.Page
+import ru.ok.technopolis.training.personal.repository.CurrentUserRepository
 import ru.ok.technopolis.training.personal.utils.logger.Logger
 import ru.ok.technopolis.training.personal.utils.recycler.adapters.ShortExerciseListAdapter
 import ru.ok.technopolis.training.personal.utils.recycler.adapters.ShortWorkoutListAdapter
@@ -38,6 +39,8 @@ class ViewAuthorFragment : UserFragment() {
     private var workoutsMutableList = mutableListOf<ShortWorkoutItem>()
     private var exerciseMutableList = mutableListOf<ShortExerciseItem>()
 
+    private var authorId: Long = -1L
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         profileNameAndIcon = view.profile
@@ -52,6 +55,7 @@ class ViewAuthorFragment : UserFragment() {
 
 
         val id = (activity?.intent?.extras?.get(Page.AUTHOR_ID_KEY)) as Long
+        authorId = id
         authorLayout(id)
 
         val flag = true
@@ -167,21 +171,25 @@ class ViewAuthorFragment : UserFragment() {
         inflater.inflate(R.menu.subscribe_menu, menu)
 
         val button: MenuItem = menu.findItem(R.id.subscribe_button)
+        val userId = CurrentUserRepository.currentUser.value?.id
+        var falg = false
+        getUserSubscribtionsIdList(userId!!) { subscribers ->
+            if (authorId in subscribers) {
+                button.setIcon(R.drawable.ic_person_added)
+            } else {
+                button.setIcon(R.drawable.ic_baseline_person_add_24)
+            }
 
-//        if (author?.id in currentUser.subscribers) {
-//            button.setIcon(R.drawable.ic_persone_added_)
-//        }  else if (author?.id in currentUser.weithingList) {
-//            button.setIcon(R.drawable.ic_waiting_approval)
-//        }
-
-        button.setOnMenuItemClickListener {
-//            if (author?.id not in currentUser.subscribers) {
-            button.setIcon(R.drawable.ic_waiting_approval)
-//            var chatId = db.createChat()
-//            router?.showChatPage(123)
-            true
+            button.setOnMenuItemClickListener {
+                if (authorId !in subscribers) {
+                    button.setIcon(R.drawable.ic_waiting_approval)
+                   subscribeToAuthor(userId, authorId) { id ->
+                       println("llllllllllllllllllllllll ${id}")
+                  }
+                }
+                    true
+            }
         }
-
     }
 
     private fun setButtonsLogic(id: Long, trSwLine: View, exSwitchLine: View) {
