@@ -18,27 +18,27 @@ abstract class CategoryWorkoutFragment : BaseFragment() {
             ) -> Unit) {
         GlobalScope.launch(Dispatchers.IO) {
             database!!.let {
-                val categoryElem = mutableListOf<CategoryWorkoutsItem>()
+                val categoryElements = mutableListOf<CategoryWorkoutsItem>()
 
                 val categories = it.workoutCategoryDao().getAll()
-                categories.map { category ->
+                categories.forEach { category ->
                     val workouts: List<WorkoutEntity> = if (library) {
                         it.workoutDao().getByCategoryIdNotForAuthor(category.id, userId)
                     } else {
                         it.workoutDao().getByCategoryIdAndAuthorId(category.id, userId)
-
                     }
-                    formList(workouts, category, it, categoryElem)
+                    formList(workouts, category, it, categoryElements)
                 }
+                val filtered = categoryElements.filter { cat -> cat.worlouts.isNotEmpty() }.toMutableList()
                 withContext(Dispatchers.Main) {
-                    actionsAfter.invoke(categoryElem)
+                    actionsAfter.invoke(filtered)
                 }
             }
 
         }
     }
 
-    private fun formList(workouts: List<WorkoutEntity>, category: WorkoutCategoryEntity, db: AppDatabase, categoryElem: MutableList<CategoryWorkoutsItem>): Boolean {
+    private fun formList(workouts: List<WorkoutEntity>, category: WorkoutCategoryEntity, db: AppDatabase, categoryElem: MutableList<CategoryWorkoutsItem>) {
         val workoutsList = workouts.map { workout ->
             val sport = db.workoutSportDao().getById(workout.sportId)
             val downloadsNumber = 0
@@ -52,6 +52,6 @@ abstract class CategoryWorkoutFragment : BaseFragment() {
                     rank
             )
         }.toMutableList()
-        return categoryElem.add(CategoryWorkoutsItem(category.id.toString(), category.name, workoutsList))
+        categoryElem.add(CategoryWorkoutsItem(category.id.toString(), category.name, workoutsList))
     }
 }

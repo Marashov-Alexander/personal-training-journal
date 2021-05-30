@@ -19,7 +19,6 @@ import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.db.AppDatabase
 import ru.ok.technopolis.training.personal.db.entity.MessageEntity
 import ru.ok.technopolis.training.personal.db.entity.UserEntity
-import ru.ok.technopolis.training.personal.items.ProfileItem
 import ru.ok.technopolis.training.personal.items.ShortExerciseItem
 import ru.ok.technopolis.training.personal.items.ShortWorkoutItem
 import ru.ok.technopolis.training.personal.items.chatItems.MessageFromItem
@@ -32,15 +31,15 @@ class ChatFragment : UserFragment() {
     private var attachButton: ImageButton? = null
     private var messageText: EditText? = null
     private var sendButton: ImageButton? = null
-    private val adapter = GroupAdapter<GroupieViewHolder>()
+    private lateinit var adapter: GroupAdapter<GroupieViewHolder>
 
-    private var userId: Long? = CurrentUserRepository.currentUser.value!!.id
+    private var userId: Long = -1L
 
     private var messagesList: MutableList<MessageEntity>? = null
 
-
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+        userId = CurrentUserRepository.currentUser.value!!.id
         dialog = view.dialog
         attachButton = view.attach_icon
         messageText = view.message_input
@@ -49,32 +48,20 @@ class ChatFragment : UserFragment() {
         getUser(opponentId) {opponent ->
             activity?.base_toolbar?.title = getString(R.string.chat) + " \"${opponent.name}\""
         }
-//        addDummyMessages()
-//        val size = messagesList?.size
-//        messagesList?.clear()
-//        size?.or(0)?.let { dialog?.adapter?.notifyItemRangeRemoved(0, it) }
 
         showMessages(opponentId)
-//        dialog?.scrollToPosition(adapter.itemCount - 1)
         sendButton?.setOnClickListener {
-            print { "WE ARE SENDING//////////////////////////////" }
-            performSendMessage()
+            performSendMessage(userId, opponentId)
         }
     }
 
-
     //WIP: load from db
     private fun showMessages(opponentId: Long) {
+        adapter = GroupAdapter<GroupieViewHolder>()
         GlobalScope.launch(Dispatchers.IO) {
-//            userId = CurrentUserRepository.currentUser.value!!.id
             database?.let { appDatabase ->
                 // TODO: SOCKET
-//                val size = messagesList?.size
-//                messagesList?.clear()
-//                if (size != null) {
-//                    (dialog?.adapter as GroupAdapter<*>).notifyItemRangeRemoved(0, size)
-//                }
-                messagesList = appDatabase.messageDao().getDialog(userId!!, opponentId)
+                messagesList = appDatabase.messageDao().getDialog(userId, opponentId)
                 val user = appDatabase.userDao().getById(opponentId)
                 messagesList!!.sortBy { it.timestamp }
                 for (message in messagesList!!) {
@@ -85,10 +72,7 @@ class ChatFragment : UserFragment() {
                     }
                 }
                 withContext(Dispatchers.Main) {
-////                messagesList = appDatabase.messageDao().getDialog(chatId)
-////                withContext(Dispatchers.Main) {
-//////                    progressBar?.visibility = View.GONE
-//                    dialog?.scrollToPosition(adapter.itemCount - 1)
+                    dialog?.scrollToPosition(adapter.itemCount - 1)
                     dialog?.adapter = adapter
                 }
             }
@@ -159,13 +143,13 @@ class ChatFragment : UserFragment() {
         return elem
     }
 
-    private fun performSendMessage() {
+    private fun performSendMessage(userId: Long, opponentId: Long) {
         val message = messageText?.text?.toString()
         if (!message.isNullOrBlank()) {
             GlobalScope.launch(Dispatchers.IO) {
                 database?.let { appDatabase ->
                     val messageEntity = MessageEntity(
-                            message, System.currentTimeMillis(), userId!!, userId!!, null, null, true
+                            message, System.currentTimeMillis(), userId, opponentId, null, null, true
                     )
                     messageEntity.id = appDatabase.messageDao().insert(messageEntity)
                     withContext(Dispatchers.Main) {
