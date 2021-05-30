@@ -97,20 +97,27 @@ class ProfileFragment : UserFragment() {
             }
         }
 
-            val flag = true
-            val sharedFlag = false
-            val privateFlag = false
-            getUserWorkouts(id!!) { workouts ->
-                workoutsMutableList = workouts
-                loadWorkouts(workouts)
-
-            }
-            setButtonslogic(sharedFlag, privateFlag, flag, trSwLine, exSwitchLine)
+        val flag = true
+        val sharedFlag = false
+        val privateFlag = false
+        setNumbers(id!!, flag)
+        setButtonsLogic(sharedFlag, privateFlag, flag, trSwLine, exSwitchLine)
     }
 
+    private fun setNumbers(id: Long, flag: Boolean) {
+        if (flag) {
+            loadItems(flag = true, privateFlag = true, sharedFlag = false, id = id)
+            loadItems(flag = true, privateFlag = false, sharedFlag = true, id = id)
+            loadItems(flag = true, privateFlag = false, sharedFlag = false, id = id)
+        } else {
+            loadItems(flag = false, privateFlag = true, sharedFlag = false, id = id)
+            loadItems(flag = false, privateFlag = false, sharedFlag = true, id = id)
+            loadItems(flag = false, privateFlag = false, sharedFlag = false, id = id)
+        }
+    }
 
     private fun loadItems(flag: Boolean, privateFlag: Boolean, sharedFlag: Boolean, id: Long) {
-       clearRecView(flag)
+        clearRecView(flag)
         if (flag) {
             loadWorkoutItems(privateFlag, sharedFlag, id)
         } else {
@@ -132,19 +139,21 @@ class ProfileFragment : UserFragment() {
             }
         }
     }
+
     private fun loadExItems(privateFlag: Boolean, sharedFlag: Boolean, id: Long) {
         when {
             privateFlag -> {
                 privateExercises(id)
             }
             sharedFlag -> {
-               sharedExercises(id)
+                sharedExercises(id)
             }
             else -> {
-              allExercises(id)
+                allExercises(id)
             }
         }
     }
+
     private fun clearRecView(flag: Boolean) {
         if (flag) {
             val listSize = workoutsMutableList.size
@@ -156,6 +165,7 @@ class ProfileFragment : UserFragment() {
             recyclerView?.adapter?.notifyItemRangeRemoved(0, listSize)
         }
     }
+
     private fun allWorkouts(id: Long) {
         getUserWorkouts(id) { workouts ->
             workoutsMutableList = workouts
@@ -165,6 +175,7 @@ class ProfileFragment : UserFragment() {
             loadWorkouts(workouts)
         }
     }
+
     private fun privateWorkouts(id: Long) {
         getUserWorkoutsPrivate(id) { workouts ->
             workoutsMutableList = workouts
@@ -174,6 +185,7 @@ class ProfileFragment : UserFragment() {
             loadWorkouts(workouts)
         }
     }
+
     private fun sharedWorkouts(id: Long) {
         getUserWorkoutsShared(id) { workouts ->
             workoutsMutableList = workouts
@@ -193,6 +205,7 @@ class ProfileFragment : UserFragment() {
             loadExercises(workouts)
         }
     }
+
     private fun privateExercises(id: Long) {
         getUserExercisesPrivate(id) { workouts ->
             exerciseMutableList = workouts
@@ -202,6 +215,7 @@ class ProfileFragment : UserFragment() {
             filterButtons?.private_filter_button?.text = text
         }
     }
+
     private fun sharedExercises(id: Long) {
         getUserExercisesShared(id) { workouts ->
             exerciseMutableList = workouts
@@ -211,6 +225,7 @@ class ProfileFragment : UserFragment() {
             loadExercises(workouts)
         }
     }
+
     private fun loadWorkouts(workouts: MutableList<ShortWorkoutItem>) {
         val workoutsList = ItemsList(workouts)
         val workoutsAdapter = ShortWorkoutListAdapter(
@@ -228,13 +243,13 @@ class ProfileFragment : UserFragment() {
         recyclerView?.layoutManager = workoutsLayoutManager
     }
 
-        private fun loadExercises(exercises: MutableList<ShortExerciseItem>) {
+    private fun loadExercises(exercises: MutableList<ShortExerciseItem>) {
         val exList = ItemsList(exercises)
         val exAdapter = ShortExerciseListAdapter(
                 holderType = ShortExerciseViewHolder::class,
                 layoutId = R.layout.item_short_exercice,
                 dataSource = exList,
-                onClick = {exItem -> println("workout ${exItem.id} clicked")},
+                onClick = { exItem -> println("workout ${exItem.id} clicked") },
                 onStart = { exItem ->
                     println("workout ${exItem.id} started")
                     router?.showExercisePage(exItem.id.toLong())
@@ -246,7 +261,7 @@ class ProfileFragment : UserFragment() {
     }
 
 
-    private fun setButtonslogic(sharedFlag: Boolean, privateFlag: Boolean, flag: Boolean, trSwLine: View, exSwitchLine: View) {
+    private fun setButtonsLogic(sharedFlag: Boolean, privateFlag: Boolean, flag: Boolean, trSwLine: View, exSwitchLine: View) {
         var sharedFlag1 = sharedFlag
         var privateFlag1 = privateFlag
         var flag1 = flag
@@ -324,6 +339,7 @@ class ProfileFragment : UserFragment() {
 
                 }
             }
+            setNumbers(id!!, flag1)
             loadItems(flag1, privateFlag1, sharedFlag1, id!!)
         }
 
@@ -345,9 +361,9 @@ class ProfileFragment : UserFragment() {
                     train_switch_line.setBackgroundResource(R.color.design_default_color_secondary_variant)
                 }
             }
+            setNumbers(id!!, flag1)
             loadItems(flag1, privateFlag1, sharedFlag1, id!!)
         }
-
 
         filterButtons!!.all_filter_button.setOnClickListener(allCl)
         filterButtons!!.shared_filter_button.setOnClickListener(sharedCl)
@@ -356,6 +372,5 @@ class ProfileFragment : UserFragment() {
         trainSwitcher!!.ex_switch_button.setOnClickListener(exCll)
     }
 
-    override fun getFragmentLayoutId() : Int = R.layout.fragment_profile
-
+    override fun getFragmentLayoutId(): Int = R.layout.fragment_profile
 }
