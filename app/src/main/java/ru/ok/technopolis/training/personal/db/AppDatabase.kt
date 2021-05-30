@@ -92,6 +92,7 @@ abstract class AppDatabase : RoomDatabase() {
                                 instance?.parameterDao()?.insert(InitialDataGenerator.getParameters(context))
                                 instance?.userDao()?.insert(InitialDataGenerator.getTestUser())
                                 instance?.userDao()?.insert(InitialDataGenerator.getTestAuthor())
+                                instance?.userDao()?.insert(InitialDataGenerator.getTestAuthor2())
                                 instance?.workoutCategoryDao()?.insert(InitialDataGenerator.getTestCategories(context))
                                 instance?.workoutSportDao()?.insert(InitialDataGenerator.getTestSports(context))
                                 instance?.exerciseCategoryDao()?.insert(InitialDataGenerator.getTestExerciseCategories(context))

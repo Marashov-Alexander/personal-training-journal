@@ -48,6 +48,17 @@ class InitialDataGenerator {
                     10
             )
         }
+        fun getTestAuthor2(): UserEntity {
+            return UserEntity(
+                    "Author",
+                    "Testov",
+                    "Testovich",
+                    "test@test.test",
+                    "Mail",
+                    null,
+                    6
+            )
+        }
 
         fun getTestUserSubscriptionEntity(): SubscriptionEntity {
             return SubscriptionEntity(1, 10)

@@ -234,8 +234,8 @@ abstract class UserFragment : BaseFragment() {
                            ) -> Unit) {
         GlobalScope.launch(Dispatchers.IO) {
             database!!.let {
-                val allSubscribers = it.userDao().getAllUSerSubscriptions(userId).toMutableList()
-                allSubscribers.addAll(it.userDao().getAllUSerSubscribers(userId))
+                val allSubscribers = it.userDao().getUserChatsSenders(userId).toMutableList()
+                allSubscribers.addAll(it.userDao().getUserChatsRecipients(userId))
                 var subscribers = formProfiles(allSubscribers, it)
                 subscribers = subscribers.toList().distinct().toMutableList()
                 withContext(Dispatchers.Main) {

@@ -46,6 +46,11 @@ interface UserDao {
     @Query("SELECT * FROM UserEntity WHERE id in (SELECT subscriptionId FROM SubscriptionEntity WHERE subscriberId = :userId)")
     fun getAllUSerSubscriptions(userId: Long): List<UserEntity>
 
+    @Query("SELECT * FROM UserEntity WHERE id in (SELECT senderId FROM MessageEntity WHERE recipientId = :userId)")
+    fun getUserChatsSenders(userId: Long): List<UserEntity>
+
+    @Query("SELECT * FROM UserEntity WHERE id in (SELECT recipientId FROM MessageEntity WHERE  senderId = :userId)")
+    fun getUserChatsRecipients(userId: Long): List<UserEntity>
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(user: UserEntity): Long
 
