@@ -1,6 +1,9 @@
 package ru.ok.technopolis.training.personal.fragments
 
 import android.os.Bundle
+import android.view.Menu
+import android.view.MenuInflater
+import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
@@ -40,9 +43,15 @@ class WorkoutViewFragment : WorkoutFragment() {
     private var exercisesList: ExercisesList? = null
     private var info: MaterialCardView? = null
 
+    private var workout: ShortWorkoutItem? = null
+
+    private var workoutId: Long = -1L
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
+
+        workoutId = (activity?.intent?.extras?.get(Page.WORKOUT_ID_KEY)) as Long
+
         workoutShortInfoRecycler = view.workout_scroll_info
         startButton = view.workout_start_icon
         imageSwitcher = view.exercise_image_switcher
@@ -54,7 +63,7 @@ class WorkoutViewFragment : WorkoutFragment() {
         info = view.info_card
 
         shareText = view.share_text
-        val workoutId = (activity?.intent?.extras?.get(Page.WORKOUT_ID_KEY) as Long)
+
         loadWorkoutInfo(workoutId) { workout, category, sport, exercises, author ->
             setWorkoutDummy(workout, category, sport)
             exercisesList = ExercisesList(exercises)
@@ -78,6 +87,17 @@ class WorkoutViewFragment : WorkoutFragment() {
             exerciseRecycler?.adapter = adapter
             val workoutsLayoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
             exerciseRecycler?.layoutManager = workoutsLayoutManager
+        }
+        setHasOptionsMenu(true)
+    }
+
+    override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
+        inflater.inflate(R.menu.edit_menu, menu)
+
+        val editButton: MenuItem = menu.findItem(R.id.edit_item)
+        editButton.setOnMenuItemClickListener {
+            router?.showNewWorkoutPage(workoutId)
+            true
         }
     }
 
