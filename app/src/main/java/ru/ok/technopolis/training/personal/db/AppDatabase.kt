@@ -12,6 +12,7 @@ import kotlinx.coroutines.launch
 import ru.ok.technopolis.training.personal.db.converter.DateConverter
 import ru.ok.technopolis.training.personal.db.dao.ExerciseCategoryDao
 import ru.ok.technopolis.training.personal.db.dao.ExerciseDao
+import ru.ok.technopolis.training.personal.db.dao.ExerciseMediaDao
 import ru.ok.technopolis.training.personal.db.dao.ExerciseParameterDao
 import ru.ok.technopolis.training.personal.db.dao.LevelExerciseParameterDao
 import ru.ok.technopolis.training.personal.db.dao.MessageDao
@@ -25,9 +26,11 @@ import ru.ok.technopolis.training.personal.db.dao.UserWorkoutDao
 import ru.ok.technopolis.training.personal.db.dao.WorkoutCategoryDao
 import ru.ok.technopolis.training.personal.db.dao.WorkoutDao
 import ru.ok.technopolis.training.personal.db.dao.WorkoutExerciseDao
+import ru.ok.technopolis.training.personal.db.dao.WorkoutMediaDao
 import ru.ok.technopolis.training.personal.db.dao.WorkoutSportDao
 import ru.ok.technopolis.training.personal.db.entity.ExerciseCategoryEntity
 import ru.ok.technopolis.training.personal.db.entity.ExerciseEntity
+import ru.ok.technopolis.training.personal.db.entity.ExerciseMediaEntity
 import ru.ok.technopolis.training.personal.db.entity.ExerciseParameterEntity
 import ru.ok.technopolis.training.personal.db.entity.LevelExerciseParameterEntity
 import ru.ok.technopolis.training.personal.db.entity.MessageEntity
@@ -41,29 +44,32 @@ import ru.ok.technopolis.training.personal.db.entity.UserWorkoutEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutCategoryEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutExerciseEntity
+import ru.ok.technopolis.training.personal.db.entity.WorkoutMediaEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutSportEntity
 import ru.ok.technopolis.training.personal.db.generators.InitialDataGenerator
 
 @Database(
-    entities = [
-        ExerciseEntity::class,
-        ExerciseParameterEntity::class,
-        ExerciseCategoryEntity::class,
-        LevelExerciseParameterEntity::class,
-        MessageEntity::class,
-        ParameterEntity::class,
-        ParameterResultEntity::class,
-        UserEntity::class,
-        UserExerciseEntity::class,
-        UserLevelEntity::class,
-        UserWorkoutEntity::class,
-        WorkoutCategoryEntity::class,
-        WorkoutEntity::class,
-        WorkoutExerciseEntity::class,
-        WorkoutSportEntity::class,
-        SubscriptionEntity::class
-    ],
-    version = 1
+        entities = [
+            ExerciseEntity::class,
+            ExerciseParameterEntity::class,
+            ExerciseCategoryEntity::class,
+            LevelExerciseParameterEntity::class,
+            MessageEntity::class,
+            ParameterEntity::class,
+            ParameterResultEntity::class,
+            UserEntity::class,
+            UserExerciseEntity::class,
+            UserLevelEntity::class,
+            UserWorkoutEntity::class,
+            WorkoutCategoryEntity::class,
+            WorkoutEntity::class,
+            WorkoutExerciseEntity::class,
+            WorkoutSportEntity::class,
+            SubscriptionEntity::class,
+            WorkoutMediaEntity::class,
+            ExerciseMediaEntity::class
+        ],
+        version = 1
 )
 @TypeConverters(DateConverter::class)
 abstract class AppDatabase : RoomDatabase() {
@@ -82,9 +88,9 @@ abstract class AppDatabase : RoomDatabase() {
                     instance
                 } else {
                     instance = Room.databaseBuilder(
-                        context.applicationContext,
-                        AppDatabase::class.java,
-                        DATABASE_NAME
+                            context.applicationContext,
+                            AppDatabase::class.java,
+                            DATABASE_NAME
                     ).addCallback(object : RoomDatabase.Callback() {
                         override fun onCreate(db: SupportSQLiteDatabase) {
                             super.onCreate(db)
@@ -114,7 +120,7 @@ abstract class AppDatabase : RoomDatabase() {
                             }
                         }
                     })
-                        .build()
+                            .build()
                     instance
                 }
             }
@@ -137,4 +143,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun workoutExerciseDao(): WorkoutExerciseDao
     abstract fun workoutSportDao(): WorkoutSportDao
     abstract fun subscriptionDao(): SubscriptionDao
+    abstract fun workoutMediaDao(): WorkoutMediaDao
+    abstract fun exerciseMediaDao(): ExerciseMediaDao
 }
