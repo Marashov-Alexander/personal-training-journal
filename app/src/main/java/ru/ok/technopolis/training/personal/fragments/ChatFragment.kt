@@ -31,9 +31,7 @@ class ChatFragment : BaseFragment() {
     private val adapter = GroupAdapter<GroupieViewHolder>()
 
     private var oponent: ProfileItem? = null
-    private var prof: ProfileItem? = null
-
-    private var userId: Long? = null
+    private var userId: Long? = CurrentUserRepository.currentUser.value!!.id
 
     private var messagesList: MutableList<MessageEntity>? = null
 
@@ -47,9 +45,7 @@ class ChatFragment : BaseFragment() {
         val opponentId = (activity?.intent?.extras?.get(OPPONENT_ID_KEY) as Long)
 
         val list = listOf("Легкая атлетика", "Бейсбол", "Теннис")
-
-        prof = ProfileItem("1234", 123, "Иванов Иван", list, true, null, 5, 10, 23, 6)
-
+        //TODO: get author form db
         oponent = ProfileItem(opponentId.toString(), opponentId, "Иванов Иван", list, true, null, 5, 10, 23, 6)
 
         activity?.base_toolbar?.title = getString(R.string.chat) + " \"${oponent!!.name}\""
@@ -66,11 +62,9 @@ class ChatFragment : BaseFragment() {
     //WIP: load from db
     private fun showMessages(opponentId: Long) {
         GlobalScope.launch(Dispatchers.IO) {
-            val email = CurrentUserRepository.currentUser.value!!.email
-            val user = database!!.userDao().getByEmail(email)
-            userId = user.id
+//            userId = CurrentUserRepository.currentUser.value!!.id
             database?.let { appDatabase ->
-                // TODO: DO SOMETHING
+                // TODO: SOCKET
                 messagesList = appDatabase.messageDao().getDialog(userId!!, opponentId)
 
                 withContext(Dispatchers.Main) {
@@ -91,20 +85,6 @@ class ChatFragment : BaseFragment() {
             }
         }
     }
-
-
-//    private fun addDummyMessages() {
-//
-//        val oldMessageTo = oponent?.userId?.let { MessageEntity("lsls", System.currentTimeMillis(), 12, it, 1, null, true) }
-//        val oldMessageFrom = prof?.userId?.let { oponent?.userId?.let { it1 -> MessageEntity("fff", System.currentTimeMillis(), it, it1, null, 1, true) } }
-//        oldMessageFrom?.let { MessageFromItem(it, router!!) }?.let { adapter.add(it) }
-//        oldMessageTo?.let { MessageToItem(it, router!!) }?.let { adapter.add(it) }
-//        val oldMessageTo2 = oponent?.userId?.let { MessageEntity("lslkkkkkkkkkkkkkkkkkkkks", System.currentTimeMillis(), 12, it, null, null, true) }
-//        val oldMessageFrom2 = prof?.userId?.let { oponent?.userId?.let { it1 -> MessageEntity("ffkkkkkkkkkkkkkkkfffffffffffffffffffffffffffffkkkkkkkkkf", System.currentTimeMillis(), it, it1, null, null, true) } }
-//        oldMessageFrom2?.let { MessageFromItem(it, router!!) }?.let { adapter.add(it) }
-//        oldMessageTo2?.let { MessageToItem(it, router!!) }?.let { adapter.add(it) }
-//        dialog?.adapter = adapter
-//    }
 
     private fun performSendMessage() {
         val message = messageText?.text?.toString()

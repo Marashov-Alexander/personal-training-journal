@@ -94,11 +94,13 @@ abstract class AppDatabase : RoomDatabase() {
                                 instance?.workoutSportDao()?.insert(InitialDataGenerator.getTestSport())
                                 instance?.workoutDao()?.insert(InitialDataGenerator.getTestWorkout())
                                 instance?.workoutDao()?.insert(InitialDataGenerator.getAuthorTestWorkout())
-                                instance?.exerciseDao()?.insert(InitialDataGenerator.getAuthorTestExercise())
                                 instance?.exerciseDao()?.insert(InitialDataGenerator.getTestExercise())
+                                instance?.exerciseDao()?.insert(InitialDataGenerator.getAuthorTestExercise())
                                 instance?.workoutExerciseDao()?.insert(InitialDataGenerator.getTestWorkoutExercise())
+                                instance?.workoutExerciseDao()?.insert(InitialDataGenerator.getTestAuthorWorkoutExercise())
                                 instance?.userWorkoutDao()?.insert(InitialDataGenerator.getTestUserWorkout())
                                 instance?.userWorkoutDao()?.insert(InitialDataGenerator. getTestAuthorWorkout())
+                                instance?.userExerciseDao()?.insert(InitialDataGenerator. getTestUserExercise())
                                 instance?.userExerciseDao()?.insert(InitialDataGenerator. getTestAuthorExercise())
                             }
                         }

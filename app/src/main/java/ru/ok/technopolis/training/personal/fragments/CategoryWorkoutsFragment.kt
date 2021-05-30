@@ -21,7 +21,7 @@ class CategoryWorkoutsFragment : CategoryWorkoutFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         recycler = view.navigation_view_main_block
         addButton = view.add_element_button
-        loadWokouts()
+        loadWorkouts()
         addButton?.setOnClickListener {
             // TODO: create new workout here
             router?.showNewWorkoutPage(1)
@@ -30,7 +30,7 @@ class CategoryWorkoutsFragment : CategoryWorkoutFragment() {
 
     override fun getFragmentLayoutId() = R.layout.item_personal_elements
 
-    private fun loadWokouts() {
+    private fun loadWorkouts() {
         val userId = CurrentUserRepository.currentUser.value?.id
                 loadCategoryWorkouts(userId!!, false) { elementsList ->
                 val categoriesList = ItemsList(elementsList)

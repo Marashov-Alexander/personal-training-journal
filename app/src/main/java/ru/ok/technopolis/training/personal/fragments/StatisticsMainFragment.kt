@@ -27,35 +27,35 @@ class StatisticsMainFragment : BaseFragment() {
 
         recyclerView = view.statistics_workout_ex_list
         activity?.base_toolbar?.title = getString(R.string.statistics)
-        exDummyToRecView()
+//        exDummyToRecView()
     }
 
-    private fun exDummyToRecView() {
-        for (i in 1..5) pushWorkout(i)
-        val workoutsList = ItemsList(workoutsMutableList)
-        val workoutsAdapter = ShortWorkoutListAdapter(
-                holderType = ShortWorkoutViewHolder::class,
-                layoutId = R.layout.item_short_workout,
-                dataSource = workoutsList,
-                onClick = { workoutItem ->
-                    println("workout ${workoutItem.id} clicked")
-                },
-                onStart = { workoutItem ->
-                    println("workout ${workoutItem.id} started")
-                    router?.showWorkoutProgressPage()
-                }
-        )
-        recyclerView?.adapter = workoutsAdapter
-        val workoutsLayoutManager = GridLayoutManager(activity, 2)
-        recyclerView?.layoutManager = workoutsLayoutManager
-    }
+//    private fun exDummyToRecView() {
+//        for (i in 1..5) pushWorkout(i)
+//        val workoutsList = ItemsList(workoutsMutableList)
+//        val workoutsAdapter = ShortWorkoutListAdapter(
+//                holderType = ShortWorkoutViewHolder::class,
+//                layoutId = R.layout.item_short_workout,
+//                dataSource = workoutsList,
+//                onClick = { workoutItem ->
+//                    println("workout ${workoutItem.id} clicked")
+//                },
+//                onStart = { workoutItem ->
+//                    println("workout ${workoutItem.id} started")
+//                    router?.showWorkoutProgressPage()
+//                }
+//        )
+//        recyclerView?.adapter = workoutsAdapter
+//        val workoutsLayoutManager = GridLayoutManager(activity, 2)
+//        recyclerView?.layoutManager = workoutsLayoutManager
+//    }
 
-
-    private fun pushWorkout(id: Int) {
-        workoutsMutableList.add(
-                ShortWorkoutItem(id.toString(),"MYвшпвшпвкпиквпшкивпквпвпквпивчмпч MY","kardio", "ofp", 0, 0.0)
-        )
-    }
+//
+//    private fun pushWorkout(id: Int) {
+//        workoutsMutableList.add(
+//                ShortWorkoutItem(id.toString(),"MYвшпвшпвкпиквпшкивпквпвпквпивчмпч MY","kardio", "ofp", 0, 0.0)
+//        )
+//    }
 
     override fun getFragmentLayoutId(): Int = R.layout.fragment_statistics_main
 }

@@ -38,12 +38,12 @@ abstract class CategoryExerciseFragment : BaseFragment() {
     }
 
     private fun formList(exercises: List<ExerciseEntity>, category: ExerciseCategoryEntity, categoryElem: MutableList<CategoryExerciseItem>): Boolean {
-        val exercisesList = exercises.map { workout ->
+        val exercisesList = exercises.map { entity ->
             val downloadsNumber = 0
             val rank = 0.0
             ShortExerciseItem(
                     Random.nextInt().toString(),
-                    workout.name,
+                    entity,
                     category.name,
                     downloadsNumber,
                     rank

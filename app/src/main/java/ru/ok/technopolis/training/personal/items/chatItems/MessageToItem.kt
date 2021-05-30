@@ -30,43 +30,43 @@ class MessageToItem(@NonNull val message: MessageEntity, private val router: Rou
         viewHolder.itemView.request.visibility = View.GONE
         when {
             message.userWorkoutId != null -> {
-                workoutDummy(viewHolder)
+//                workoutDummy(viewHolder)
             }
             message.userExerciseId != null -> {
-                exDummy(viewHolder)
+//                exDummy(viewHolder)
             }
         }
     }
 
-    private fun workoutDummy(viewHolder: GroupieViewHolder) {
-        val workout = mutableListOf(ShortWorkoutItem(message.userWorkoutId.toString(),  "kk", "category", "sport", 0, 0.0))
-        val workoutsList = ItemsList(workout)
-        val workoutsAdapter = ShortWorkoutListAdapter(
-                holderType = ShortWorkoutViewHolder::class,
-                layoutId = R.layout.item_short_workout,
-                dataSource = workoutsList,
-                onClick = { workoutItem -> println("workout ${workoutItem.id} clicked") },
-                onStart = { workoutItem ->
-                    println("workout ${workoutItem.id} started")
-                    router.showWorkoutPage(workoutItem.id.toLong())
-                }
-        )
-        viewHolder.itemView.message_element.adapter = workoutsAdapter
-    }
-
-    private fun exDummy(viewHolder: GroupieViewHolder) {
-        val ex = mutableListOf(ShortExerciseItem(message.userExerciseId.toString(), "kk", "category", 0, 0.0))
-        val exList = ItemsList(ex)
-        val workoutsAdapter = ShortExerciseListAdapter(
-                holderType = ShortExerciseViewHolder::class,
-                layoutId = R.layout.item_short_exercice,
-                dataSource = exList,
-                onClick = { workoutItem -> println("workout ${workoutItem.id} clicked") },
-                onStart = { workoutItem ->
-                    println("workout ${workoutItem.id} started")
-                    router.showExercisePage(workoutItem.id.toLong())
-                }
-        )
-        viewHolder.itemView.message_element.adapter = workoutsAdapter
-    }
+//    private fun workoutDummy(viewHolder: GroupieViewHolder) {
+//        val workout = mutableListOf(ShortWorkoutItem(message.userWorkoutId.toString(),  "kk", "category", "sport", 0, 0.0))
+//        val workoutsList = ItemsList(workout)
+//        val workoutsAdapter = ShortWorkoutListAdapter(
+//                holderType = ShortWorkoutViewHolder::class,
+//                layoutId = R.layout.item_short_workout,
+//                dataSource = workoutsList,
+//                onClick = { workoutItem -> println("workout ${workoutItem.id} clicked") },
+//                onStart = { workoutItem ->
+//                    println("workout ${workoutItem.id} started")
+//                    router.showWorkoutPage(workoutItem.id.toLong())
+//                }
+//        )
+//        viewHolder.itemView.message_element.adapter = workoutsAdapter
+//    }
+//
+//    private fun exDummy(viewHolder: GroupieViewHolder) {
+//        val ex = mutableListOf(ShortExerciseItem(message.userExerciseId.toString(), "kk", "category", 0, 0.0))
+//        val exList = ItemsList(ex)
+//        val workoutsAdapter = ShortExerciseListAdapter(
+//                holderType = ShortExerciseViewHolder::class,
+//                layoutId = R.layout.item_short_exercice,
+//                dataSource = exList,
+//                onClick = { workoutItem -> println("workout ${workoutItem.id} clicked") },
+//                onStart = { workoutItem ->
+//                    println("workout ${workoutItem.id} started")
+//                    router.showExercisePage(workoutItem.id.toLong())
+//                }
+//        )
+//        viewHolder.itemView.message_element.adapter = workoutsAdapter
+//    }
 }

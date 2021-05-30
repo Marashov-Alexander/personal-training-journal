@@ -31,6 +31,18 @@ interface UserDao {
     @Query("SELECT * FROM ExerciseEntity WHERE id in (SELECT exerciseId FROM UserExerciseEntity where userId = :id)")
     fun getUserExercises(id: Long): List<ExerciseEntity>
 
+    @Query("SELECT * FROM WorkoutEntity WHERE id in (SELECT workoutId FROM UserWorkoutEntity where userId = :id) and isPublic =:isPublic")
+    fun getUserWorkoutsPublic(id: Long, isPublic:  Boolean): List<WorkoutEntity>
+
+    @Query("SELECT * FROM ExerciseEntity WHERE id in (SELECT exerciseId FROM UserExerciseEntity where userId = :id) and isPublic =:isPublic")
+    fun getUserExercisesPublic(id: Long, isPublic: Boolean): List<ExerciseEntity>
+
+//    @Query("SELECT * FROM WorkoutEntity WHERE id in (SELECT workoutId FROM UserWorkoutEntity where userId = :id)  and isPublic = 'TRUE'")
+//    fun getUserWorkoutsShared(id: Long): List<WorkoutEntity>
+//
+//    @Query("SELECT * FROM ExerciseEntity WHERE id in (SELECT exerciseId FROM UserExerciseEntity where userId = :id) and isPublic = 'TRUE'")
+//    fun getUserExercisesShared(id: Long): List<ExerciseEntity>
+
     @Query(" SELECT * FROM WorkoutSportEntity WHERE id in( SELECT sportId FROM WorkoutEntity WHERE id in ( SELECT workoutId FROM UserWorkoutEntity where userId = :id))")
     fun getUserSports(id: Long): List<WorkoutSportEntity>
 

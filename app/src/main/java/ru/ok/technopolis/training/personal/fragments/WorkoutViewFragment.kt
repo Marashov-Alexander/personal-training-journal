@@ -19,6 +19,7 @@ import ru.ok.technopolis.training.personal.items.BundleItem
 import ru.ok.technopolis.training.personal.items.ExercisesList
 import ru.ok.technopolis.training.personal.items.ShortWorkoutItem
 import ru.ok.technopolis.training.personal.items.SingleSelectableList
+import ru.ok.technopolis.training.personal.lifecycle.Page
 import ru.ok.technopolis.training.personal.utils.recycler.adapters.BundleAdapter
 import ru.ok.technopolis.training.personal.utils.recycler.adapters.ExerciseAdapter
 import ru.ok.technopolis.training.personal.viewholders.BundleItemViewHolder
@@ -39,9 +40,6 @@ class WorkoutViewFragment : WorkoutFragment() {
     private var exercisesList: ExercisesList? = null
     private var info: MaterialCardView? = null
 
-    private var workout: ShortWorkoutItem? = null
-
-    private var workoutId = 1L
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -56,7 +54,7 @@ class WorkoutViewFragment : WorkoutFragment() {
         info = view.info_card
 
         shareText = view.share_text
-
+        val workoutId = (activity?.intent?.extras?.get(Page.WORKOUT_ID_KEY) as Long)
         loadWorkoutInfo(workoutId) { workout, category, sport, exercises, author ->
             setWorkoutDummy(workout, category, sport)
             exercisesList = ExercisesList(exercises)
@@ -90,7 +88,7 @@ class WorkoutViewFragment : WorkoutFragment() {
 //        raiting?.text = workout.
         difficulty?.text = workout.difficulty.toString()
 //        downloadsNumber?.text = workout?.downloadsNumber.toString()
-//        if (!workout?.private!!) {
+//        if (workout.isPublic) {
 //            shareButton?.visibility = View.INVISIBLE
 //            startButton?.visibility = View.INVISIBLE
 //            shareText?.visibility = View.INVISIBLE

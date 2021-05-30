@@ -34,9 +34,9 @@ class CategoryExerciseViewHolder(
                 layoutId = R.layout.item_short_exercice,
                 dataSource = exercises,
                 onClick = { workoutItem -> println("workout ${workoutItem.id} clicked") },
-                onStart = { workoutItem ->
-                    println("workout ${workoutItem.id} started")
-                    exerciseView.invoke(workoutItem.id.toLong())
+                onStart = { exerciseItem ->
+                    println("workout ${exerciseItem.exercise.id} started")
+                    exerciseView.invoke(exerciseItem.exercise.id)
                 }
         )
         exercisesList.adapter = workoutsAdapter

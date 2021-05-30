@@ -39,7 +39,7 @@ class ShortExerciseViewHolder (
     }
 
     fun update(item: ShortExerciseItem) {
-        name.text = item.name
+        name.text = item.exercise.name
         category.text = item.category
         rank.text = item.rank.toString()
         downloads.text = item.downloadsNumber.toString()

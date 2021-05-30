@@ -1,6 +1,5 @@
 package ru.ok.technopolis.training.personal.fragments
 
-import android.content.IntentFilter
 import android.graphics.Color
 import android.os.Bundle
 import android.view.Menu
@@ -16,28 +15,19 @@ import kotlinx.android.synthetic.main.item_profile.view.*
 import kotlinx.android.synthetic.main.item_train_ex_switcher.*
 import kotlinx.android.synthetic.main.item_train_ex_switcher.view.*
 import kotlinx.android.synthetic.main.view_appbar.*
-import kotlinx.coroutines.Dispatchers
-import kotlinx.coroutines.GlobalScope
-import kotlinx.coroutines.launch
-import kotlinx.coroutines.withContext
-import okhttp3.internal.notify
 import ru.ok.technopolis.training.personal.R
-import ru.ok.technopolis.training.personal.db.entity.UserEntity
+import ru.ok.technopolis.training.personal.db.entity.WorkoutSportEntity
 import ru.ok.technopolis.training.personal.items.ItemsList
-import ru.ok.technopolis.training.personal.items.ProfileItem
 import ru.ok.technopolis.training.personal.items.ShortExerciseItem
 import ru.ok.technopolis.training.personal.items.ShortWorkoutItem
 import ru.ok.technopolis.training.personal.lifecycle.Page
-import ru.ok.technopolis.training.personal.repository.CurrentUserRepository
-import ru.ok.technopolis.training.personal.repository.CurrentUserRepository.currentUser
 import ru.ok.technopolis.training.personal.utils.logger.Logger
 import ru.ok.technopolis.training.personal.utils.recycler.adapters.ShortExerciseListAdapter
 import ru.ok.technopolis.training.personal.utils.recycler.adapters.ShortWorkoutListAdapter
 import ru.ok.technopolis.training.personal.viewholders.ShortExerciseViewHolder
 import ru.ok.technopolis.training.personal.viewholders.ShortWorkoutViewHolder
-import java.sql.Time
 
-class ViewAuthorFragment :UserFragment() {
+class ViewAuthorFragment : UserFragment() {
     private var profileNameAndIcon: View? = null
     private var subscribersNumber: TextView? = null
     private var subscriptionsNumber: TextView? = null
@@ -58,125 +48,119 @@ class ViewAuthorFragment :UserFragment() {
         recyclerView = view.author_tr_ex_list
         val trSwLine = view.train_switch_line
         val exSwitchLine = view.ex_switch_line
+        trainSwitcher = view.switcher
+
+
+        val id = (activity?.intent?.extras?.get(Page.AUTHOR_ID_KEY)) as Long
+        authorLayout(id)
+
+        val flag = true
+        setExercisesNumber(id)
+        getUserWorkouts(id) { workouts ->
+            workoutsMutableList = workouts
+            loadItems(id, flag)
+        }
+        setButtonsLogic(id, trSwLine, exSwitchLine)
 
         //TODO:Get chat id for the author from db of create new one
-        pushExercise(0, "Мое упражнение", "Кардио", "Офп", 0, 0.0)
-        pushExercise(1, "Бег на месте", "Кардио", "Офп", 0, 0.0)
-        pushExercise(2, "Приседания", "Силовые", "Базовые", 3, 5.0)
+        sendMessage?.setOnClickListener {
+            router?.showChatPage(id)
+        }
+    }
 
-        val text = getString(R.string.ex_switcher_text) + " (" + exerciseMutableList.size + ")"
-        trainSwitcher?.ex_switch_button?.text = text
+    private fun setExercisesNumber(id: Long) {
+        getUserExercises(id) { exercises ->
+            val text = getString(R.string.ex_switcher_text) + " (" + exercises.size + ")"
+            trainSwitcher?.ex_switch_button?.text = text
+            exerciseMutableList = exercises
+        }
+    }
 
-        trainSwitcher = view.switcher
-        val flag = true
-        val id = (activity?.intent?.extras?.get(Page.AUTHOR_ID_KEY)) as Long
+    private fun authorLayout(id: Long) {
         loadAuthorAndSportsInfo(id) { author, list ->
-            var sportsList = ""
-            for (sport in list) {
-                sportsList += if (sport != list.last()) {
-                    "${sport.name}, "
-                } else {
-                    "${sport.name} "
-                }
-            }
+            activity?.base_toolbar?.title = author.name
             profileNameAndIcon?.profile_name?.text = author.name
             profileNameAndIcon?.complaint?.visibility = View.VISIBLE
-            profileNameAndIcon?.profile_description?.text = sportsList
+            profileNameAndIcon?.profile_description?.text = makeSportsList(list)
             subscribersNumber?.text = author.subscribersNumber.toString()
             subscriptionsNumber?.text = author.subscriptionsNumber.toString()
         }
-            getUserWorkouts(id) { workouts ->
-                 workoutsMutableList = workouts
-                loadWorkoutItems(id)
-                setButtonsLogic(id, flag, trSwLine, exSwitchLine)
-                sendMessage?.setOnClickListener {
-                    router?.showChatPage(id)
-                }
-            }
     }
 
-
+    private fun makeSportsList(list: List<WorkoutSportEntity>): String {
+        var sportsList = ""
+        for (sport in list) {
+            sportsList += if (sport != list.last()) {
+                "${sport.name}, "
+            } else {
+                "${sport.name} "
+            }
+        }
+        return sportsList
+    }
 
     private fun loadItems(id: Long, flag: Boolean) {
         clearRecView(flag)
         if (flag) {
-            loadWorkoutItems(id)
+            loadWorkouts(id)
         } else {
-            loadExItems()
+            loadExercises(id)
         }
     }
 
     private fun clearRecView(flag: Boolean) {
+        val listSize: Int
         if (flag) {
-            val listSize = workoutsMutableList.size
+            listSize = workoutsMutableList.size
             workoutsMutableList.clear()
-            recyclerView?.adapter?.notifyItemRangeRemoved(0, listSize)
         } else {
-            val listSize = exerciseMutableList.size
+            listSize = exerciseMutableList.size
             exerciseMutableList.clear()
-            recyclerView?.adapter?.notifyItemRangeRemoved(0, listSize)
         }
+        recyclerView?.adapter?.notifyItemRangeRemoved(0, listSize)
     }
 
-    private fun loadWorkoutItems(id: Long) {
+    private fun loadWorkouts(id: Long) {
         getUserWorkouts(id) { workouts ->
-            workoutsMutableList = workouts
-            exDummyToRecView()
+            val text = getString(R.string.training_switcher_text) + " (" + workouts.size + ")"
+            trainSwitcher?.train_switch_button?.text = text
+            val workoutsList = ItemsList(workouts)
+            val workoutsAdapter = ShortWorkoutListAdapter(
+                    holderType = ShortWorkoutViewHolder::class,
+                    layoutId = R.layout.item_short_workout,
+                    dataSource = workoutsList,
+                    onClick = { workoutItem -> println("workout ${workoutItem.id} clicked") },
+                    onStart = { workoutItem ->
+                        println("workout ${workoutItem.id} started")
+                        router?.showWorkoutPage(workoutItem.workout.id)
+                    }
+            )
+            recyclerView?.adapter = workoutsAdapter
+            val workoutsLayoutManager = GridLayoutManager(activity, 2)
+            recyclerView?.layoutManager = workoutsLayoutManager
         }
     }
 
-    private fun exDummyToRecView() {
-
-        val text = getString(R.string.training_switcher_text) + " (" + workoutsMutableList.size + ")"
-        trainSwitcher?.train_switch_button?.text = text
-        val workoutsList = ItemsList(workoutsMutableList)
-        val workoutsAdapter = ShortWorkoutListAdapter(
-                holderType = ShortWorkoutViewHolder::class,
-                layoutId = R.layout.item_short_workout,
-                dataSource = workoutsList,
-                onClick = { workoutItem -> println("workout ${workoutItem.id} clicked") },
-                onStart = { workoutItem ->
-                    println("workout ${workoutItem.id} started")
-                    router?.showWorkoutPage(workoutItem.id.toLong())
-                }
-        )
-        recyclerView?.adapter = workoutsAdapter
-        val workoutsLayoutManager = GridLayoutManager(activity, 2)
-        recyclerView?.layoutManager = workoutsLayoutManager
+    private fun loadExercises(id: Long) {
+        getUserExercises(id) { exercises ->
+            val text = getString(R.string.ex_switcher_text) + " (" + exercises.size + ")"
+            trainSwitcher?.ex_switch_button?.text = text
+            val exList = ItemsList(exercises)
+            val exAdapter = ShortExerciseListAdapter(
+                    holderType = ShortExerciseViewHolder::class,
+                    layoutId = R.layout.item_short_exercice,
+                    dataSource = exList,
+                    onClick = { exItem -> println("workout ${exItem.id} clicked") },
+                    onStart = { exItem ->
+                        println("workout ${exItem.exercise.id} started")
+                        router?.showExercisePage(exItem.exercise.id)
+                    }
+            )
+            recyclerView?.adapter = exAdapter
+            val exLayoutManager = GridLayoutManager(activity, 2)
+            recyclerView?.layoutManager = exLayoutManager
+        }
     }
-
-    private fun exerciseDummyAll() {
-        pushExercise(0, "Мое упражнение", "Кардио", "Офп", 0, 0.0)
-        pushExercise(1, "Бег на месте", "Кардио", "Офп", 0, 0.0)
-        pushExercise(2, "Приседания", "Силовые", "Базовые", 3, 5.0)
-        val exList = ItemsList(exerciseMutableList)
-        val text = getString(R.string.ex_switcher_text) + " (" + exerciseMutableList.size + ")"
-        trainSwitcher?.ex_switch_button?.text = text
-        val exAdapter = ShortExerciseListAdapter(
-                holderType = ShortExerciseViewHolder::class,
-                layoutId = R.layout.item_short_exercice,
-                dataSource = exList,
-                onClick = { exItem -> println("workout ${exItem.id} clicked") },
-                onStart = { exItem ->
-                    println("workout ${exItem.id} started")
-                    router?.showExercisePage(exItem.id.toLong())
-                }
-        )
-        recyclerView?.adapter = exAdapter
-        val exLayoutManager = GridLayoutManager(activity, 2)
-        recyclerView?.layoutManager = exLayoutManager
-    }
-
-    private fun loadExItems() {
-        exerciseDummyAll()
-    }
-
-    private fun pushExercise(id: Int, name: String, category: String, description: String, sharedNumber: Int, rank: Double) {
-        exerciseMutableList.add(
-                ShortExerciseItem(id.toString(), name, category, sharedNumber, rank)
-        )
-    }
-
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
         Logger.d(this, "onCreateOptionsMenu")
@@ -199,8 +183,9 @@ class ViewAuthorFragment :UserFragment() {
         }
 
     }
-    private fun setButtonsLogic(id: Long, flag: Boolean, trSwLine: View, exSwitchLine: View) {
-        var flag1 = flag
+
+    private fun setButtonsLogic(id: Long, trSwLine: View, exSwitchLine: View) {
+        var flag1 = true
         val clL = View.OnClickListener { elem ->
             flag1 = !flag1
             print(flag1)

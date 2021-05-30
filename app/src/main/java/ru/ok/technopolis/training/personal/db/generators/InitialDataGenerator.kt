@@ -88,16 +88,6 @@ class InitialDataGenerator {
             )
         }
 
-        fun getAuthorTestExercise(): ExerciseEntity {
-            return ExerciseEntity(
-                    "Author exercise",
-                    "Description",
-                    1,
-                    true,
-                    10
-            )
-        }
-
         fun getTestExercise(): ExerciseEntity {
             return ExerciseEntity(
                 "My exercise 1",
@@ -108,12 +98,30 @@ class InitialDataGenerator {
             )
         }
 
+        fun getAuthorTestExercise(): ExerciseEntity {
+            return ExerciseEntity(
+                    "Author exercise",
+                    "Description",
+                    1,
+                    true,
+                    10
+            )
+        }
+
         fun getTestWorkoutExercise(): WorkoutExerciseEntity {
             return WorkoutExerciseEntity(1, 1)
         }
 
+        fun getTestAuthorWorkoutExercise(): WorkoutExerciseEntity {
+            return WorkoutExerciseEntity(2, 2)
+        }
+
         fun getTestUserWorkout(): UserWorkoutEntity {
             return UserWorkoutEntity(1, 1, true)
+        }
+
+        fun getTestUserExercise(): UserExerciseEntity{
+            return UserExerciseEntity(1, 1, true)
         }
 
         fun getTestAuthorWorkout(): UserWorkoutEntity {

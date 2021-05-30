@@ -33,7 +33,7 @@ class CategoryWorkoutsViewHolder(
                 dataSource = workouts,
                 onClick = {},
                 onStart = { workoutItem ->
-                    viewWorkout.invoke(workoutItem.id.toLong())
+                    viewWorkout.invoke(workoutItem.workout.id)
                 }
         )
         workoutsList.adapter = workoutsAdapter
