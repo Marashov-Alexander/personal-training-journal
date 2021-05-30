@@ -370,5 +370,6 @@
     <string name="plus">+</string>
     <string name="plan">Plan!</string>
     <string name="choose_workout">Choose workout</string>
+    <string name="empty_plan">Is it a rest day?\nOr you forgot\n<b>to plan your workout?</b> :)</string>
 
 </resources>

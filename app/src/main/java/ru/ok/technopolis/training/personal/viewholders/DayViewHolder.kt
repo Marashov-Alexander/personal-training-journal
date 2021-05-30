@@ -22,7 +22,6 @@ class DayViewHolder(
     private val formatter: DateFormat = getDateInstance(DateFormat.SHORT)
 
     override fun bind(item: DayItem) {
-        print("Bind item $item")
         update(item)
     }
 

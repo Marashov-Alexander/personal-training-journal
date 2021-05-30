@@ -332,4 +332,5 @@
     <string name="change_difficulty">Изменить\nнагрузку</string>
     <string name="send_results">Отправить\nрезультаты</string>
     <string name="choose_workout">Выберите тренировку</string>
+    <string name="empty_plan">Это день отдыха?\nИли ты забыл\n<b>запланировать тренировку?</b> :)</string>
 </resources>

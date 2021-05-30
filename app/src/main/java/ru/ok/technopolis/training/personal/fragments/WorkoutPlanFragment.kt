@@ -2,6 +2,10 @@ package ru.ok.technopolis.training.personal.fragments
 
 import android.os.Bundle
 import android.view.View
+import android.view.View.INVISIBLE
+import android.view.View.VISIBLE
+import android.widget.ImageView
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
@@ -12,10 +16,8 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.ok.technopolis.training.personal.R
-import ru.ok.technopolis.training.personal.db.entity.ExerciseEntity
 import ru.ok.technopolis.training.personal.db.entity.UserWorkoutEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutEntity
-import ru.ok.technopolis.training.personal.db.entity.WorkoutExerciseEntity
 import ru.ok.technopolis.training.personal.items.*
 import ru.ok.technopolis.training.personal.repository.CurrentUserRepository
 import ru.ok.technopolis.training.personal.utils.recycler.adapters.DayListAdapter
@@ -24,9 +26,11 @@ import ru.ok.technopolis.training.personal.utils.recycler.listeners.InfinityScro
 import ru.ok.technopolis.training.personal.viewholders.DayViewHolder
 import ru.ok.technopolis.training.personal.viewholders.ScheduledWorkoutViewHolder
 import java.sql.Date
-import java.sql.Time
 import java.text.DateFormatSymbols
+import java.time.temporal.ChronoUnit
 import java.util.*
+import java.util.Calendar.SUNDAY
+import kotlin.random.Random.Default.nextInt
 
 class WorkoutPlanFragment : BaseFragment() {
 
@@ -44,12 +48,18 @@ class WorkoutPlanFragment : BaseFragment() {
     private val daysMutableList = mutableListOf<DayItem>()
     private val workoutsMutableList = mutableListOf<ScheduledWorkoutItem>()
 
+    private lateinit var workoutsList: ItemsList<ScheduledWorkoutItem>
+    private lateinit var hintText: TextView
+    private lateinit var hintArrow: ImageView
+
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
         val userId = CurrentUserRepository.currentUser.value!!.id
         recyclerView = view.days_recycler_view
         workoutsRecycler = view.scheduled_workouts_recycler
         addWorkoutButton = view.add_workout_button
+        hintText = view.hint_text
+        hintArrow = view.hint_arrow
         activity?.base_toolbar?.title = getString(R.string.workouts_plan)
         addWorkoutButton?.setOnClickListener {
             createNewWorkout(userId) { workoutId: Long ->
@@ -66,13 +76,13 @@ class WorkoutPlanFragment : BaseFragment() {
         }
 
         val itemsList = SingleSelectableList(daysMutableList)
-        itemsList.select( itemsList.items.find { it.isToday }!! )
         val dayAdapter = DayListAdapter(
                 holderType = DayViewHolder::class,
                 layoutId = R.layout.day_item,
                 dataSource = itemsList,
                 onClick = { dayItem ->
                     itemsList.select(dayItem)
+                    loadScheduledWorkouts(dayItem.date)
                 }
         )
         recyclerView?.adapter = dayAdapter
@@ -84,9 +94,7 @@ class WorkoutPlanFragment : BaseFragment() {
                     pushDay(ahead)
                 }, daysMutableList))
 
-        for (i in 1..3) pushWorkout(i, false)
-        pushWorkout(4, true)
-        val workoutsList = ItemsList(workoutsMutableList)
+        workoutsList = ItemsList(workoutsMutableList)
         val workoutAdapter = ScheduledWorkoutListAdapter(
                 holderType = ScheduledWorkoutViewHolder::class,
                 layoutId = R.layout.scheduled_workout_item,
@@ -104,6 +112,71 @@ class WorkoutPlanFragment : BaseFragment() {
         workoutsRecycler?.adapter = workoutAdapter
         val workoutLayoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
         workoutsRecycler?.layoutManager = workoutLayoutManager
+
+        val todayItem = itemsList.items.find { it.isToday }!!
+        itemsList.select(todayItem)
+        loadScheduledWorkouts(todayItem.date)
+    }
+
+    private fun loadScheduledWorkouts(date: java.util.Date) {
+        calendar.time = date
+        val weekday = if (calendar.firstDayOfWeek == SUNDAY) {
+            calendar.get(Calendar.DAY_OF_WEEK) - 1 // from 0 to 6
+        } else {
+            (calendar.get(Calendar.DAY_OF_WEEK) - 1 + 6) % 7 // from 0 to 6
+        }
+        GlobalScope.launch(Dispatchers.IO) {
+            database!!.let {
+                val all = it.userWorkoutDao().getAll()
+                val filtered = all.filter { userWorkout ->
+                    var result = false
+                    if (userWorkout.restDays != null) {
+                        val createdDate = Date(userWorkout.timestampFrom)
+                        val daysDelta = ChronoUnit.DAYS.between(
+                                date.toInstant().truncatedTo(ChronoUnit.DAYS),
+                                createdDate.toInstant().truncatedTo(ChronoUnit.DAYS)
+                        )
+                        result = daysDelta % userWorkout.restDays!!.toLong() == 0L
+                    }
+                    if (!result) {
+                        if (userWorkout.weekdaysMask != null) {
+                            println("mask=${userWorkout.weekdaysMask!!}, bit=$weekday, and=${userWorkout.weekdaysMask!! and (1 shl weekday)}")
+                        }
+                        result = userWorkout.weekdaysMask != null && (userWorkout.weekdaysMask!! and (1 shl weekday)) != 0
+                    }
+                    result
+                }.map { userWorkout ->
+                    val workout = it.workoutDao().getById(userWorkout.workoutId)
+                    val category = it.workoutCategoryDao().getById(workout.categoryId)
+                    val sport = it.workoutSportDao().getById(workout.sportId)
+                    val timeStart = if (userWorkout.weekdaysMask == null) {
+                        userWorkout.getPlannedTime(0)
+                    } else {
+                        userWorkout.getPlannedTime(weekday)
+                    }
+                    // TODO: check if workout already done
+                    ScheduledWorkoutItem(
+                            nextInt().toString(),
+                            workout,
+                            userWorkout,
+                            category,
+                            sport,
+                            timeStart,
+                            false
+                    )
+                }.toMutableList()
+                withContext(Dispatchers.Main) {
+                    if (filtered.isEmpty()) {
+                        hintText.visibility = VISIBLE
+                        hintArrow.visibility = VISIBLE
+                    } else {
+                        hintText.visibility = INVISIBLE
+                        hintArrow.visibility = INVISIBLE
+                    }
+                    workoutsList.setData(filtered)
+                }
+            }
+        }
     }
 
     private fun createNewWorkout(userId: Long, actionsAfter: (Long) -> Unit?) {
@@ -137,22 +210,7 @@ class WorkoutPlanFragment : BaseFragment() {
                         dayNames[calendar.get(Calendar.DAY_OF_WEEK)],
                         isChosen = false,
                         isToday = dayId == 0,
-                        event = EventColor.GREEN
-                )
-        )
-    }
-
-    private fun pushWorkout(id: Int, invisible: Boolean) {
-        workoutsMutableList.add(
-                ScheduledWorkoutItem(
-                        id.toString(),
-                        Time(System.currentTimeMillis()),
-                        "Моя тренировочка",
-                        "Общеукрепляющая",
-                        "ОФП",
-                        "40 минут",
-                        true,
-                        invisible
+                        event = EventColor.NONE
                 )
         )
     }

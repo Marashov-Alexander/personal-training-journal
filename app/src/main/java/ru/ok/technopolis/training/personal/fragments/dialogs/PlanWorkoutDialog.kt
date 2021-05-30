@@ -26,6 +26,7 @@ import ru.ok.technopolis.training.personal.utils.recycler.adapters.PlanDayAdapte
 import ru.ok.technopolis.training.personal.viewholders.PlanDayViewHolder
 import java.sql.Time
 import java.text.DateFormat
+import java.time.temporal.ChronoUnit
 
 
 class PlanWorkoutDialog(
@@ -170,7 +171,7 @@ class PlanWorkoutDialog(
                 } else {
                     val mask = dayElements.map { it.checked }.toBooleanArray()
                     val plannedTimes = dayElements
-                            .map { it.time.toString() }
+                            .map { formatter.format(it.time) }
                             .reduce { acc, str -> "$acc*$str" }
                     userWorkout.plannedTimes = plannedTimes
                     userWorkout.setWeekdaysMask(mask)
