@@ -64,7 +64,7 @@ class ViewAuthorFragment : UserFragment() {
 
         //TODO:Get chat id for the author from db of create new one
         sendMessage?.setOnClickListener {
-            router?.showChatPage(id)
+            router?.showChatPage(id, null)
         }
     }
 

@@ -25,7 +25,7 @@ class ChatsFragment : UserFragment() {
         activity?.base_toolbar?.title = getString(R.string.chats)
         chatsRecycler = view.chats_list
         val userId  = CurrentUserRepository.currentUser.value?.id
-        getUserSubscribers(userId!!) { authors ->
+        getChats(userId!!) { authors ->
             chatsMutableList.clear()
             for (author in authors) {
                 //TODO:TIME OF LAST MESSAGE
@@ -38,11 +38,11 @@ class ChatsFragment : UserFragment() {
                     dataSource = chats,
                     onClick = { item ->
                         println("item ${item.id} clicked")
-                        router?.showChatPage(item.chatId)
+                        router?.showChatPage(item.chatId, null)
                     },
                     onStart = { item ->
                         println("item ${item.id} started")
-                        router?.showChatPage(item.chatId)
+                        router?.showChatPage(item.chatId, null)
                     }
             )
             chatsRecycler?.adapter = chatAdapter

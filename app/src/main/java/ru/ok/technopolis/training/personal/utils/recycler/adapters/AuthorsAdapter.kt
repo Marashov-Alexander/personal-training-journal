@@ -12,7 +12,8 @@ class AuthorsAdapter(
         @LayoutRes layoutId: Int,
         dataSource: ItemsList<ProfileItem>,
         onClick: (ProfileItem) -> Unit = {},
-        private val onStart: (ProfileItem) -> Unit = {}
+        private val onStart: (ProfileItem) -> Unit = {},
+        private val onSendClick: (ProfileItem) -> Unit = {}
 ) : BaseListAdapter<ProfileItem>(holderType, layoutId, dataSource, onClick) {
 
     override fun onBindViewHolder(holder: BaseViewHolder<ProfileItem>, position: Int) {
@@ -20,6 +21,9 @@ class AuthorsAdapter(
         val item = data[position]
         (holder as AuthorViewHolder).setOnStartClickListener {
             onStart.invoke(item)
+        }
+        holder.setSendMessageClick {
+            onSendClick.invoke(item)
         }
     }
 }

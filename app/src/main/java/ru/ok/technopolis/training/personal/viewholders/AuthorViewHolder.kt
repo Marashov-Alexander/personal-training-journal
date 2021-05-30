@@ -22,7 +22,6 @@ class AuthorViewHolder (
     private var authorSendMessage: ImageButton = itemView.send_message_icon
     private var separator: View = itemView.author_separator
 
-
     override fun bind(item: ProfileItem) {
         if (item.isUser) {
             itemView.visibility = View.INVISIBLE
@@ -48,9 +47,12 @@ class AuthorViewHolder (
 
     fun setOnStartClickListener(onStart: () -> Unit) {
         if (itemView.visibility == View.VISIBLE) {
-            authorSendMessage.setOnClickListener { onStart() }
             authorIcon.setOnClickListener { onStart() }
             authorName.setOnClickListener{onStart()}
         }
+    }
+
+    fun setSendMessageClick(onSendClick: () -> Unit) {
+        authorSendMessage.setOnClickListener {onSendClick()}
     }
 }

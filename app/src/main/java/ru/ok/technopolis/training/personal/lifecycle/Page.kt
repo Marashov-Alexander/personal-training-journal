@@ -6,6 +6,7 @@ import ru.ok.technopolis.training.personal.activities.auth.RegistrationActivity
 import ru.ok.technopolis.training.personal.activities.settings.AccountSettingsActivity
 import ru.ok.technopolis.training.personal.activities.settings.SettingsActivity
 import ru.ok.technopolis.training.personal.fragments.*
+import ru.ok.technopolis.training.personal.fragments.ShareFragment
 import ru.ok.technopolis.training.personal.fragments.settings.AccountSettingsFragment
 import java.io.Serializable
 import kotlin.reflect.KClass
@@ -102,6 +103,10 @@ sealed class Page : Serializable {
             override val clazz = ChatFragment::class
         }
 
+        object Share: Fragment() {
+            override val clazz = ShareFragment::class
+        }
+
         object Workout : Fragment() {
             override val clazz = WorkoutViewFragment::class
         }
@@ -131,5 +136,6 @@ sealed class Page : Serializable {
         const val EXERCISE_ID_KEY = "EXERCISE_ID"
         const val AUTHOR_ID_KEY = "AUTHOR_ID"
         const val OPPONENT_ID_KEY = "OPPONENT_ID"
+        const val MESSAGE_ID_KEY = "MESSAGE_ID"
     }
 }

@@ -23,6 +23,7 @@ import ru.ok.technopolis.training.personal.items.ShortExerciseItem
 import ru.ok.technopolis.training.personal.items.ShortWorkoutItem
 import ru.ok.technopolis.training.personal.items.chatItems.MessageFromItem
 import ru.ok.technopolis.training.personal.items.chatItems.MessageToItem
+import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.MESSAGE_ID_KEY
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.OPPONENT_ID_KEY
 import ru.ok.technopolis.training.personal.repository.CurrentUserRepository
 
@@ -45,11 +46,16 @@ class ChatFragment : UserFragment() {
         messageText = view.message_input
         sendButton = view.send_icon
         val opponentId = (activity?.intent?.extras?.get(OPPONENT_ID_KEY) as Long)
+
+        val messageId = (activity?.intent?.extras?.get(MESSAGE_ID_KEY) )as Long?
         getUser(opponentId) {opponent ->
             activity?.base_toolbar?.title = getString(R.string.chat) + " \"${opponent.name}\""
         }
 
         showMessages(opponentId)
+        if (messageId != null) {
+            sendShareMessage(messageId)
+        }
         sendButton?.setOnClickListener {
             performSendMessage(userId, opponentId)
         }
@@ -141,6 +147,22 @@ class ChatFragment : UserFragment() {
                 rank
         )
         return elem
+    }
+
+    private fun sendShareMessage(messageId: Long) {
+        val message = messageText?.text?.toString()
+        if (!message.isNullOrBlank()) {
+            GlobalScope.launch(Dispatchers.IO) {
+                database?.let { appDatabase ->
+                    val messageEntity = appDatabase.messageDao().getById(messageId)
+                        formToMessage(messageEntity, appDatabase)
+                        messageText?.text?.clear()
+                        val imm = activity?.getSystemService(Activity.INPUT_METHOD_SERVICE) as InputMethodManager
+                        imm.hideSoftInputFromWindow(view?.windowToken, 0)
+                        dialog?.scrollToPosition(adapter.itemCount - 1)
+                    }
+                }
+            }
     }
 
     private fun performSendMessage(userId: Long, opponentId: Long) {

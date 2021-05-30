@@ -371,5 +371,9 @@
     <string name="plan">Plan!</string>
     <string name="choose_workout">Choose workout</string>
     <string name="empty_plan">Is it a rest day?\nOr you forgot\n<b>to plan your workout?</b> :)</string>
+    <string name="choose_recipient">Choose recipient</string>
+    <string name="subscription_text">Subscriptions</string>
+    <string name="subscriber_text">Subscribers</string>
+    <string name="want_to_share">I want to share it with you</string>
 
 </resources>

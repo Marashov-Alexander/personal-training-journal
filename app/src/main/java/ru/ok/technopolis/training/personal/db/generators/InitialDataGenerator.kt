@@ -126,6 +126,17 @@ class InitialDataGenerator {
                     true
             )
         }
+        fun getTestMessage2(): MessageEntity {
+            return MessageEntity(
+                    "Test Message",
+                    System.currentTimeMillis(),
+                    10,
+                    1,
+                    null,
+                    1,
+                    true
+            )
+        }
 
         fun getTestWorkoutExercise(): WorkoutExerciseEntity {
             return WorkoutExerciseEntity(1, 1)

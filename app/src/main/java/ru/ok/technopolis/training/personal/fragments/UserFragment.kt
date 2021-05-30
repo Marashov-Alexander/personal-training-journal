@@ -228,6 +228,23 @@ abstract class UserFragment : BaseFragment() {
         }
     }
 
+    protected fun getChats(userId: Long,
+                           actionsAfter: (
+                                   MutableList<ProfileItem>
+                           ) -> Unit) {
+        GlobalScope.launch(Dispatchers.IO) {
+            database!!.let {
+                val allSubscribers = it.userDao().getAllUSerSubscriptions(userId).toMutableList()
+                allSubscribers.addAll(it.userDao().getAllUSerSubscribers(userId))
+                var subscribers = formProfiles(allSubscribers, it)
+                subscribers = subscribers.toList().distinct().toMutableList()
+                withContext(Dispatchers.Main) {
+                    actionsAfter.invoke(subscribers)
+                }
+            }
+        }
+    }
+
     protected fun getUser(userId: Long,
                            actionsAfter: (ProfileItem) -> Unit){
         GlobalScope.launch(Dispatchers.IO) {

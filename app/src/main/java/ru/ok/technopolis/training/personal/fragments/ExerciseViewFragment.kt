@@ -8,11 +8,17 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.Spinner
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.element_exercise_parameters.*
 import kotlinx.android.synthetic.main.fragment_view_exercise.view.*
+import kotlinx.android.synthetic.main.fragment_view_exercise.view.author_name
+import kotlinx.android.synthetic.main.fragment_view_exercise.view.downloads_number
+import kotlinx.android.synthetic.main.fragment_view_exercise.view.info_card
+import kotlinx.android.synthetic.main.fragment_view_exercise.view.rank_number
+import kotlinx.android.synthetic.main.fragment_view_exercise.view.share_card
 import kotlinx.android.synthetic.main.item_media_viewer.view.*
 import kotlinx.android.synthetic.main.scheduled_workout_item.*
 import kotlinx.android.synthetic.main.view_appbar.*
@@ -20,6 +26,7 @@ import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.db.entity.ExerciseEntity
 import ru.ok.technopolis.training.personal.db.entity.UserEntity
 import ru.ok.technopolis.training.personal.fragments.dialogs.DescriptionDialogFragment
+import ru.ok.technopolis.training.personal.fragments.dialogs.ShareDialog
 import ru.ok.technopolis.training.personal.items.BundleItem
 import ru.ok.technopolis.training.personal.items.ShortExerciseItem
 import ru.ok.technopolis.training.personal.items.SingleSelectableList
@@ -40,12 +47,13 @@ class ExerciseViewFragment : ExerciseFragment() {
     private var authorName: TextView? = null
     private var parametersRecycler: RecyclerView? = null
     private var info: MaterialCardView? = null
+    private var shareButton: CardView? = null
 
     private var exercise: ShortExerciseItem? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        val exerciseId = (activity?.intent?.extras?.get(Page.EXERCISE_ID_KEY) as Long)
+        val exerciseId = (activity?.intent?.extras?.get(Page.EXERCISE_ID_KEY)) as Long
         val workoutId = (activity?.intent?.extras?.get(Page.WORKOUT_ID_KEY) as? Long)
 
         super.onViewCreated(view, savedInstanceState)
@@ -59,6 +67,12 @@ class ExerciseViewFragment : ExerciseFragment() {
         parametersRecycler = parameters_recycler
         info = view.info_card
         val userId = CurrentUserRepository.currentUser.value?.id!!
+        shareButton = view.share_card
+        shareButton?.setOnClickListener {
+//            router?.shareElement(exerciseId, null)
+            ShareDialog(exerciseId, false)
+                    .show(requireActivity().supportFragmentManager, "ShareDialog")
+        }
 
         loadExerciseInfo(userId, workoutId, exerciseId) { exercise, author, userLevel, levelsMap, maxLevel ->
             setWorkoutDummy(exercise, author)

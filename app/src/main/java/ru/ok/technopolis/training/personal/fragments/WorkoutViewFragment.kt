@@ -1,5 +1,6 @@
 package ru.ok.technopolis.training.personal.fragments
 
+import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -7,6 +8,7 @@ import android.view.MenuItem
 import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
+import androidx.cardview.widget.CardView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
@@ -19,6 +21,7 @@ import ru.ok.technopolis.training.personal.db.entity.WorkoutCategoryEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutSportEntity
 import ru.ok.technopolis.training.personal.fragments.dialogs.DescriptionDialogFragment
+import ru.ok.technopolis.training.personal.fragments.dialogs.ShareDialog
 import ru.ok.technopolis.training.personal.items.BundleItem
 import ru.ok.technopolis.training.personal.items.ExercisesList
 import ru.ok.technopolis.training.personal.items.ShortWorkoutItem
@@ -33,6 +36,7 @@ class WorkoutViewFragment : WorkoutFragment() {
     private var workoutShortInfoRecycler: RecyclerView? = null
     private var imageSwitcher: RecyclerView? = null
     private var startButton: ImageView? = null
+    private var shareButton: CardView? = null
     private var shareText: TextView? = null
     private var downloadsNumber: TextView? = null
     private var raiting: TextView? = null
@@ -62,8 +66,14 @@ class WorkoutViewFragment : WorkoutFragment() {
         authorName = view.author_name
         exerciseRecycler = view.workout_ex_list
         info = view.info_card
+        shareButton = view.share_card
 
         shareText = view.share_text
+        shareButton?.setOnClickListener {
+//            router?.shareElement(null, workoutId)
+            ShareDialog(workoutId, true)
+                    .show(requireActivity().supportFragmentManager, "ShareDialog")
+        }
 
         loadWorkoutInfo(null, workoutId, loadCategories = false, loadSports = false) { workout, userWorkout, category, sport, exercises, author, _, _ ->
             setWorkoutDummy(workout, category, sport)
@@ -86,6 +96,8 @@ class WorkoutViewFragment : WorkoutFragment() {
                 }
             )
             exerciseRecycler?.adapter = adapter
+            val name = author?.firstName + " ${author?.lastName}"
+            authorName?.text = name
             val workoutsLayoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
             exerciseRecycler?.layoutManager = workoutsLayoutManager
         }
@@ -97,6 +109,7 @@ class WorkoutViewFragment : WorkoutFragment() {
 
         val editButton: MenuItem = menu.findItem(R.id.edit_item)
         editButton.setOnMenuItemClickListener {
+
             router?.showNewWorkoutPage(workoutId)
             true
         }
@@ -119,7 +132,7 @@ class WorkoutViewFragment : WorkoutFragment() {
             showExerciseDescription(workout.name, workout.description.toString())
         }
         //TODO:load author from db
-//        authorName?.text =
+
         setWorkoutShortInfo(workout, category, sport)
     }
 
