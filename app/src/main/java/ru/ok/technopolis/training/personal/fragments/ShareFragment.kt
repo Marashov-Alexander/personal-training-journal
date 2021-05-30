@@ -59,6 +59,9 @@ class ShareFragment: UserFragment() {
                 onStart = { authorItem  ->
 
                     formAndSend(userId, authorItem, workoutId, exerciseId)
+                },
+                onSendClick = {item ->
+                    router?.showChatPage(item.userId, null)
                 }
         )
         peoplesRecycler?.adapter = authorsAdapter

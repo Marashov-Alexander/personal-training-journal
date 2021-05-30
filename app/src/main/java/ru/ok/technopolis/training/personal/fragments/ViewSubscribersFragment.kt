@@ -117,6 +117,9 @@ class ViewSubscribersFragment : UserFragment() {
                 onStart = { workoutItem ->
                     println("workout ${workoutItem.id} started")
                     router?.showAuthorPage(workoutItem.userId)
+                },
+                onSendClick = {item ->
+                    router?.showChatPage(item.userId, null)
                 }
         )
         recycler?.adapter = authorsAdapter

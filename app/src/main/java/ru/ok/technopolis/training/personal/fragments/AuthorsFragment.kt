@@ -121,6 +121,7 @@ class AuthorsFragment : UserFragment() {
                     router?.showAuthorPage(workoutItem.userId)
                 },
                 onSendClick = {item ->
+                    println("item.!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!!")
                     router?.showChatPage(item.userId, null)
                 }
         )
