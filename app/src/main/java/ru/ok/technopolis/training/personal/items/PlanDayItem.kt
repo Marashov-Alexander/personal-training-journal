@@ -6,5 +6,6 @@ import java.sql.Time
 data class PlanDayItem (
         override val id: String,
         val name: String,
-        var time: Time
+        var time: Time,
+        var checked: Boolean
 ) : WithId

@@ -16,15 +16,13 @@ class PlanDayAdapter (
         @LayoutRes layoutId: Int,
         dataSource: ItemsList<PlanDayItem>,
         onClick: (PlanDayItem) -> Unit = {},
-        private val onStart: (EditText) -> Unit = {}
+        private val onStart: (EditText, PlanDayItem) -> Unit
 ) : BaseListAdapter<PlanDayItem>(holderType, layoutId, dataSource, onClick) {
 
     override fun onBindViewHolder(holder: BaseViewHolder<PlanDayItem>, position: Int) {
         super.onBindViewHolder(holder, position)
         val item = data[position]
         //WARNING: usage of public val that should be private
-        (holder as PlanDayViewHolder).setClickListener {
-            onStart.invoke(holder.time)
-        }
+        (holder as PlanDayViewHolder).setClickListener(onStart)
     }
 }

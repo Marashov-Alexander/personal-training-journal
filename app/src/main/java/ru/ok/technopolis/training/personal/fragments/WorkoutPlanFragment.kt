@@ -52,7 +52,6 @@ class WorkoutPlanFragment : BaseFragment() {
         addWorkoutButton = view.add_workout_button
         activity?.base_toolbar?.title = getString(R.string.workouts_plan)
         addWorkoutButton?.setOnClickListener {
-            // TODO: create new workout here
             createNewWorkout(userId) { workoutId: Long ->
                 router?.showNewWorkoutPage(workoutId)
             }
@@ -67,6 +66,7 @@ class WorkoutPlanFragment : BaseFragment() {
         }
 
         val itemsList = SingleSelectableList(daysMutableList)
+        itemsList.select( itemsList.items.find { it.isToday }!! )
         val dayAdapter = DayListAdapter(
                 holderType = DayViewHolder::class,
                 layoutId = R.layout.day_item,
@@ -111,7 +111,7 @@ class WorkoutPlanFragment : BaseFragment() {
             database!!.let {
                 val newWorkout = WorkoutEntity("", "", 1L, 1L, 1, false, userId)
                 newWorkout.id = it.workoutDao().insert(newWorkout)
-                val newUserWorkout = UserWorkoutEntity(userId, newWorkout.id, true)
+                val newUserWorkout = UserWorkoutEntity(userId, newWorkout.id, true, System.currentTimeMillis())
                 newUserWorkout.id = it.userWorkoutDao().insert(newUserWorkout)
                 withContext(Dispatchers.Main) {
                     actionsAfter.invoke(newWorkout.id)

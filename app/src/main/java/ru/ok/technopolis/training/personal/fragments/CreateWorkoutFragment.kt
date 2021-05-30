@@ -72,7 +72,7 @@ class CreateWorkoutFragment : WorkoutFragment() {
         val itemTouchHelper = ItemTouchHelper(simpleItemTouchCallback)
         itemTouchHelper.attachToRecyclerView(exercisesRecycler)
 
-        loadWorkoutInfo(workoutId, loadCategories = false, loadSports = false) { workout, category, sport, exercises, author, _, _ ->
+        loadWorkoutInfo(null, workoutId, loadCategories = false, loadSports = false) { workout, userWorkout, category, sport, exercises, author, _, _ ->
             workoutName.setText(workout.name)
             nextStepCard.setOnClickListener {
                 workout.name = workoutName.text.toString()
