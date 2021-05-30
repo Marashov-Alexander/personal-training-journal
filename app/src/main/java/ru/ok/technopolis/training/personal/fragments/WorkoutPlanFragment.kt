@@ -101,12 +101,11 @@ class WorkoutPlanFragment : BaseFragment() {
                 dataSource = workoutsList,
                 onClick = { workoutItem ->
                     println("workout ${workoutItem.id} clicked")
-                    router?.showWorkoutPage(workoutItem.id.toLong())
+                    router?.showWorkoutPage(workoutItem.workout.id)
                 },
                 onStart = { workoutItem ->
                     println("workout ${workoutItem.id} started")
-                    // TODO: configure userId and workoutId
-                    router?.showActivePreExercisePage(0, 0)
+                    router?.showActivePreExercisePage(userId, workoutItem.workout.id)
                 }
         )
         workoutsRecycler?.adapter = workoutAdapter
