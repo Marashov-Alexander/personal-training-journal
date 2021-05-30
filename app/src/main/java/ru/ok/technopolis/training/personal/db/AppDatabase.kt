@@ -17,6 +17,7 @@ import ru.ok.technopolis.training.personal.db.dao.LevelExerciseParameterDao
 import ru.ok.technopolis.training.personal.db.dao.MessageDao
 import ru.ok.technopolis.training.personal.db.dao.ParameterDao
 import ru.ok.technopolis.training.personal.db.dao.ParameterResultDao
+import ru.ok.technopolis.training.personal.db.dao.SubscriptionDao
 import ru.ok.technopolis.training.personal.db.dao.UserDao
 import ru.ok.technopolis.training.personal.db.dao.UserExerciseDao
 import ru.ok.technopolis.training.personal.db.dao.UserLevelDao
@@ -32,6 +33,7 @@ import ru.ok.technopolis.training.personal.db.entity.LevelExerciseParameterEntit
 import ru.ok.technopolis.training.personal.db.entity.MessageEntity
 import ru.ok.technopolis.training.personal.db.entity.ParameterEntity
 import ru.ok.technopolis.training.personal.db.entity.ParameterResultEntity
+import ru.ok.technopolis.training.personal.db.entity.SubscriptionEntity
 import ru.ok.technopolis.training.personal.db.entity.UserEntity
 import ru.ok.technopolis.training.personal.db.entity.UserExerciseEntity
 import ru.ok.technopolis.training.personal.db.entity.UserLevelEntity
@@ -58,7 +60,8 @@ import ru.ok.technopolis.training.personal.db.generators.InitialDataGenerator
         WorkoutCategoryEntity::class,
         WorkoutEntity::class,
         WorkoutExerciseEntity::class,
-        WorkoutSportEntity::class
+        WorkoutSportEntity::class,
+        SubscriptionEntity::class
     ],
     version = 1
 )
@@ -93,15 +96,18 @@ abstract class AppDatabase : RoomDatabase() {
                                 instance?.exerciseCategoryDao()?.insert(InitialDataGenerator.getTestExerciseCategory())
                                 instance?.workoutSportDao()?.insert(InitialDataGenerator.getTestSport())
                                 instance?.workoutDao()?.insert(InitialDataGenerator.getTestWorkout())
+                                instance?.subscriptionDao()?.insert(InitialDataGenerator.getTestUserSubscriptionEntity())
+                                instance?.subscriptionDao()?.insert(InitialDataGenerator.getTestAuthorSubscriptionEntity())
                                 instance?.workoutDao()?.insert(InitialDataGenerator.getAuthorTestWorkout())
                                 instance?.exerciseDao()?.insert(InitialDataGenerator.getTestExercise())
                                 instance?.exerciseDao()?.insert(InitialDataGenerator.getAuthorTestExercise())
                                 instance?.workoutExerciseDao()?.insert(InitialDataGenerator.getTestWorkoutExercise())
                                 instance?.workoutExerciseDao()?.insert(InitialDataGenerator.getTestAuthorWorkoutExercise())
                                 instance?.userWorkoutDao()?.insert(InitialDataGenerator.getTestUserWorkout())
-                                instance?.userWorkoutDao()?.insert(InitialDataGenerator. getTestAuthorWorkout())
-                                instance?.userExerciseDao()?.insert(InitialDataGenerator. getTestUserExercise())
-                                instance?.userExerciseDao()?.insert(InitialDataGenerator. getTestAuthorExercise())
+                                instance?.userWorkoutDao()?.insert(InitialDataGenerator.getTestAuthorWorkout())
+                                instance?.userExerciseDao()?.insert(InitialDataGenerator.getTestUserExercise())
+                                instance?.userExerciseDao()?.insert(InitialDataGenerator.getTestAuthorExercise())
+                                instance?.messageDao()?.insert(InitialDataGenerator.getTestMessage())
                             }
                         }
                     })
@@ -127,4 +133,5 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun workoutDao(): WorkoutDao
     abstract fun workoutExerciseDao(): WorkoutExerciseDao
     abstract fun workoutSportDao(): WorkoutSportDao
+    abstract fun subscriptionDao(): SubscriptionDao
 }

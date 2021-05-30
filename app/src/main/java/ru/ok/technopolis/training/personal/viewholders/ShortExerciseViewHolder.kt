@@ -4,7 +4,7 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
-import kotlinx.android.synthetic.main.item_short_exercice.view.*
+import kotlinx.android.synthetic.main.item_short_exercise.view.*
 import ru.ok.technopolis.training.personal.items.ShortExerciseItem
 import kotlin.math.roundToInt
 

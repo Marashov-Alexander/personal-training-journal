@@ -53,32 +53,32 @@ class ProfileFragment : UserFragment() {
         val exSwitchLine = view.ex_switch_line
 
         id = CurrentUserRepository.currentUser.value?.id
-        loadSportsInfo(id!!) { list ->
+        getUser(id!!) { prof ->
 
 
-            val name = CurrentUserRepository.currentUser.value?.firstName + " ${CurrentUserRepository.currentUser.value?.lastName}"
-            val picture = CurrentUserRepository.currentUser.value?.pictureUrlStr
-
+//            val name = CurrentUserRepository.currentUser.value?.firstName + " ${CurrentUserRepository.currentUser.value?.lastName}"
+//            val picture = CurrentUserRepository.currentUser.value?.pictureUrlStr
+//
             var sportsList = ""
-            for (sport in list) {
-                sportsList += if (sport != list.last()) {
-                    "${sport.name}, "
+            for (sport in prof.sports) {
+                sportsList += if (sport != prof.sports.last()) {
+                    "${sport}, "
                 } else {
-                    "${sport.name} "
+                    "$sport "
                 }
             }
-            //TODO: change to real
-            val prof = ProfileItem(id.toString(),
-                    id!!,
-                    name,
-                    listOf(sportsList),
-                    true,
-                    picture,
-                    0,
-                    0,
-                    2,
-                    3
-            )
+//            //TODO: change to real
+//            val prof = ProfileItem(id.toString(),
+//                    id!!,
+//                    name,
+//                    listOf(sportsList),
+//                    true,
+//                    picture,
+//                    0,
+//                    0,
+//                    2,
+//                    3
+//            )
 
             profileNameAndIcon?.profile_name?.text = prof.name
             profileNameAndIcon?.complaint?.visibility = View.INVISIBLE
@@ -249,7 +249,7 @@ class ProfileFragment : UserFragment() {
         val exList = ItemsList(exercises)
         val exAdapter = ShortExerciseListAdapter(
                 holderType = ShortExerciseViewHolder::class,
-                layoutId = R.layout.item_short_exercice,
+                layoutId = R.layout.item_short_exercise,
                 dataSource = exList,
                 onClick = { exItem -> println("workout ${exItem.id} clicked") },
                 onStart = { exItem ->

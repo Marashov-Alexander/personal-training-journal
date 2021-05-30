@@ -148,7 +148,7 @@ class ViewAuthorFragment : UserFragment() {
             val exList = ItemsList(exercises)
             val exAdapter = ShortExerciseListAdapter(
                     holderType = ShortExerciseViewHolder::class,
-                    layoutId = R.layout.item_short_exercice,
+                    layoutId = R.layout.item_short_exercise,
                     dataSource = exList,
                     onClick = { exItem -> println("workout ${exItem.id} clicked") },
                     onStart = { exItem ->

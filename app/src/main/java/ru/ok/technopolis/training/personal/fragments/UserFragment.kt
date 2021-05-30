@@ -6,8 +6,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.ok.technopolis.training.personal.db.AppDatabase
 import ru.ok.technopolis.training.personal.db.entity.ExerciseEntity
+import ru.ok.technopolis.training.personal.db.entity.UserEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutSportEntity
+import ru.ok.technopolis.training.personal.items.ChatItem
 import ru.ok.technopolis.training.personal.items.ProfileItem
 import ru.ok.technopolis.training.personal.items.ShortExerciseItem
 import ru.ok.technopolis.training.personal.items.ShortWorkoutItem
@@ -37,21 +39,8 @@ abstract class UserFragment : BaseFragment() {
         GlobalScope.launch(Dispatchers.IO) {
             database!!.let {
                 val authorEntity = it.userDao().getById(userId)
+                val author = formProfiles(listOf(authorEntity), it).single()
                 val userSports = it.userDao().getUserSports(userId)
-                val name = authorEntity.firstName + " ${authorEntity.fatherName}"
-                val sportsList = formSportsList(it.userDao().getUserSports(authorEntity.id))
-                val author = ProfileItem(
-                        authorEntity.id.toString(),
-                        authorEntity.id,
-                        name,
-                        sportsList,
-                        false,
-                        authorEntity.avatarUrl,
-                        0,
-                        0,
-                        0,
-                        0
-                )
                 withContext(Dispatchers.Main) {
                     actionsAfter.invoke(author, userSports)
                 }
@@ -67,23 +56,7 @@ abstract class UserFragment : BaseFragment() {
         GlobalScope.launch(Dispatchers.IO) {
             database!!.let {
                 val authors = it.userDao().getAllExceptUser(userId)
-                val authorsList = mutableListOf<ProfileItem>()
-                for (author in authors) {
-                    val name = author.firstName + " ${author.fatherName}"
-                    val sportsList = formSportsList(it.userDao().getUserSports(author.id))
-                    authorsList.add(ProfileItem(
-                            author.id.toString(),
-                            author.id,
-                            name,
-                            sportsList,
-                            false,
-                            author.avatarUrl,
-                            0,
-                            0,
-                            0,
-                            0
-                    ))
-                }
+                val authorsList = formProfiles(authors, it)
                 withContext(Dispatchers.Main) {
                     actionsAfter.invoke(authorsList)
                 }
@@ -223,6 +196,75 @@ abstract class UserFragment : BaseFragment() {
                     rank
             )
         }.toMutableList()
+    }
+
+    protected fun getUserSubscribers (userId: Long,
+    actionsAfter: (
+    MutableList<ProfileItem>
+    ) -> Unit) {
+        GlobalScope.launch(Dispatchers.IO) {
+            database!!.let {
+                val allSubscribers = it.userDao().getAllUSerSubscribers(userId)
+                val subscribers = formProfiles(allSubscribers, it)
+                withContext(Dispatchers.Main) {
+                    actionsAfter.invoke(subscribers)
+                }
+            }
+        }
+    }
+
+    protected fun getUserSubscriptions (userId: Long,
+                                      actionsAfter: (
+                                              MutableList<ProfileItem>
+                                      ) -> Unit) {
+        GlobalScope.launch(Dispatchers.IO) {
+            database!!.let {
+                val allSubscribers = it.userDao().getAllUSerSubscriptions(userId)
+                val subscribers = formProfiles(allSubscribers, it)
+                withContext(Dispatchers.Main) {
+                    actionsAfter.invoke(subscribers)
+                }
+            }
+        }
+    }
+
+    protected fun getUser(userId: Long,
+                           actionsAfter: (ProfileItem) -> Unit){
+        GlobalScope.launch(Dispatchers.IO) {
+            database!!.let {
+                val user = it.userDao().getById(userId)
+                val subscribers = formProfiles(listOf(user), it)
+                withContext(Dispatchers.Main) {
+                    actionsAfter.invoke(subscribers.single())
+                }
+            }
+        }
+    }
+
+
+    private fun formProfiles(elements: List<UserEntity>, db: AppDatabase): MutableList<ProfileItem> {
+        val authorsList = mutableListOf<ProfileItem>()
+        for (element in elements) {
+            val name = element.firstName + " ${element.fatherName}"
+            val sportsList = formSportsList(db.userDao().getUserSports(element.id))
+            val subscribers= db.userDao().getAllUSerSubscribers(element.id).size
+            val subscriptions = db.userDao().getAllUSerSubscriptions(element.id).size
+            val sharedWorkouts = db.userDao().getUserWorkoutsPublic(element.id, true).size
+            val sharedExercises = db.userDao().getUserExercisesPublic(element.id, true).size
+            authorsList.add(ProfileItem(
+                    element.id.toString(),
+                    element.id,
+                    name,
+                    sportsList,
+                    false,
+                    element.avatarUrl,
+                    subscribers,
+                    subscriptions,
+                    sharedWorkouts,
+                    sharedExercises
+            ))
+        }
+        return authorsList
     }
 
 }

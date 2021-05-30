@@ -37,14 +37,14 @@ interface UserDao {
     @Query("SELECT * FROM ExerciseEntity WHERE id in (SELECT exerciseId FROM UserExerciseEntity where userId = :id) and isPublic =:isPublic")
     fun getUserExercisesPublic(id: Long, isPublic: Boolean): List<ExerciseEntity>
 
-//    @Query("SELECT * FROM WorkoutEntity WHERE id in (SELECT workoutId FROM UserWorkoutEntity where userId = :id)  and isPublic = 'TRUE'")
-//    fun getUserWorkoutsShared(id: Long): List<WorkoutEntity>
-//
-//    @Query("SELECT * FROM ExerciseEntity WHERE id in (SELECT exerciseId FROM UserExerciseEntity where userId = :id) and isPublic = 'TRUE'")
-//    fun getUserExercisesShared(id: Long): List<ExerciseEntity>
-
     @Query(" SELECT * FROM WorkoutSportEntity WHERE id in( SELECT sportId FROM WorkoutEntity WHERE id in ( SELECT workoutId FROM UserWorkoutEntity where userId = :id))")
     fun getUserSports(id: Long): List<WorkoutSportEntity>
+
+    @Query("SELECT * FROM UserEntity WHERE id in (SELECT subscriberId FROM SubscriptionEntity WHERE subscriptionId = :userId)")
+    fun getAllUSerSubscribers(userId: Long): List<UserEntity>
+
+    @Query("SELECT * FROM UserEntity WHERE id in (SELECT subscriptionId FROM SubscriptionEntity WHERE subscriberId = :userId)")
+    fun getAllUSerSubscriptions(userId: Long): List<UserEntity>
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(user: UserEntity): Long
