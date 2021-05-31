@@ -32,7 +32,7 @@ data class ExerciseResultsHelper(
         val delimiter = if (str.contains('.')) '.' else '/'
         return when (chartMode) {
             ProgressChartView.ChartMode.DAY -> str
-            ProgressChartView.ChartMode.WEEK -> TODO()
+//            ProgressChartView.ChartMode.WEEK -> TODO()
             ProgressChartView.ChartMode.MONTH -> str.substringAfter(delimiter)
             ProgressChartView.ChartMode.YEAR -> str.substringAfter(delimiter).substringAfter(delimiter)
         }

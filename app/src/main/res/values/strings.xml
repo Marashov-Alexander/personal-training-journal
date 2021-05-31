@@ -382,6 +382,6 @@
     <string name="exercise_edit">Edit exercise</string>
     <string name="rest">Rest</string>
 
-    <string name="percents_value" translatable="false">%d%</string>
+    <string name="percents_value" translatable="false">%d%%</string>
 
 </resources>
