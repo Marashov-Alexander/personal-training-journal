@@ -179,6 +179,8 @@
     <string name="flexibility">Гибкость</string>
     <string name="concentration">Концентрация</string>
     <string name="other_type">Other type</string>
+    <string name="repeat">Повторы</string>
+    <string name="quantity">раз</string>
     <string name="mm">мм</string>
     <string name="sm">см</string>
     <string name="m">м</string>
@@ -340,4 +342,5 @@
     <string name="no_thank_you">Нет, спасибо</string>
     <string name="workout_editing">Редактирование тренировки</string>
     <string name="exercise_edit">Редактирование упражнения</string>
+    <string name="rest">Отдых</string>
 </resources>

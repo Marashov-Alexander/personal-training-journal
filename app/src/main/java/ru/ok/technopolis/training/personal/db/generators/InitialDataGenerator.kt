@@ -175,5 +175,12 @@ class InitialDataGenerator {
             return UserExerciseEntity(10, 2, true)
         }
 
+        fun setRestParam(context: Context): ParameterEntity {
+            return ParameterEntity(context.getString(R.string.rest), context.getString(R.string.sec), ParameterEntity.EQUALS_BETTER, ParameterEntity.INPUT_SIMPLE, true, ParameterEntity.PARAMETER_REST)
+        }
+        fun setRepeatParam(context: Context): ParameterEntity {
+            return ParameterEntity(context.getString(R.string.repeats), context.getString(R.string.quantity), ParameterEntity.EQUALS_BETTER, ParameterEntity.INPUT_SIMPLE, true, ParameterEntity.PARAMETER_REPEATS)
+        }
+
     }
 }

@@ -25,7 +25,7 @@ class CreateExerciseFragment1 : ExerciseFragment() {
     private var exerciseId: Long = -1L
     private var isCreating: Boolean = false
     private lateinit var exercise: ExerciseEntity
-    private lateinit var userLevel: UserLevelEntity
+    private var userLevel: UserLevelEntity? = null
 
     private var nextStepCard: MaterialCardView? = null
     private lateinit var nameTextView: AutoCompleteTextView
@@ -36,9 +36,12 @@ class CreateExerciseFragment1 : ExerciseFragment() {
         super.onViewCreated(view, savedInstanceState)
 
         activity?.let {
-            workoutId = (it.intent.extras?.get(WORKOUT_ID_KEY)) as? Long
+            workoutId = (it.intent.extras?.get(WORKOUT_ID_KEY)) as Long
             exerciseId = (it.intent.extras?.get(EXERCISE_ID_KEY)) as Long
             isCreating = (it.intent.extras?.get(EXERCISE_CREATING_ID_KEY)) as Boolean
+        }
+        if (workoutId == 0L ) {
+            workoutId = null
         }
 
         if (isCreating) {
@@ -66,7 +69,7 @@ class CreateExerciseFragment1 : ExerciseFragment() {
                 }
             }
 
-            this.userLevel = userLevel!!
+            this.userLevel = userLevel
             this.exercise = exercise
 
             parametersWrapper = ExerciseParametersWrapper(

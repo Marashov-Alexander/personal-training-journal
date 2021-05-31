@@ -339,6 +339,8 @@
     <string name="exercise_description"><u>Exercise description</u></string>
     <string name="info_btn">info_btn</string>
     <string name="repeats">Repeats: %d/%d</string>
+    <string name="repeat">Repeats</string>
+    <string name="quantity">times</string>
     <string name="record_enabled"><u>Record on</u></string>
     <string name="skip">Skip</string>
     <string name="its_clear">All clear!</string>
@@ -378,6 +380,7 @@
     <string name="no_thank_you">No thank you</string>
     <string name="workout_editing">Edit workout</string>
     <string name="exercise_edit">Edit exercise</string>
+    <string name="rest">Rest</string>
 
     <string name="percents_value" translatable="false">%d%</string>
 

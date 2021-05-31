@@ -11,6 +11,7 @@ import android.widget.ImageView
 import android.widget.TextView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
 import kotlinx.android.synthetic.main.item_parameter_short.view.*
+import ru.ok.technopolis.training.personal.db.entity.ParameterEntity
 import ru.ok.technopolis.training.personal.items.ParameterItem
 
 
@@ -45,12 +46,15 @@ class ParameterViewHolder(
 
     override fun bind(item: ParameterItem) {
         this.item = item
-        title.text = item.parameter?.name
-        units.text = item.parameter?.measureUnit
-        value.setText(item.levelExerciseParameterEntity?.value.toString())
+        title.text = item.parameter.name
+        units.text = item.parameter.measureUnit
+        value.setText(item.levelExerciseParameterEntity.value.toString())
         value.isEnabled = item.editable
         edit.visibility = if (item.editable) VISIBLE else GONE
         itemView.visibility = if (item.invisible) INVISIBLE else VISIBLE
+         if(item.parameter.parameterType != ParameterEntity.PARAMETER_ORDINARY) {
+             edit.visibility = GONE
+         }
     }
 
     fun setOnEditListener(onEditListener: (ParameterItem) -> Unit) {

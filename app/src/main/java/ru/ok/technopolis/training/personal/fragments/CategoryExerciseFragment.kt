@@ -7,6 +7,7 @@ import kotlinx.coroutines.withContext
 import ru.ok.technopolis.training.personal.db.AppDatabase
 import ru.ok.technopolis.training.personal.db.entity.ExerciseCategoryEntity
 import ru.ok.technopolis.training.personal.db.entity.ExerciseEntity
+import ru.ok.technopolis.training.personal.db.entity.ExerciseParameterEntity
 import ru.ok.technopolis.training.personal.items.CategoryExerciseItem
 import ru.ok.technopolis.training.personal.items.ShortExerciseItem
 import kotlin.random.Random
@@ -63,6 +64,10 @@ abstract class CategoryExerciseFragment : BaseFragment() {
             database!!.let {
                 val newExercise = ExerciseEntity("", "", "Не указано",1, false, userId)
                 newExercise.id = it.exerciseDao().insert(newExercise)
+                val nevExerciseRest = ExerciseParameterEntity(newExercise.id, 1)
+                nevExerciseRest.id = it.exerciseParameterDao().insert(nevExerciseRest)
+                val nevExerciseRepeats = ExerciseParameterEntity(newExercise.id, 2)
+                nevExerciseRepeats.id = it.exerciseParameterDao().insert(nevExerciseRepeats)
                 withContext(Dispatchers.Main) {
                     actionsAfter.invoke(newExercise.id)
                 }

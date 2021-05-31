@@ -49,7 +49,7 @@ class CreateExerciseFragment2 : ExerciseFragment(), MultiSpinner.MultiSpinnerLis
         MuscleItem("11", "Дельты", false)
     )
 
-        var workoutId: Long = -1L
+        var workoutId: Long? = -1L
         var exerciseId: Long = -1L
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
@@ -60,7 +60,9 @@ class CreateExerciseFragment2 : ExerciseFragment(), MultiSpinner.MultiSpinnerLis
             workoutId = (it.intent.extras?.get(Page.WORKOUT_ID_KEY)) as Long
             exerciseId = (it.intent.extras?.get(Page.EXERCISE_ID_KEY)) as Long
         }
-
+        if (workoutId == 0L ) {
+            workoutId = null
+        }
         exerciseDescription = exercise_description
         nextStepCard = next_step_card
         prevStepCard = prev_step_card

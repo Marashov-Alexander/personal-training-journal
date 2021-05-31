@@ -56,6 +56,8 @@ class Router(private val activity: Activity) {
         val bundle = Bundle(3)
         if (workoutId != null) {
             bundle.putLong(WORKOUT_ID_KEY, workoutId)
+        } else {
+            bundle.putLong(WORKOUT_ID_KEY, 0)
         }
         bundle.putLong(EXERCISE_ID_KEY, exerciseId)
         bundle.putBoolean(EXERCISE_CREATING_ID_KEY, isCreating)
@@ -66,6 +68,8 @@ class Router(private val activity: Activity) {
         val workoutIdBundle = Bundle(2)
         if (workoutId != null) {
             workoutIdBundle.putLong(WORKOUT_ID_KEY, workoutId)
+        } else {
+            workoutIdBundle.putLong(WORKOUT_ID_KEY, 0)
         }
         workoutIdBundle.putLong(EXERCISE_ID_KEY, exerciseId)
         showPage(Page.Fragment.NewExercise2, workoutIdBundle)
