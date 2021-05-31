@@ -24,6 +24,7 @@ import kotlinx.android.synthetic.main.item_media_viewer.view.*
 import kotlinx.android.synthetic.main.scheduled_workout_item.*
 import kotlinx.android.synthetic.main.view_appbar.*
 import ru.ok.technopolis.training.personal.R
+import ru.ok.technopolis.training.personal.db.entity.ExerciseCategoryEntity
 import ru.ok.technopolis.training.personal.db.entity.ExerciseEntity
 import ru.ok.technopolis.training.personal.db.entity.UserEntity
 import ru.ok.technopolis.training.personal.fragments.dialogs.DescriptionDialogFragment
@@ -74,8 +75,8 @@ class ExerciseViewFragment : ExerciseFragment() {
                     .show(requireActivity().supportFragmentManager, "ShareDialog")
         }
 
-        loadExerciseInfo(userId, workoutId, exerciseId) { exercise, author, userLevel, levelsMap, maxLevel, mediaData ->
-            setWorkoutDummy(exercise, author)
+        loadExerciseInfo(userId, workoutId, exerciseId) { exercise, category, author, userLevel, levelsMap, maxLevel, mediaData ->
+            setWorkoutDummy(exercise, author, category)
 
             val mediaList = ItemsList<MediaItem>(mutableListOf())
             val mediaViewer = MediaViewerWrapper(
@@ -104,16 +105,12 @@ class ExerciseViewFragment : ExerciseFragment() {
     }
 
 
-    private fun setWorkoutDummy(exerciseEntity: ExerciseEntity, author: UserEntity){
+    private fun setWorkoutDummy(exerciseEntity: ExerciseEntity, author: UserEntity, categoryEntity: ExerciseCategoryEntity){
         val exerciseId = (activity?.intent?.extras?.get(Page.EXERCISE_ID_KEY) as Long)
-        exercise = ShortExerciseItem(exerciseId.toString(), exerciseEntity, "category", 123, 3.5)
+        exercise = ShortExerciseItem(exerciseId.toString(), exerciseEntity, categoryEntity.name, 0, 0.0)
         activity?.base_toolbar?.title = getString(R.string.exercise) + " \"${exercise?.exercise?.name}\" "
         raiting?.text = exercise?.rank.toString()
         downloadsNumber?.text = exercise?.downloadsNumber.toString()
-//        if (!exercise?.exercise?.isPublic!!) {
-//            shareButton?.visibility = View.INVISIBLE
-//            startButton?.visibility = View.INVISIBLE
-//        }
         info?.setOnClickListener {
             showExerciseDescription(exercise!!.exercise.name, exercise!!.exercise.description.toString())
         }

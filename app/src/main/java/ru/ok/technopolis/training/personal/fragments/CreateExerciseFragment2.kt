@@ -68,7 +68,7 @@ class CreateExerciseFragment2 : ExerciseFragment(), MultiSpinner.MultiSpinnerLis
         muscleGroupsLabel = muscle_groups_label
 
         val userId = CurrentUserRepository.currentUser.value!!.id
-        loadExerciseInfo(userId, workoutId, exerciseId) { exercise, author, userLevel, levelsMap, maxLevel, mediaData ->
+        loadExerciseInfo(userId, workoutId, exerciseId) { exercise, category, author, userLevel, levelsMap, maxLevel, mediaData ->
             mediaLoader = MediaLoaderWrapper(
                     this,
                     exercise_image_switcher,
@@ -83,6 +83,7 @@ class CreateExerciseFragment2 : ExerciseFragment(), MultiSpinner.MultiSpinnerLis
             exerciseDescription.setText(exercise.description)
 
             val defaultText = exercise.muscles
+            // TODO: parse muscles from exercise.muscles
             muscleGroupsValue?.setItems(muscles.map {it.name}, defaultText, this, muscles.map {it.checked}.toBooleanArray())
 
             prevStepCard?.setOnClickListener {
@@ -90,7 +91,12 @@ class CreateExerciseFragment2 : ExerciseFragment(), MultiSpinner.MultiSpinnerLis
             }
             nextStepCard?.setOnClickListener {
                 exercise.description = exerciseDescription.text.toString()
-                exercise.muscles = muscles.filter {it.checked}.map {it.name}.reduce { acc, str -> "$acc, $str" }
+                val musclesCollection = muscles.filter {it.checked}
+                if (musclesCollection.isEmpty()) {
+                    exercise.muscles = "Не указано"
+                } else {
+                    exercise.muscles = muscles.map { it.name }.reduce { acc, str -> "$acc, $str" }
+                }
                 saveExerciseInfo(
                         exercise,
                         mediaLoader!!.getLoadedData().map { str -> ExerciseMediaEntity(str, true, exerciseId) }
