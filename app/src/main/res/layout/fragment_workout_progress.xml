@@ -174,42 +174,6 @@
             android:nestedScrollingEnabled="false"
             >
 
-            <ImageView
-                android:id="@+id/prev_period_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:scaleX="-1"
-                android:src="@drawable/ic_play_arrow_black_24dp"
-                android:tint="@color/gray_3"
-                app:layout_constraintBottom_toBottomOf="@id/period"
-                app:layout_constraintStart_toStartOf="parent"
-                app:layout_constraintTop_toTopOf="@id/period"
-                android:contentDescription="@string/prev" />
-
-            <TextView
-                android:id="@+id/period"
-                android:layout_width="0dp"
-                android:layout_height="wrap_content"
-                android:layout_marginVertical="@dimen/dimens_16dp"
-                android:gravity="center"
-                android:text="@string/period_dummy"
-                android:textColor="@color/black"
-                android:textSize="@dimen/text_size_20"
-                app:layout_constraintEnd_toStartOf="@id/next_period_btn"
-                app:layout_constraintStart_toEndOf="@id/prev_period_btn"
-                app:layout_constraintTop_toTopOf="parent"/>
-
-            <ImageView
-                android:id="@+id/next_period_btn"
-                android:layout_width="wrap_content"
-                android:layout_height="wrap_content"
-                android:src="@drawable/ic_play_arrow_black_24dp"
-                android:tint="@color/gray_3"
-                app:layout_constraintBottom_toBottomOf="@id/period"
-                app:layout_constraintEnd_toEndOf="parent"
-                app:layout_constraintTop_toTopOf="@id/period"
-                android:contentDescription="@string/next" />
-
             <ru.ok.technopolis.training.personal.views.ProgressChartView
                 android:id="@+id/progress_chart"
                 android:layout_width="match_parent"
@@ -221,7 +185,7 @@
                 app:goodColor="@color/green_progress"
                 app:itemColor="@color/gray_5"
                 app:itemWidth="35dp"
-                app:layout_constraintTop_toBottomOf="@id/period"
+                app:layout_constraintTop_toTopOf="parent"
                 app:startLineColor="@color/shadow_start_light" />
 
             <com.google.android.material.card.MaterialCardView
