@@ -40,6 +40,7 @@ class PlanWorkoutDialog(
     private var notificationTimePicker: LinearLayout? = null
     private var minutesHoursSwitcher: ConstraintLayout? = null
     private var planButton: Button? = null
+    private var cancelButton: Button? = null
     private var hoursMinutesSwitch: ConstraintLayout? = null
     val myCalendar: Calendar = Calendar.getInstance()
 
@@ -62,6 +63,7 @@ class PlanWorkoutDialog(
             dialog.window?.setBackgroundDrawable(ColorDrawable(Color.TRANSPARENT))
 
             daysRecyclerView = view.choose_days
+            cancelButton = view.stop_plan_button
             workoutRepetitionSpinner = view.workout_repetition_variants
             everyDayPart = view.every_n_day
 
@@ -187,6 +189,10 @@ class PlanWorkoutDialog(
                     dialog.dismiss()
                     println(userWorkout)
                 }
+            }
+
+            cancelButton?.setOnClickListener {
+                dialog.dismiss()
             }
 
             dialog

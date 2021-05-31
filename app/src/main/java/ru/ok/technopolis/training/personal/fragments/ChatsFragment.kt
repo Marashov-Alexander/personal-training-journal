@@ -32,7 +32,7 @@ class ChatsFragment : UserFragment() {
             for (author in authors) {
                 //TODO:TIME OF LAST MESSAGE
                 getChatLastMessage(author.userId, userId) { message ->
-                    chatsMutableList.add(ChatItem(author.id, author.userId, author.name, author.pictureUrlStr, " ", 0, formatter.format(message.timestamp), userId))
+                    chatsMutableList.add(ChatItem(author.id, author.userId, author.name, author.pictureUrlStr, message.text, 0, formatter.format(message.timestamp), userId))
 
                 val chats = ItemsList(chatsMutableList)
                 val chatAdapter = ChatAdapter(
