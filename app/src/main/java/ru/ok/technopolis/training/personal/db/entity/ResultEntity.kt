@@ -33,6 +33,7 @@ data class ResultEntity(
         @ColumnInfo var workoutId: Long,
         @ColumnInfo var goal: Float,
         @ColumnInfo var result: Float,
+        @ColumnInfo var resultType: Int,
         @ColumnInfo var timestamp: Long,
         @ColumnInfo var serverId: Long = -1L,
         @PrimaryKey(autoGenerate = true) var id: Long = 0L

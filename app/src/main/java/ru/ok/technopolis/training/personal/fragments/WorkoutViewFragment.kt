@@ -75,6 +75,12 @@ class WorkoutViewFragment : WorkoutFragment() {
                     .show(requireActivity().supportFragmentManager, "ShareDialog")
         }
 
+        startButton?.setOnClickListener {
+            createExercisesList(workoutId) { workoutExercises, currentCounters, progress ->
+                router?.showActivePreExercisePage(0, workoutExercises, currentCounters, progress, 15)
+            }
+        }
+
         loadWorkoutInfo(null, workoutId, loadCategories = false, loadSports = false) { workout, userWorkout, category, sport, exercises, author, _, _, mediaData ->
             setWorkoutDummy(workout, category, sport)
             exercisesList = ExercisesList(exercises)

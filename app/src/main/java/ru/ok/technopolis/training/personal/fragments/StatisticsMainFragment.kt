@@ -37,7 +37,7 @@ class StatisticsMainFragment : UserFragment() {
                     },
                     onStart = { workoutItem ->
                         println("workout ${workoutItem.id} started")
-                        router?.showWorkoutProgressPage()
+                        router?.showWorkoutProgressPage(workoutItem.workout.id)
                     }
             )
             recyclerView?.adapter = workoutsAdapter

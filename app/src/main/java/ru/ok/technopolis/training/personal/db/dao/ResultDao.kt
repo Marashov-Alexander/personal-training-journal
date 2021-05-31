@@ -12,7 +12,11 @@ interface ResultDao {
     fun getById(id: Long): ResultEntity
 
     @Query("SELECT * FROM ResultEntity WHERE workoutId = :workoutId AND userId = :userId")
-    fun getByWorkoutAndUser(workoutId: Long, userId: Long): ResultEntity
+    fun getByWorkoutAndUser(workoutId: Long, userId: Long): List<ResultEntity>
+
+    @Query("SELECT * FROM ResultEntity WHERE workoutId = :workoutId AND userId = :userId AND exerciseParameterId IN (SELECT id FROM ExerciseParameterEntity WHERE exerciseId = :exerciseId)")
+    fun getByWorkoutAndUserAndExercise(workoutId: Long, userId: Long, exerciseId: Long): List<ResultEntity>
+
 
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(result: ResultEntity): Long

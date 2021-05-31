@@ -32,7 +32,6 @@ import ru.ok.technopolis.training.personal.fragments.dialogs.ShareDialog
 import ru.ok.technopolis.training.personal.items.*
 import ru.ok.technopolis.training.personal.lifecycle.Page
 import ru.ok.technopolis.training.personal.repository.CurrentUserRepository
-import ru.ok.technopolis.training.personal.utils.logger.Logger
 import ru.ok.technopolis.training.personal.utils.recycler.adapters.BundleAdapter
 import ru.ok.technopolis.training.personal.viewholders.BundleItemViewHolder
 import ru.ok.technopolis.training.personal.views.ExerciseParametersWrapper

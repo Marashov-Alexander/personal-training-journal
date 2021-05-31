@@ -32,7 +32,7 @@ import java.util.*
 import java.util.Calendar.SUNDAY
 import kotlin.random.Random.Default.nextInt
 
-class WorkoutPlanFragment : BaseFragment() {
+class WorkoutPlanFragment : WorkoutFragment() {
 
     private var recyclerView: RecyclerView? = null
     private var workoutsRecycler: RecyclerView? = null
@@ -118,34 +118,6 @@ class WorkoutPlanFragment : BaseFragment() {
         val todayItem = itemsList.items.find { it.isToday }!!
         itemsList.select(todayItem)
         loadScheduledWorkouts(todayItem.date)
-    }
-
-    private fun createExercisesList(workoutId: Long, actionsAfter: (LongArray, IntArray, IntArray) -> Unit?) {
-        GlobalScope.launch(Dispatchers.IO) {
-            database!!.let {
-                val allByWorkout = it.workoutExerciseDao().getAllByWorkout(workoutId)
-                val flatExercisesWex = mutableListOf<Long>()
-                val flatExercisesCnt = mutableListOf<Int>()
-                val groupBy = allByWorkout.groupBy { exWrk -> exWrk.supersetGroupId }
-                groupBy.forEach { entry ->
-                    val lst = entry.value
-                    val counter = lst.first().counter ?: 1
-                    for (currentCounter in 1..counter) {
-                        lst.forEach { wex ->
-                            flatExercisesWex.add(wex.id)
-                            flatExercisesCnt.add(currentCounter)
-                        }
-                    }
-                }
-                withContext(Dispatchers.Main) {
-                    actionsAfter.invoke(
-                            flatExercisesWex.toLongArray(),
-                            flatExercisesCnt.toIntArray(),
-                            IntArray(flatExercisesWex.size) {0}
-                    )
-                }
-            }
-        }
     }
 
     private fun loadScheduledWorkouts(date: java.util.Date) {

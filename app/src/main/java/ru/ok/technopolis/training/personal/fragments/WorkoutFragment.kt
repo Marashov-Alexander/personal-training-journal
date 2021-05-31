@@ -57,4 +57,32 @@ abstract class WorkoutFragment : BaseFragment() {
             }
         }
     }
+
+    protected fun createExercisesList(workoutId: Long, actionsAfter: (LongArray, IntArray, IntArray) -> Unit?) {
+        GlobalScope.launch(Dispatchers.IO) {
+            database!!.let {
+                val allByWorkout = it.workoutExerciseDao().getAllByWorkout(workoutId)
+                val flatExercisesWex = mutableListOf<Long>()
+                val flatExercisesCnt = mutableListOf<Int>()
+                val groupBy = allByWorkout.groupBy { exWrk -> exWrk.supersetGroupId }
+                groupBy.forEach { entry ->
+                    val lst = entry.value
+                    val counter = lst.first().counter ?: 1
+                    for (currentCounter in 1..counter) {
+                        lst.forEach { wex ->
+                            flatExercisesWex.add(wex.id)
+                            flatExercisesCnt.add(currentCounter)
+                        }
+                    }
+                }
+                withContext(Dispatchers.Main) {
+                    actionsAfter.invoke(
+                            flatExercisesWex.toLongArray(),
+                            flatExercisesCnt.toIntArray(),
+                            IntArray(flatExercisesWex.size) {0}
+                    )
+                }
+            }
+        }
+    }
 }

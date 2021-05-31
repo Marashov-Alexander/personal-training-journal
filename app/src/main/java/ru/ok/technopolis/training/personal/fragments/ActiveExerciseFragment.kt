@@ -118,6 +118,7 @@ class ActiveExerciseFragment : ExerciseFragment() {
                                 workoutId,
                                 goal,
                                 result,
+                                parItem.parameter.resultType,
                                 System.currentTimeMillis()
                         )
                     }
@@ -225,6 +226,7 @@ class ActiveExerciseFragment : ExerciseFragment() {
                                 workoutId,
                                 repeatsAllCount.toFloat(),
                                 (repeatsDoneCount - repeatsSkippedCount).toFloat(),
+                                ParameterEntity.GREATER_BETTER,
                                 System.currentTimeMillis()
                         )
                         createResultEntity(listOf(repeatsResult)) {
