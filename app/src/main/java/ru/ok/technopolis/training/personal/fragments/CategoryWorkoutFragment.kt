@@ -41,6 +41,10 @@ abstract class CategoryWorkoutFragment : BaseFragment() {
     private fun formList(workouts: List<WorkoutEntity>, category: WorkoutCategoryEntity, db: AppDatabase, categoryElem: MutableList<CategoryWorkoutsItem>) {
         val workoutsList = workouts.map { workout ->
             val sport = db.workoutSportDao().getById(workout.sportId)
+            var image = db.workoutMediaDao().getByFirstWorkoutId(workout.id)
+            if (image.isNullOrBlank()) {
+                image = " "
+            }
             val downloadsNumber = 0
             val rank = 0.0
             ShortWorkoutItem(
@@ -49,7 +53,8 @@ abstract class CategoryWorkoutFragment : BaseFragment() {
                     category.name,
                     sport.name,
                     downloadsNumber,
-                    rank
+                    rank,
+                    image
             )
         }.toMutableList()
         categoryElem.add(CategoryWorkoutsItem(category.id.toString(), category.name, workoutsList))

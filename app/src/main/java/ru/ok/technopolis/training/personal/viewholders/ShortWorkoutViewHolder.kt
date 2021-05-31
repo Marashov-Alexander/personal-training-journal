@@ -4,7 +4,10 @@ import android.view.View
 import android.widget.ImageView
 import android.widget.TextView
 import androidx.cardview.widget.CardView
+import com.bumptech.glide.Glide
 import kotlinx.android.synthetic.main.item_short_workout.view.*
+import ru.ok.technopolis.training.personal.R
+import ru.ok.technopolis.training.personal.items.MediaItem
 import ru.ok.technopolis.training.personal.items.ShortWorkoutItem
 import kotlin.math.roundToInt
 
@@ -48,6 +51,18 @@ class ShortWorkoutViewHolder (
         sport.text = item.sport
         rank.text = item.rank.toString()
         downloads.text = item.downloadsNumber.toString()
+        setImage(item.pictureUrl)
+    }
+
+    private fun setImage(url: String){
+       Glide
+                .with(imageCard.short_workout_image)
+                .asDrawable()
+                .load(url)
+                .centerCrop()
+                .placeholder(R.drawable.ic_access_time_black_24dp)
+                .error(R.drawable.header_nav_menu)
+                .into(imageCard.short_workout_image)
     }
 
     fun setOnStartClickListener(onStart: () -> Unit) {

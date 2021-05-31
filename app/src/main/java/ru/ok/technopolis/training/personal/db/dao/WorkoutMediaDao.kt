@@ -19,6 +19,9 @@ interface WorkoutMediaDao {
     @Query("SELECT * FROM WorkoutMediaEntity WHERE workoutId = :workoutId")
     fun getByWorkoutId(workoutId: Long): List<WorkoutMediaEntity>
 
+    @Query("SELECT url FROM WorkoutMediaEntity WHERE workoutId = :workoutId LIMIT 1")
+    fun getByFirstWorkoutId(workoutId: Long): String
+
     @Query("SELECT * FROM WorkoutMediaEntity WHERE serverId = :id")
     fun getByServerId(id: Long): WorkoutMediaEntity
 
