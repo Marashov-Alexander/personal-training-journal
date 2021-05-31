@@ -22,12 +22,14 @@ abstract class WorkoutFragment : BaseFragment() {
                     MutableList<ExerciseItem>,
                     UserEntity?,
                     List<WorkoutCategoryEntity>,
-                    List<WorkoutSportEntity>
+                    List<WorkoutSportEntity>,
+                    List<WorkoutMediaEntity>
             ) -> Unit) {
         GlobalScope.launch(Dispatchers.IO) {
             database!!.let {
                 val workoutExercisesByWorkout = it.workoutExerciseDao().getAllByWorkout(workoutId)
                 val workout = it.workoutDao().getById(workoutId)
+                val mediaData = it.workoutMediaDao().getByWorkoutId(workoutId)
                 val author = it.userDao().getById(workout.authorId)
                 val userWorkoutEntity = if (userId == null) null else it.userWorkoutDao().getById(userId, workout.id)
                 val exercises = workoutExercisesByWorkout.map { workoutExercise ->
@@ -50,7 +52,7 @@ abstract class WorkoutFragment : BaseFragment() {
                 val categories = if (loadCategories) it.workoutCategoryDao().getAll() else listOf()
                 val sports = if (loadSports) it.workoutSportDao().getAll() else listOf()
                 withContext(Dispatchers.Main) {
-                    actionsAfter.invoke(workout, userWorkoutEntity, category, sport, exercises, author, categories, sports)
+                    actionsAfter.invoke(workout, userWorkoutEntity, category, sport, exercises, author, categories, sports, mediaData)
                 }
             }
         }

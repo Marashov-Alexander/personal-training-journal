@@ -1,7 +1,11 @@
 package ru.ok.technopolis.training.personal.views
 
+import android.Manifest
+import android.app.Activity
+import android.content.pm.PackageManager
 import android.view.View
 import android.widget.TextView
+import androidx.core.app.ActivityCompat
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.PagerSnapHelper
 import androidx.recyclerview.widget.RecyclerView
@@ -27,7 +31,26 @@ open class MediaViewerWrapper(
     protected var mediaCount: Int = 0
     private val subscribe: Disposable
 
+    private val REQUEST_EXTERNAL_STORAGE = 1
+    private val PERMISSIONS_STORAGE = arrayOf(
+            Manifest.permission.READ_EXTERNAL_STORAGE
+    )
+
+    private fun verifyStoragePermissions(activity: Activity?) {
+        // Check if we have write permission
+        val permission = ActivityCompat.checkSelfPermission(activity!!, Manifest.permission.WRITE_EXTERNAL_STORAGE)
+        if (permission != PackageManager.PERMISSION_GRANTED) {
+            // We don't have permission so prompt the user
+            ActivityCompat.requestPermissions(
+                    activity,
+                    PERMISSIONS_STORAGE,
+                    REQUEST_EXTERNAL_STORAGE
+            )
+        }
+    }
+
     init {
+        verifyStoragePermissions(fragment.activity)
         posCard.visibility = View.INVISIBLE
         posValue.text = ""
         subscribe = mediaList.sizeChangedSubject().subscribe { size ->
@@ -72,6 +95,14 @@ open class MediaViewerWrapper(
 
     fun onDetach() {
         subscribe.dispose()
+    }
+
+    fun setMediaData(data: List<String>) {
+        mediaList.setData(
+                data.mapIndexed { index, uri ->
+                    MediaItem(index.toString(), uri, MediaItem.DisplayMode.FIT_CENTER)
+                }.toMutableList()
+        )
     }
 
 }

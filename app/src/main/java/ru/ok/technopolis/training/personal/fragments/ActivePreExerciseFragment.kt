@@ -15,6 +15,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.db.entity.ExerciseEntity
+import ru.ok.technopolis.training.personal.db.entity.ExerciseMediaEntity
 import ru.ok.technopolis.training.personal.db.entity.UserEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutExerciseEntity
 import ru.ok.technopolis.training.personal.fragments.dialogs.DescriptionDialogFragment
@@ -62,7 +63,7 @@ class ActivePreExerciseFragment : ExerciseFragment() {
 
         val workoutExerciseId = workoutExercises[currentIndex]
 //        val currentRepeatCounter = counters[currentIndex]
-        loadPreExerciseInfo(workoutExerciseId) { wex, exercise, author ->
+        loadPreExerciseInfo(workoutExerciseId) { wex, exercise, author, mediaData ->
             startCard?.setOnClickListener {
                 // TODO: configure userId and workoutId
                 println("On start exercise")
@@ -77,6 +78,7 @@ class ActivePreExerciseFragment : ExerciseFragment() {
                     pos_card,
                     mediaList
             )
+            mediaViewer?.setMediaData(mediaData.map { m -> m.url })
 
             val description = if (exercise.description.isNullOrBlank()) "Описания нет :(" else exercise.description!!
             exerciseDescription?.setOnClickListener {
@@ -123,15 +125,17 @@ class ActivePreExerciseFragment : ExerciseFragment() {
             actionsAfter: (
                     wex: WorkoutExerciseEntity,
                     exercise: ExerciseEntity,
-                    author: UserEntity
+                    author: UserEntity,
+                    mediaData: List<ExerciseMediaEntity>
             ) -> Unit) {
         GlobalScope.launch(Dispatchers.IO) {
             database!!.let {
                 val wex = it.workoutExerciseDao().getById(workoutExerciseId)
                 val exercise = it.exerciseDao().getById(wex.exerciseId)
+                val mediaList = it.exerciseMediaDao().getByExerciseId(exercise.id)
                 val author = it.userDao().getById(exercise.authorId)
                 withContext(Dispatchers.Main) {
-                    actionsAfter.invoke(wex, exercise, author)
+                    actionsAfter.invoke(wex, exercise, author, mediaList)
                 }
             }
 

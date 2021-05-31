@@ -14,10 +14,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.ok.technopolis.training.personal.R
-import ru.ok.technopolis.training.personal.db.entity.UserWorkoutEntity
-import ru.ok.technopolis.training.personal.db.entity.WorkoutCategoryEntity
-import ru.ok.technopolis.training.personal.db.entity.WorkoutEntity
-import ru.ok.technopolis.training.personal.db.entity.WorkoutSportEntity
+import ru.ok.technopolis.training.personal.db.entity.*
 import ru.ok.technopolis.training.personal.fragments.dialogs.PlanWorkoutDialog
 import ru.ok.technopolis.training.personal.items.ItemsList
 import ru.ok.technopolis.training.personal.items.MediaItem
@@ -62,7 +59,7 @@ class CreateWorkoutFragment2 : WorkoutFragment() {
         sportSpinner = sport_type_spinner
         workoutDescription = workout_description
 
-        loadWorkoutInfo(userId, workoutId, loadCategories = true, loadSports = true) { workoutEntity, userWorkout, workoutCategoryEntity, workoutSportEntity, exercises, author, categories, sports ->
+        loadWorkoutInfo(userId, workoutId, loadCategories = true, loadSports = true) { workoutEntity, userWorkout, workoutCategoryEntity, workoutSportEntity, exercises, author, categories, sports, mediaData ->
             this.workout = workoutEntity
             setDifficulty(this.workout.difficulty)
             difficultyPlus.setOnClickListener { changeDifficulty(1) }
@@ -71,7 +68,7 @@ class CreateWorkoutFragment2 : WorkoutFragment() {
 
             nextStepCard?.setOnClickListener {
                 workout.description = workoutDescription.text.toString()
-                saveWorkoutInfo(workout) {
+                saveWorkoutInfo(mediaLoader!!.getLoadedData(), workout) {
                     router?.showWorkoutPlanPage()
                     PlanWorkoutDialog(userWorkout!!, this::savePlan)
                             .show(requireActivity().supportFragmentManager, "ParameterDialogFragment")
@@ -90,6 +87,7 @@ class CreateWorkoutFragment2 : WorkoutFragment() {
                     pos_card,
                     mediaList
             )
+            mediaLoader?.setMediaData(mediaData.map { m -> m.url })
 
             val categoryAdapter = ArrayAdapter<WorkoutCategoryEntity>(requireContext(), R.layout.spinner_item, categories)
             categoryAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item)
@@ -127,9 +125,11 @@ class CreateWorkoutFragment2 : WorkoutFragment() {
         }
     }
 
-    private fun saveWorkoutInfo(workout: WorkoutEntity, actionsAfter: (Long) -> Unit?) {
+    private fun saveWorkoutInfo(mediaData: List<String>, workout: WorkoutEntity, actionsAfter: (Long) -> Unit?) {
         GlobalScope.launch(Dispatchers.IO) {
             database!!.let {
+                it.workoutMediaDao().deleteByWorkout(workout.id)
+                it.workoutMediaDao().insert(mediaData.map { uri -> WorkoutMediaEntity(uri, isLocal = true, workoutId = workout.id) })
                 it.workoutDao().update(workout)
                 withContext(Dispatchers.Main) {
                     actionsAfter.invoke(workoutId)

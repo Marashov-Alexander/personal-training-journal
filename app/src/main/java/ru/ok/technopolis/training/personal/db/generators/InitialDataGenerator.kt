@@ -110,6 +110,7 @@ class InitialDataGenerator {
             return ExerciseEntity(
                     "My exercise 1",
                     "Description",
+                    "Не указано",
                     1,
                     true,
                     1L
@@ -120,6 +121,7 @@ class InitialDataGenerator {
             return ExerciseEntity(
                     "Author exercise",
                     "Description",
+                    "Не указано",
                     1,
                     true,
                     10

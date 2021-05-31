@@ -4,10 +4,7 @@ import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
-import ru.ok.technopolis.training.personal.db.entity.ExerciseEntity
-import ru.ok.technopolis.training.personal.db.entity.ExerciseParameterEntity
-import ru.ok.technopolis.training.personal.db.entity.UserEntity
-import ru.ok.technopolis.training.personal.db.entity.UserLevelEntity
+import ru.ok.technopolis.training.personal.db.entity.*
 import ru.ok.technopolis.training.personal.items.ParameterItem
 import kotlin.random.Random
 
@@ -22,12 +19,14 @@ abstract class ExerciseFragment : BaseFragment() {
             author: UserEntity,
             userLevel: UserLevelEntity?,
             levelsMap: MutableMap<Int, MutableList<ParameterItem>>,
-            maxLevel: Int
+            maxLevel: Int,
+            mediaList: List<ExerciseMediaEntity>
         ) -> Unit) {
         GlobalScope.launch(Dispatchers.IO) {
             var maxLevel = 0
             database!!.let {
                 val exercise = it.exerciseDao().getById(exerciseId)
+                val mediaList = it.exerciseMediaDao().getByExerciseId(exerciseId)
                 val author = it.userDao().getById(exercise.authorId)
                 val exerciseParameters = it.exerciseParameterDao().getAllByExercise(exerciseId)
                 val parameters = it.exerciseParameterDao().getParametersForExercise(exerciseId)
@@ -57,7 +56,7 @@ abstract class ExerciseFragment : BaseFragment() {
                     }
                 }
                 withContext(Dispatchers.Main) {
-                    actionsAfter.invoke(exercise, author, userLevel, levelsMap, maxLevel)
+                    actionsAfter.invoke(exercise, author, userLevel, levelsMap, maxLevel, mediaList)
                 }
             }
 

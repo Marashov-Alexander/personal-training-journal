@@ -19,6 +19,7 @@ import kotlinx.android.synthetic.main.fragment_view_exercise.view.downloads_numb
 import kotlinx.android.synthetic.main.fragment_view_exercise.view.info_card
 import kotlinx.android.synthetic.main.fragment_view_exercise.view.rank_number
 import kotlinx.android.synthetic.main.fragment_view_exercise.view.share_card
+import kotlinx.android.synthetic.main.item_media_viewer.*
 import kotlinx.android.synthetic.main.item_media_viewer.view.*
 import kotlinx.android.synthetic.main.scheduled_workout_item.*
 import kotlinx.android.synthetic.main.view_appbar.*
@@ -27,15 +28,14 @@ import ru.ok.technopolis.training.personal.db.entity.ExerciseEntity
 import ru.ok.technopolis.training.personal.db.entity.UserEntity
 import ru.ok.technopolis.training.personal.fragments.dialogs.DescriptionDialogFragment
 import ru.ok.technopolis.training.personal.fragments.dialogs.ShareDialog
-import ru.ok.technopolis.training.personal.items.BundleItem
-import ru.ok.technopolis.training.personal.items.ShortExerciseItem
-import ru.ok.technopolis.training.personal.items.SingleSelectableList
+import ru.ok.technopolis.training.personal.items.*
 import ru.ok.technopolis.training.personal.lifecycle.Page
 import ru.ok.technopolis.training.personal.repository.CurrentUserRepository
 import ru.ok.technopolis.training.personal.utils.logger.Logger
 import ru.ok.technopolis.training.personal.utils.recycler.adapters.BundleAdapter
 import ru.ok.technopolis.training.personal.viewholders.BundleItemViewHolder
 import ru.ok.technopolis.training.personal.views.ExerciseParametersWrapper
+import ru.ok.technopolis.training.personal.views.MediaViewerWrapper
 
 class ExerciseViewFragment : ExerciseFragment() {
     private var exerciseShortInfoRecycler: RecyclerView? = null
@@ -74,8 +74,19 @@ class ExerciseViewFragment : ExerciseFragment() {
                     .show(requireActivity().supportFragmentManager, "ShareDialog")
         }
 
-        loadExerciseInfo(userId, workoutId, exerciseId) { exercise, author, userLevel, levelsMap, maxLevel ->
+        loadExerciseInfo(userId, workoutId, exerciseId) { exercise, author, userLevel, levelsMap, maxLevel, mediaData ->
             setWorkoutDummy(exercise, author)
+
+            val mediaList = ItemsList<MediaItem>(mutableListOf())
+            val mediaViewer = MediaViewerWrapper(
+                    this,
+                    exercise_image_switcher,
+                    no_content,
+                    pos_value,
+                    pos_card,
+                    mediaList
+            )
+            mediaViewer.setMediaData(mediaData.map { m -> m.url })
 
             ExerciseParametersWrapper(
                 this,

@@ -24,6 +24,7 @@ import androidx.room.PrimaryKey
 data class ExerciseEntity(
     @ColumnInfo var name: String,
     @ColumnInfo var description: String?,
+    @ColumnInfo var muscles: String = "Не указано",
     @ColumnInfo var categoryId: Long,
     @ColumnInfo var isPublic: Boolean,
     @ColumnInfo var authorId: Long,

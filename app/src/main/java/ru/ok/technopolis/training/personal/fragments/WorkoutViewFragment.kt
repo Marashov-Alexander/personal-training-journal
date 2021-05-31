@@ -1,6 +1,5 @@
 package ru.ok.technopolis.training.personal.fragments
 
-import android.annotation.SuppressLint
 import android.os.Bundle
 import android.view.Menu
 import android.view.MenuInflater
@@ -14,6 +13,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.element_start_button.*
 import kotlinx.android.synthetic.main.fragment_view_workout.view.*
+import kotlinx.android.synthetic.main.item_media_viewer.*
 import kotlinx.android.synthetic.main.item_media_viewer.view.*
 import kotlinx.android.synthetic.main.view_appbar.*
 import ru.ok.technopolis.training.personal.R
@@ -22,15 +22,13 @@ import ru.ok.technopolis.training.personal.db.entity.WorkoutEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutSportEntity
 import ru.ok.technopolis.training.personal.fragments.dialogs.DescriptionDialogFragment
 import ru.ok.technopolis.training.personal.fragments.dialogs.ShareDialog
-import ru.ok.technopolis.training.personal.items.BundleItem
-import ru.ok.technopolis.training.personal.items.ExercisesList
-import ru.ok.technopolis.training.personal.items.ShortWorkoutItem
-import ru.ok.technopolis.training.personal.items.SingleSelectableList
+import ru.ok.technopolis.training.personal.items.*
 import ru.ok.technopolis.training.personal.lifecycle.Page
 import ru.ok.technopolis.training.personal.utils.recycler.adapters.BundleAdapter
 import ru.ok.technopolis.training.personal.utils.recycler.adapters.ExerciseAdapter
 import ru.ok.technopolis.training.personal.viewholders.BundleItemViewHolder
 import ru.ok.technopolis.training.personal.viewholders.ExerciseItemViewHolder
+import ru.ok.technopolis.training.personal.views.MediaViewerWrapper
 
 class WorkoutViewFragment : WorkoutFragment() {
     private var workoutShortInfoRecycler: RecyclerView? = null
@@ -51,6 +49,8 @@ class WorkoutViewFragment : WorkoutFragment() {
     private var workout: ShortWorkoutItem? = null
 
     private var workoutId: Long = -1L
+
+    private lateinit var mediaViewer: MediaViewerWrapper
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -75,7 +75,7 @@ class WorkoutViewFragment : WorkoutFragment() {
                     .show(requireActivity().supportFragmentManager, "ShareDialog")
         }
 
-        loadWorkoutInfo(null, workoutId, loadCategories = false, loadSports = false) { workout, userWorkout, category, sport, exercises, author, _, _ ->
+        loadWorkoutInfo(null, workoutId, loadCategories = false, loadSports = false) { workout, userWorkout, category, sport, exercises, author, _, _, mediaData ->
             setWorkoutDummy(workout, category, sport)
             exercisesList = ExercisesList(exercises)
             val adapter = ExerciseAdapter(
@@ -100,6 +100,16 @@ class WorkoutViewFragment : WorkoutFragment() {
             authorName?.text = name
             val workoutsLayoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
             exerciseRecycler?.layoutManager = workoutsLayoutManager
+            val mediaList = ItemsList<MediaItem>(mutableListOf())
+            mediaViewer = MediaViewerWrapper(
+                    this,
+                    exercise_image_switcher,
+                    no_content,
+                    pos_value,
+                    pos_card,
+                    mediaList
+            )
+            mediaViewer.setMediaData(mediaData.map { m -> m.url })
         }
         setHasOptionsMenu(true)
     }

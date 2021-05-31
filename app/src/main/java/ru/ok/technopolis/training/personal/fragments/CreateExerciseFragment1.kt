@@ -41,7 +41,7 @@ class CreateExerciseFragment1 : ExerciseFragment() {
         }
 
 
-        loadExerciseInfo(userId, workoutId, exerciseId) { exercise, author, userLevel, levelsMap, maxLevel ->
+        loadExerciseInfo(userId, workoutId, exerciseId) { exercise, author, userLevel, levelsMap, maxLevel, mediaData ->
 
             nameTextView.setText(exercise.name)
             nextStepCard?.setOnClickListener {
@@ -54,7 +54,7 @@ class CreateExerciseFragment1 : ExerciseFragment() {
                     parametersWrapper.levelsMap,
                     parametersWrapper.removedParameters
                 ) {
-                    router?.showNewExercisePage2()
+                    router?.showNewExercisePage2(workoutId, exerciseId)
                 }
             }
 

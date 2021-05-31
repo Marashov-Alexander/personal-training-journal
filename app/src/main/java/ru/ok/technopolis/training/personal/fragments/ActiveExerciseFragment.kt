@@ -81,7 +81,7 @@ class ActiveExerciseFragment : ExerciseFragment() {
                     userId,
                     workoutExercise.workoutId,
                     workoutExercise.exerciseId
-            ) { exercise, author, userLevel, levelsMap, maxLevel ->
+            ) { exercise, author, userLevel, levelsMap, maxLevel, mediaData ->
                 // TODO: load repeats count from parameters
                 mediaViewer = MediaViewerWrapper(
                         this,
@@ -91,6 +91,7 @@ class ActiveExerciseFragment : ExerciseFragment() {
                         pos_card,
                         mediaList
                 )
+                mediaViewer?.setMediaData(mediaData.map { m -> m.url })
 
                 val parameters = levelsMap[userLevel!!.level]!!
                 val ordinaryParams = parameters.filter {par -> par.parameter.parameterType == ParameterEntity.PARAMETER_ORDINARY}.toMutableList()

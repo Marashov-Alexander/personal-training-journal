@@ -17,7 +17,7 @@ interface WorkoutMediaDao {
     fun getById(id: Long): WorkoutMediaEntity
 
     @Query("SELECT * FROM WorkoutMediaEntity WHERE workoutId = :workoutId")
-    fun getByWorkoutId(workoutId: Long): WorkoutMediaEntity
+    fun getByWorkoutId(workoutId: Long): List<WorkoutMediaEntity>
 
     @Query("SELECT * FROM WorkoutMediaEntity WHERE serverId = :id")
     fun getByServerId(id: Long): WorkoutMediaEntity
@@ -33,6 +33,9 @@ interface WorkoutMediaDao {
 
     @Update
     fun update(workoutMediaEntity: List<WorkoutMediaEntity>): Int
+
+    @Query("DELETE FROM WorkoutMediaEntity WHERE WorkoutMediaEntity.workoutId = :workoutId")
+    fun deleteByWorkout(workoutId: Long): Int
 
     @Delete
     fun delete(workoutMediaEntity: WorkoutMediaEntity): Int

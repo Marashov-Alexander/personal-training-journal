@@ -3,6 +3,7 @@ package ru.ok.technopolis.training.personal.views
 import android.Manifest
 import android.app.Activity
 import android.content.Intent
+import android.content.pm.PackageManager
 import android.net.Uri
 import android.provider.MediaStore
 import android.view.View.INVISIBLE
@@ -19,6 +20,7 @@ import ru.ok.technopolis.training.personal.items.ItemsList
 import ru.ok.technopolis.training.personal.items.MediaItem
 import kotlin.random.Random
 
+
 class MediaLoaderWrapper(
     private val fragment: BaseFragment,
     private val mediaRecycler: RecyclerView,
@@ -34,7 +36,7 @@ class MediaLoaderWrapper(
 
     init {
         editContentBtn.setOnClickListener {
-            ActivityCompat.requestPermissions(fragment.requireActivity(), arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 1)
+//            ActivityCompat.requestPermissions(fragment.requireActivity(), arrayOf(Manifest.permission.READ_EXTERNAL_STORAGE), 1)
             val intent = Intent(Intent.ACTION_PICK, MediaStore.Images.Media.EXTERNAL_CONTENT_URI)
             intent.putExtra(Intent.EXTRA_ALLOW_MULTIPLE, true)
             fragment.startActivityForResult(intent, MediaItem.PICK_IMAGE_REQUEST)
@@ -86,6 +88,10 @@ class MediaLoaderWrapper(
             mediaList.addLast(item)
             mediaRecycler.smoothScrollToPosition(mediaList.size() - 1)
         }
+    }
+
+    fun getLoadedData(): List<String> {
+        return mediaList.items.map { mediaItem -> mediaItem.uri }
     }
 
 }

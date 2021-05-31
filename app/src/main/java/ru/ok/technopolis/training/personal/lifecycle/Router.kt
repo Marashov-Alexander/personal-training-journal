@@ -57,8 +57,11 @@ class Router(private val activity: Activity) {
         showPage(Page.Fragment.NewExercise1, bundle)
     }
 
-    fun showNewExercisePage2() {
-        showPage(Page.Fragment.NewExercise2)
+    fun showNewExercisePage2(workoutId: Long, exerciseId: Long) {
+        val workoutIdBundle = Bundle(2)
+        workoutIdBundle.putLong(WORKOUT_ID_KEY, workoutId)
+        workoutIdBundle.putLong(EXERCISE_ID_KEY, exerciseId)
+        showPage(Page.Fragment.NewExercise2, workoutIdBundle)
     }
 
     fun showWorkoutPage(workoutId: Long) {
