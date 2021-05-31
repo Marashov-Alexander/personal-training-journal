@@ -6,6 +6,7 @@ import android.os.Bundle
 import ru.ok.technopolis.training.personal.activities.BaseFragmentActivity
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.AUTHOR_ID_KEY
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.COUNTERS_ID_KEY
+import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.EXERCISE_CREATING_ID_KEY
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.OPPONENT_ID_KEY
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.EXERCISE_ID_KEY
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.INDEX_ID_KEY
@@ -14,6 +15,7 @@ import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.PAGE_KEY
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.PROGRESS_ID_KEY
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.REST_ID_KEY
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.USER_ID_KEY
+import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.WORKOUT_CREATING_ID_KEY
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.WORKOUT_EXERCISES_ID_KEY
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.WORKOUT_ID_KEY
 import ru.ok.technopolis.training.personal.utils.logger.Logger
@@ -37,9 +39,10 @@ class Router(private val activity: Activity) {
         showPage(Page.Fragment.Chats)
     }
 
-    fun showNewWorkoutPage(workoutId: Long) {
-        val bundle = Bundle(1)
+    fun showNewWorkoutPage(workoutId: Long, creating: Boolean) {
+        val bundle = Bundle(2)
         bundle.putLong(WORKOUT_ID_KEY, workoutId)
+        bundle.putBoolean(WORKOUT_CREATING_ID_KEY, creating)
         showPage(Page.Fragment.NewWorkout, bundle)
     }
 
@@ -49,17 +52,21 @@ class Router(private val activity: Activity) {
         showPage(Page.Fragment.NewWorkout2, bundle)
     }
 
-    fun showNewExercisePage1(userId: Long, workoutId: Long, exerciseId: Long) {
-        val bundle = Bundle(2)
-        bundle.putLong(USER_ID_KEY, userId)
-        bundle.putLong(WORKOUT_ID_KEY, workoutId)
+    fun showNewExercisePage1(workoutId: Long?, exerciseId: Long, isCreating: Boolean) {
+        val bundle = Bundle(3)
+        if (workoutId != null) {
+            bundle.putLong(WORKOUT_ID_KEY, workoutId)
+        }
         bundle.putLong(EXERCISE_ID_KEY, exerciseId)
+        bundle.putBoolean(EXERCISE_CREATING_ID_KEY, isCreating)
         showPage(Page.Fragment.NewExercise1, bundle)
     }
 
-    fun showNewExercisePage2(workoutId: Long, exerciseId: Long) {
+    fun showNewExercisePage2(workoutId: Long?, exerciseId: Long) {
         val workoutIdBundle = Bundle(2)
-        workoutIdBundle.putLong(WORKOUT_ID_KEY, workoutId)
+        if (workoutId != null) {
+            workoutIdBundle.putLong(WORKOUT_ID_KEY, workoutId)
+        }
         workoutIdBundle.putLong(EXERCISE_ID_KEY, exerciseId)
         showPage(Page.Fragment.NewExercise2, workoutIdBundle)
     }

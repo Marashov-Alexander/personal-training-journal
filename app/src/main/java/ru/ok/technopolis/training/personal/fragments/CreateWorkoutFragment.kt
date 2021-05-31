@@ -43,10 +43,15 @@ class CreateWorkoutFragment : WorkoutFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
+        val isWorkoutCreating = (requireActivity().intent.extras?.get(Page.WORKOUT_CREATING_ID_KEY)) as Boolean
         workoutId = (requireActivity().intent.extras?.get(Page.WORKOUT_ID_KEY)) as Long
         userId = CurrentUserRepository.currentUser.value!!.id
 
-        activity?.base_toolbar?.title = getString(R.string.workout_creation)
+        if (isWorkoutCreating) {
+            activity?.base_toolbar?.title = getString(R.string.workout_creation)
+        } else {
+            activity?.base_toolbar?.title = getString(R.string.workout_editing)
+        }
         addExerciseButton = add_exercise_button
         workoutName = workout_name_text
         exercisesRecycler = exercises_recycler
@@ -77,14 +82,13 @@ class CreateWorkoutFragment : WorkoutFragment() {
             nextStepCard.setOnClickListener {
                 workout.name = workoutName.text.toString()
                 saveWorkoutInfo(workout) { workoutId ->
-                    // TODO: go to next step
                     router?.showNewWorkoutPage2(workoutId)
                 }
             }
 
             addExerciseButton.setOnClickListener {
                 createNewExercise(exercisesList.items.size) { exerciseId: Long ->
-                    router?.showNewExercisePage1(userId, workoutId, exerciseId)
+                    router?.showNewExercisePage1(workoutId, exerciseId, true)
                 }
             }
 
@@ -106,7 +110,7 @@ class CreateWorkoutFragment : WorkoutFragment() {
                 onEdit = {exerciseItem: ExerciseItem ->
                     if (!chooseMode) {
                         print("View exercise $exerciseItem clicked")
-                        router?.showNewExercisePage1(userId, workoutId, exerciseItem.exercise.id)
+                        router?.showNewExercisePage1(workoutId, exerciseItem.exercise.id, true)
                     }
                     chooseMode
                 },
@@ -184,7 +188,7 @@ class CreateWorkoutFragment : WorkoutFragment() {
                         addExerciseButton.setImageResource(R.drawable.ic_add_black_24dp)
                         addExerciseButton.setOnClickListener {
                             createNewExercise(exercisesList.items.size) { exerciseId: Long ->
-                                router?.showNewExercisePage1(userId, workoutId, exerciseId)
+                                router?.showNewExercisePage1(workoutId, exerciseId, true)
                             }
                         }
                     }

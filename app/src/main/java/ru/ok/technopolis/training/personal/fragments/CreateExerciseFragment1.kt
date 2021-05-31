@@ -11,8 +11,8 @@ import kotlinx.android.synthetic.main.view_appbar.*
 import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.db.entity.ExerciseEntity
 import ru.ok.technopolis.training.personal.db.entity.UserLevelEntity
+import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.EXERCISE_CREATING_ID_KEY
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.EXERCISE_ID_KEY
-import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.USER_ID_KEY
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.WORKOUT_ID_KEY
 import ru.ok.technopolis.training.personal.views.ExerciseParametersWrapper
 
@@ -20,8 +20,9 @@ import ru.ok.technopolis.training.personal.views.ExerciseParametersWrapper
 class CreateExerciseFragment1 : ExerciseFragment() {
 
     private var userId: Long = -1L
-    private var workoutId: Long = -1L
+    private var workoutId: Long? = null
     private var exerciseId: Long = -1L
+    private var isCreating: Boolean = false
     private lateinit var exercise: ExerciseEntity
     private lateinit var userLevel: UserLevelEntity
 
@@ -33,13 +34,17 @@ class CreateExerciseFragment1 : ExerciseFragment() {
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
 
-        activity?.base_toolbar?.title = getString(R.string.exercise_creation)
         activity?.let {
-            userId = (it.intent.extras?.get(USER_ID_KEY)) as Long
-            workoutId = (it.intent.extras?.get(WORKOUT_ID_KEY)) as Long
+            workoutId = (it.intent.extras?.get(WORKOUT_ID_KEY)) as? Long
             exerciseId = (it.intent.extras?.get(EXERCISE_ID_KEY)) as Long
+            isCreating = (it.intent.extras?.get(EXERCISE_CREATING_ID_KEY)) as Boolean
         }
 
+        if (isCreating) {
+            activity?.base_toolbar?.title = getString(R.string.exercise_creation)
+        } else {
+            activity?.base_toolbar?.title = getString(R.string.exercise_edit)
+        }
 
         loadExerciseInfo(userId, workoutId, exerciseId) { exercise, category, author, userLevel, levelsMap, maxLevel, mediaData ->
 
