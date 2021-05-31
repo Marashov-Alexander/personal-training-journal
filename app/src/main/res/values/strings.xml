@@ -379,4 +379,6 @@
     <string name="workout_editing">Edit workout</string>
     <string name="exercise_edit">Edit exercise</string>
 
+    <string name="percents_value" translatable="false">%d%</string>
+
 </resources>

@@ -22,7 +22,7 @@ data class ExerciseResultsHelper(
         }.groupBy { pair ->
             pair.second
         }.map { entry ->
-            ProgressItem(entry.value.sumBy { pair -> pair.first }.div(results.size).toFloat(), entry.key.substringBeforeLast('.'))
+            ProgressItem(entry.value.sumBy { pair -> pair.first }.div(results.size), entry.key.substringBeforeLast('.'))
         }.toMutableList()
     }
 

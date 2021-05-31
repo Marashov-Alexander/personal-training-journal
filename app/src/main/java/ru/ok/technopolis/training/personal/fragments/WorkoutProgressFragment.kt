@@ -2,6 +2,7 @@ package ru.ok.technopolis.training.personal.fragments
 
 import android.os.Bundle
 import android.view.View
+import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import kotlinx.android.synthetic.main.fragment_workout_progress.*
@@ -32,6 +33,9 @@ class WorkoutProgressFragment : WorkoutFragment() {
     private var chart: ProgressChartView? = null
     private var buttonGroup: ButtonGroupController? = null
     private var exerciseRecycler: RecyclerView? = null
+    private lateinit var titleText: TextView
+    private lateinit var bestResultDate: TextView
+    private lateinit var bestResultValue: TextView
 
     private lateinit var chartMode: ProgressChartView.ChartMode
     private lateinit var currentExerciseResult: ExerciseResultsHelper
@@ -42,12 +46,16 @@ class WorkoutProgressFragment : WorkoutFragment() {
         super.onViewCreated(view, savedInstanceState)
         scrollView = scroll_view
         chart = progress_chart
+        titleText = title
         exerciseRecycler = exercises_recycler
+        bestResultDate = best_result_date
+        bestResultValue = best_result_value
         activity?.base_toolbar?.title = getString(R.string.workout_progress)
         val workoutId = (activity?.intent?.extras?.get(Page.WORKOUT_ID_KEY)) as Long
         val userId = CurrentUserRepository.currentUser.value!!.id
 
         loadWorkoutProgress(userId, workoutId) { workoutEntity, exercisesResults ->
+            titleText.text = workoutEntity.name
             this.chartMode = ProgressChartView.ChartMode.DAY
             this.workoutEntity = workoutEntity
             this.exercisesResults = exercisesResults
@@ -114,16 +122,26 @@ class WorkoutProgressFragment : WorkoutFragment() {
                             }
                     )
             )
-            selectableList.select(0)
             itemsList.select(0)
-
-            chart?.invalidate()
+            val allBundle = itemsList.items.first()
+            currentExerciseResult = exercisesResults.find {erh -> erh.exercise.id == allBundle.itemId}!!
+            selectableList.select(0)
+            setResults(chartMode, currentExerciseResult)
         }
     }
 
     private fun setResults(chartMode: ProgressChartView.ChartMode, exerciseResultsHelper: ExerciseResultsHelper) {
         val results = exerciseResultsHelper.getResults(chartMode)
-        chart?.bindData(results, 100f, "% ")
+        chart?.bindData(results, 100, "% ")
+        val maxResult = results.maxBy { progressItem -> progressItem.value }
+        if (maxResult == null) {
+            bestResultDate.text = "-"
+            bestResultValue.text = "-"
+        } else {
+            bestResultDate.text = maxResult.date
+            bestResultValue.text = String.format(requireContext().resources.getString(R.string.percents_value), maxResult.value)
+        }
+        chart?.invalidate()
     }
 
     override fun onDetach() {

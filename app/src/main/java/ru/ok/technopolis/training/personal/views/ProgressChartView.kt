@@ -28,7 +28,7 @@ class ProgressChartView @JvmOverloads constructor(
 
     private val itemWidth: Int
     private var originalData: List<ProgressItem>
-    private var goalValue: Float
+    private var goalValue: Int
     private var measureUnit: String
 
     private val roundedFillPaint = Paint()
@@ -107,7 +107,7 @@ class ProgressChartView @JvmOverloads constructor(
 
         itemWidth = itemWidthFromAttr
         originalData = immutableListOf()
-        goalValue = 100f
+        goalValue = 100
         measureUnit = "%"
 
         fillPaint.style = Paint.Style.FILL
@@ -240,7 +240,7 @@ class ProgressChartView @JvmOverloads constructor(
         this.unlockListener = unlockListener
     }
 
-    fun bindData(data: List<ProgressItem>, goal: Float, units: String) {
+    fun bindData(data: List<ProgressItem>, goal: Int, units: String) {
         originalData = data
         goalValue = goal
         measureUnit = units
@@ -251,8 +251,8 @@ class ProgressChartView @JvmOverloads constructor(
             return
         }
 
-        val maxValue: Float = max1(originalData.maxBy { it.value }!!.value, goalValue)
-        val startValue: Float = originalData.first().value
+        val maxValue: Int = kotlin.math.max(originalData.maxBy { it.value }!!.value, goalValue)
+        val startValue: Int = originalData.first().value
         val borderValue = maxValue * 1.25f
         val measuredHeight = measuredHeight - paddingTop - paddingBottom
         val chartHeight = measuredHeight * 0.8f
