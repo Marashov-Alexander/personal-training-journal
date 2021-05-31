@@ -51,11 +51,13 @@ class ExerciseViewFragment : ExerciseFragment() {
     private var shareButton: CardView? = null
 
     private var exercise: ShortExerciseItem? = null
+    var exerciseId: Long? = null
+    var workoutId: Long? = null
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
 
-        val exerciseId = (activity?.intent?.extras?.get(Page.EXERCISE_ID_KEY)) as Long
-        val workoutId = (activity?.intent?.extras?.get(Page.WORKOUT_ID_KEY) as? Long)
+        exerciseId = (activity?.intent?.extras?.get(Page.EXERCISE_ID_KEY)) as Long
+        workoutId = (activity?.intent?.extras?.get(Page.WORKOUT_ID_KEY) as? Long)
 
         super.onViewCreated(view, savedInstanceState)
         exerciseShortInfoRecycler = view.exercise_scroll_info
@@ -71,11 +73,11 @@ class ExerciseViewFragment : ExerciseFragment() {
         shareButton = view.share_card
         shareButton?.setOnClickListener {
 //            router?.shareElement(exerciseId, null)
-            ShareDialog(exerciseId, false)
+            ShareDialog(exerciseId!!, false)
                     .show(requireActivity().supportFragmentManager, "ShareDialog")
         }
 
-        loadExerciseInfo(userId, workoutId, exerciseId) { exercise, category, author, userLevel, levelsMap, maxLevel, mediaData ->
+        loadExerciseInfo(userId, workoutId, exerciseId!!) { exercise, category, author, userLevel, levelsMap, maxLevel, mediaData ->
             setWorkoutDummy(exercise, author, category)
 
             val mediaList = ItemsList<MediaItem>(mutableListOf())
@@ -102,6 +104,7 @@ class ExerciseViewFragment : ExerciseFragment() {
                 editable = false
             )
         }
+        setHasOptionsMenu(true)
     }
 
 
@@ -143,21 +146,15 @@ class ExerciseViewFragment : ExerciseFragment() {
     }
 
     override fun onCreateOptionsMenu(menu: Menu, inflater: MenuInflater) {
-        Logger.d(this, "onCreateOptionsMenu")
-        inflater.inflate(R.menu.change_menu, menu)
 
-        val button: MenuItem = menu.findItem(R.id.change_button)
+        inflater.inflate(R.menu.edit_menu, menu)
 
-//        if (exercise not in currentUser.exercises) {
-        button.setIcon(R.drawable.ic_add_black_24dp)
-//        }
+        val editButton: MenuItem = menu.findItem(R.id.edit_item)
+        editButton.setOnMenuItemClickListener {
 
-        button.setOnMenuItemClickListener {
-//             if (exercise not in currentUser.exercises) {
-
+            router?.showNewExercisePage1(1, workoutId!!, exerciseId!!)
             true
         }
-
     }
 
     override fun getFragmentLayoutId(): Int = R.layout.fragment_view_exercise
