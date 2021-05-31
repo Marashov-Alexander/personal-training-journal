@@ -64,9 +64,9 @@ abstract class CategoryExerciseFragment : BaseFragment() {
             database!!.let {
                 val newExercise = ExerciseEntity("", "", "Не указано",1, false, userId)
                 newExercise.id = it.exerciseDao().insert(newExercise)
-                val nevExerciseRest = ExerciseParameterEntity(newExercise.id, 1)
+                val nevExerciseRest = ExerciseParameterEntity(newExercise.id, 1L)
                 nevExerciseRest.id = it.exerciseParameterDao().insert(nevExerciseRest)
-                val nevExerciseRepeats = ExerciseParameterEntity(newExercise.id, 2)
+                val nevExerciseRepeats = ExerciseParameterEntity(newExercise.id, 2L)
                 nevExerciseRepeats.id = it.exerciseParameterDao().insert(nevExerciseRepeats)
                 withContext(Dispatchers.Main) {
                     actionsAfter.invoke(newExercise.id)

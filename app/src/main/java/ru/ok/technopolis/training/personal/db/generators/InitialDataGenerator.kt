@@ -19,6 +19,8 @@ class InitialDataGenerator {
     companion object {
         fun getParameters(context: Context): List<ParameterEntity> {
             return listOf(
+                    ParameterEntity(context.getString(R.string.rest), context.getString(R.string.sec), ParameterEntity.EQUALS_BETTER, ParameterEntity.INPUT_SIMPLE, true, ParameterEntity.PARAMETER_REST),
+                    ParameterEntity(context.getString(R.string.repeat), context.getString(R.string.quantity), ParameterEntity.EQUALS_BETTER, ParameterEntity.INPUT_SIMPLE, true, ParameterEntity.PARAMETER_REPEATS),
                     ParameterEntity(context.resources.getString(R.string.time), context.resources.getString(R.string.sec)),
                     ParameterEntity(context.resources.getString(R.string.distance), context.resources.getString(R.string.m)),
                     ParameterEntity(context.resources.getString(R.string.weight), context.resources.getString(R.string.kg))
@@ -173,13 +175,6 @@ class InitialDataGenerator {
 
         fun getTestAuthorExercise(): UserExerciseEntity {
             return UserExerciseEntity(10, 2, true)
-        }
-
-        fun setRestParam(context: Context): ParameterEntity {
-            return ParameterEntity(context.getString(R.string.rest), context.getString(R.string.sec), ParameterEntity.EQUALS_BETTER, ParameterEntity.INPUT_SIMPLE, true, ParameterEntity.PARAMETER_REST)
-        }
-        fun setRepeatParam(context: Context): ParameterEntity {
-            return ParameterEntity(context.getString(R.string.repeats), context.getString(R.string.quantity), ParameterEntity.EQUALS_BETTER, ParameterEntity.INPUT_SIMPLE, true, ParameterEntity.PARAMETER_REPEATS)
         }
 
     }

@@ -91,10 +91,17 @@ abstract class WorkoutFragment : BaseFragment() {
             database!!.let {
                 val newExercise = ExerciseEntity("", "", "Не указано",1, false, userId)
                 newExercise.id = it.exerciseDao().insert(newExercise)
-                val nevExerciseRest = ExerciseParameterEntity(newExercise.id, 1)
+
+                val nevExerciseRest = ExerciseParameterEntity(newExercise.id, 1L)
                 nevExerciseRest.id = it.exerciseParameterDao().insert(nevExerciseRest)
-                val nevExerciseRepeats = ExerciseParameterEntity(newExercise.id, 2)
+                val rstLevel = LevelExerciseParameterEntity(1, 15f, nevExerciseRest.id)
+                it.levelExerciseParameterDao().insert(rstLevel)
+
+                val nevExerciseRepeats = ExerciseParameterEntity(newExercise.id, 2L)
                 nevExerciseRepeats.id = it.exerciseParameterDao().insert(nevExerciseRepeats)
+                val rptLevel = LevelExerciseParameterEntity(1, 1f, nevExerciseRepeats.id)
+                it.levelExerciseParameterDao().insert(rptLevel)
+
                 if (workoutId != null) {
                     val newWorkoutExercise = WorkoutExerciseEntity(workoutId, newExercise.id, orderNumber)
                     newWorkoutExercise.id = it.workoutExerciseDao().insert(newWorkoutExercise)
