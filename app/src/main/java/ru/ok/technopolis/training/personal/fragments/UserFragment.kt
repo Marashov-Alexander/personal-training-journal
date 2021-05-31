@@ -125,6 +125,10 @@ abstract class UserFragment : BaseFragment() {
         return userWorkouts.map { workout ->
             val category = it.workoutCategoryDao().getById(workout.categoryId)
             val sport = it.workoutSportDao().getById(workout.sportId)
+            var image = it.workoutMediaDao().getByFirstWorkoutId(workout.id)
+            if (image.isNullOrBlank()) {
+                image = " "
+            }
             val downloadsNumber = 0
             val rank = 0.0
             ShortWorkoutItem(
@@ -133,7 +137,8 @@ abstract class UserFragment : BaseFragment() {
                     category.name,
                     sport.name,
                     downloadsNumber,
-                    rank
+                    rank,
+                    image
             )
         }.toMutableList()
     }
@@ -187,6 +192,10 @@ abstract class UserFragment : BaseFragment() {
     private fun formExercises(userExercises: List<ExerciseEntity>, it: AppDatabase): MutableList<ShortExerciseItem> {
         return userExercises.map { exercise ->
             val category = it.exerciseCategoryDao().getById(exercise.categoryId)
+            var image = it.exerciseMediaDao().getFirstByExerciseId(exercise.id)
+            if (image.isNullOrBlank()) {
+                image = " "
+            }
             val downloadsNumber = 0
             val rank = 0.0
             ShortExerciseItem(
@@ -194,7 +203,8 @@ abstract class UserFragment : BaseFragment() {
                     exercise,
                     category.name,
                     downloadsNumber,
-                    rank
+                    rank,
+                    image
             )
         }.toMutableList()
     }

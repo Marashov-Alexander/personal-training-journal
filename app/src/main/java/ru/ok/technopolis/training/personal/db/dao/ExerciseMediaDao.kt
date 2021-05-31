@@ -22,6 +22,9 @@ interface ExerciseMediaDao {
     @Query("SELECT * FROM ExerciseMediaEntity WHERE serverId = :id")
     fun getByServerId(id: Long): ExerciseMediaEntity
 
+    @Query("SELECT url FROM ExerciseMediaEntity WHERE exerciseId = :exerciseId LIMIT 1")
+    fun getFirstByExerciseId(exerciseId: Long): String
+
     @Insert(onConflict = OnConflictStrategy.REPLACE)
     fun insert(exerciseMediaEntity: ExerciseMediaEntity): Long
 

@@ -8,5 +8,6 @@ data class ShortExerciseItem (
         var exercise: ExerciseEntity,
         var category: String,
         val downloadsNumber: Int,
-        val rank: Double
+        val rank: Double,
+        var url: String
 ): WithId

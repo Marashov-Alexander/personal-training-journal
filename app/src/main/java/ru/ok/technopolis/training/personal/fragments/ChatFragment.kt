@@ -121,6 +121,10 @@ class ChatFragment : UserFragment() {
         val workout = appDatabase.workoutDao().getById(message.userWorkoutId!!)
         val category = appDatabase.workoutCategoryDao().getById(workout.categoryId)
         val sport = appDatabase.workoutSportDao().getById(workout.sportId)
+        var image = appDatabase.workoutMediaDao().getByFirstWorkoutId(workout.id)
+        if (image.isNullOrBlank()) {
+            image = " "
+        }
         val downloadsNumber = 0
         val rank = 0.0
         val elem = ShortWorkoutItem(
@@ -129,7 +133,8 @@ class ChatFragment : UserFragment() {
                 category.name,
                 sport.name,
                 downloadsNumber,
-                rank
+                rank,
+                image
         )
         return elem
     }
@@ -137,6 +142,10 @@ class ChatFragment : UserFragment() {
     private fun formExerciseItem(appDatabase: AppDatabase, message: MessageEntity): ShortExerciseItem {
         val exercise = appDatabase.exerciseDao().getById(message.userExerciseId!!)
         val category = appDatabase.exerciseCategoryDao().getById(exercise.categoryId)
+        var image = appDatabase.exerciseMediaDao().getFirstByExerciseId(exercise.id)
+        if (image.isNullOrBlank()) {
+            image = " "
+        }
         val downloadsNumber = 0
         val rank = 0.0
         val elem = ShortExerciseItem(
@@ -144,7 +153,8 @@ class ChatFragment : UserFragment() {
                 exercise,
                 category.name,
                 downloadsNumber,
-                rank
+                rank,
+                image
         )
         return elem
     }

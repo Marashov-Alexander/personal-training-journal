@@ -9,5 +9,6 @@ data class ShortWorkoutItem(
         var category: String,
         var sport: String,
         val downloadsNumber: Int,
-        val rank: Double
+        val rank: Double,
+        val pictureUrl: String
 ): WithId
