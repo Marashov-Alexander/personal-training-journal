@@ -11,6 +11,6 @@ data class ChatItem (
         val pictureUrlStr: String?,
         val description: String?,
         val unreadMessages: Int,
-        val lastMessageTime: Time?,
+        val lastMessageTime: String,
         val owner: Long
 ) : WithId

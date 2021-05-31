@@ -18,7 +18,7 @@ class ChatViewHolder (
     private var lastMessageTime: TextView = itemView.last_message_time
     private var unreadMessageNumber: TextView = itemView.unread_messages_number
 
-    private val formatter: DateFormat = DateFormat.getTimeInstance(DateFormat.SHORT)
+//    private val formatter: DateFormat = DateFormat.getTimeInstance(DateFormat.SHORT)
     override fun bind(item: ChatItem) {
         update(item)
     }
@@ -27,7 +27,7 @@ class ChatViewHolder (
         chatIcon.setImageURI(item.pictureUrlStr)
         chatName.text = item.name
         chatInfo.text = item.description
-        lastMessageTime.text = formatter.format(item.lastMessageTime)
+        lastMessageTime.text = item.lastMessageTime
         unreadMessageNumber.text = item.unreadMessages.toString()
         if (item.unreadMessages == 0) {
             unreadMessageNumber.visibility = View.INVISIBLE

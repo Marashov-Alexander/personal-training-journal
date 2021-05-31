@@ -33,7 +33,7 @@ class ShareFragment: UserFragment() {
         peoplesRecycler = view.people_list
 
 
-            getChats(userId!!) { authors ->
+            getChatsProfiles(userId!!) { authors ->
                 val authorsList = ItemsList(authors)
                 val workoutsLayoutManager = LinearLayoutManager(activity, RecyclerView.VERTICAL, false)
                 peoplesRecycler?.layoutManager = workoutsLayoutManager

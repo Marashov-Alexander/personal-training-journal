@@ -6,6 +6,7 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.ok.technopolis.training.personal.db.AppDatabase
 import ru.ok.technopolis.training.personal.db.entity.ExerciseEntity
+import ru.ok.technopolis.training.personal.db.entity.MessageEntity
 import ru.ok.technopolis.training.personal.db.entity.SubscriptionEntity
 import ru.ok.technopolis.training.personal.db.entity.UserEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutEntity
@@ -213,7 +214,7 @@ abstract class UserFragment : BaseFragment() {
         }
     }
 
-    protected fun getUserSubscribtionsIdList (userId: Long,
+    protected fun getUserSubscriptionsIdList (userId: Long,
                                               actionsAfter: (
                                               List<Long>
                                       ) -> Unit) {
@@ -256,8 +257,8 @@ abstract class UserFragment : BaseFragment() {
         }
     }
 
-    protected fun getChats(userId: Long,
-                           actionsAfter: (
+    protected fun getChatsProfiles(userId: Long,
+                                   actionsAfter: (
                                    MutableList<ProfileItem>
                            ) -> Unit) {
         GlobalScope.launch(Dispatchers.IO) {
@@ -268,6 +269,22 @@ abstract class UserFragment : BaseFragment() {
                 subscribers = subscribers.toList().distinct().toMutableList()
                 withContext(Dispatchers.Main) {
                     actionsAfter.invoke(subscribers)
+                }
+            }
+        }
+    }
+
+    protected fun getChatLastMessage(user1: Long, user2: Long,
+                           actionsAfter: (
+                                 MessageEntity
+                           ) -> Unit) {
+        GlobalScope.launch(Dispatchers.IO) {
+            database!!.let { db ->
+                val messages = db.messageDao().getDialog(user1, user2)
+                 messages.sortBy { it.timestamp }
+               val message = messages.last()
+                withContext(Dispatchers.Main) {
+                    actionsAfter.invoke(message)
                 }
             }
         }
