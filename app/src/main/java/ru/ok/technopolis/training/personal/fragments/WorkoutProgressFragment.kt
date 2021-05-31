@@ -18,6 +18,7 @@ import ru.ok.technopolis.training.personal.db.entity.UserWorkoutEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutEntity
 import ru.ok.technopolis.training.personal.items.BundleItem
 import ru.ok.technopolis.training.personal.items.ExerciseItem
+import ru.ok.technopolis.training.personal.items.ExerciseResultsHelper
 import ru.ok.technopolis.training.personal.items.ProgressItem
 import ru.ok.technopolis.training.personal.items.SelectableItem
 import ru.ok.technopolis.training.personal.items.SingleSelectableList
@@ -52,7 +53,7 @@ class WorkoutProgressFragment : WorkoutFragment() {
         val workoutId = (activity?.intent?.extras?.get(Page.WORKOUT_ID_KEY)) as Long
         val userId = CurrentUserRepository.currentUser.value!!.id
 
-        loadWorkoutProgress(userId, workoutId, null) { workoutEntity, userWorkoutEntity, exercises, results ->
+        loadWorkoutProgress(userId, workoutId) { workoutEntity, exercisesResults ->
             chart?.setScrollLockListener(
                     lockListener = {
                         scrollView?.isEnableScrolling = false
@@ -62,10 +63,10 @@ class WorkoutProgressFragment : WorkoutFragment() {
                     }
             )
 
-            val exercisesBundles = exercises.map { exercise ->
-                BundleItem(exercise.id, exercise.exercise.id, exercise.exercise.name)
+            val exercisesBundles = exercisesResults.map { exerciseResult ->
+                BundleItem(exerciseResult.exercise.id, exerciseResult.exercise.exercise.id, exerciseResult.exercise.exercise.name)
             }.toMutableList()
-//            exercisesBundles.add(0, BundleItem("0", 0, "Все"))
+            exercisesBundles.add(0, BundleItem("0", 0, "Все"))
 
             val itemsList = SingleSelectableList(exercisesBundles)
 
@@ -83,11 +84,6 @@ class WorkoutProgressFragment : WorkoutFragment() {
             exerciseRecycler?.layoutManager = layoutManager
 
 
-            chart?.bindData(
-                    results,
-                    100f,
-                    "% "
-            )
 
             val selectableList = SingleSelectableList(mutableListOf(SelectableItem("0"), SelectableItem("1"), SelectableItem("2"), SelectableItem("3")))
 
@@ -117,8 +113,23 @@ class WorkoutProgressFragment : WorkoutFragment() {
                     )
             )
             selectableList.select(0)
+
             chart?.invalidate()
         }
+    }
+
+
+    fun switchChartMode(mode: ProgressChartView.ChartMode) {
+    setResults(mode, exercisesResults)
+    }
+
+    private fun setResults(chartMode: ProgressChartView.ChartMode, exerciseResultsHelper: ExerciseResultsHelper) {
+        exerciseResultsHelper.getResults(chartMode)
+        chart?.bindData(
+                results,
+                100f,
+                "% "
+        )
     }
 
     override fun onDetach() {
@@ -129,22 +140,17 @@ class WorkoutProgressFragment : WorkoutFragment() {
     private fun loadWorkoutProgress(
             userId: Long,
             workoutId: Long,
-            exerciseId: Long?,
             actionsAfter: (
                     WorkoutEntity,
-                    UserWorkoutEntity?,
-                    MutableList<ExerciseItem>,
-                    MutableList<ProgressItem>
+                   List<ExerciseResultsHelper>
             ) -> Unit) {
         GlobalScope.launch(Dispatchers.IO) {
             database!!.let {
                 val workoutExercisesByWorkout = it.workoutExerciseDao().getAllByWorkout(workoutId)
                 val workout = it.workoutDao().getById(workoutId)
                 val userWorkoutEntity = it.userWorkoutDao().getById(userId, workout.id)
-                val resultsList: List<ResultEntity>
                 val progressItems: MutableList<ProgressItem>
                 val exercises: MutableList<ExerciseItem>
-                if (exerciseId == null) {
                     exercises = workoutExercisesByWorkout.map { workoutExercise ->
                         val exercise = it.exerciseDao().getById(workoutExercise.exerciseId)
                         val importantParameters = it.parameterDao().getImportantParameters(exercise.id)
@@ -160,37 +166,16 @@ class WorkoutProgressFragment : WorkoutFragment() {
                                 description
                         )
                     }.toMutableList()
-
-                    resultsList = it.resultsDao().getByWorkoutAndUser(workoutId, userId)
-                } else {
-                    val workoutExercise = it.workoutExerciseDao().getById(workoutId, exerciseId)
-                    val exercise = it.exerciseDao().getById(exerciseId)
-                    val importantParameters = it.parameterDao().getImportantParameters(exercise.id)
-                    val description =
-                            if (importantParameters.isEmpty())
-                                ""
-                            else
-                                importantParameters.map { info -> "${info.name}: ${info.value} ${info.units}" }.reduce { acc, str -> "$acc, $str" }
-                    exercises = mutableListOf(ExerciseItem(
-                            Random.nextInt().toString(),
-                            exercise,
-                            workoutExercise,
-                            description
-                    ))
-                    resultsList = it.resultsDao().getByWorkoutAndUserAndExercise(workoutId, userId, exerciseId)
+//                val resultsList = it.resultsDao().getByWorkoutAndUser(workoutId, userId)
+                val exercisesResults =exercises.map {exerciseItem ->
+                    val resultsList = it.resultsDao().getByWorkoutAndUserAndExercise(workoutId, userId, exerciseItem.exercise.id)
+                    ExerciseResultsHelper(
+                            exerciseItem,
+                            resultsList
+                    )
                 }
-
-                    progressItems = resultsList.map { resultEntity ->
-                        val result = getResult(resultEntity)
-                        Pair(result, formatter.format(Date(resultEntity.timestamp)))
-                    }.groupBy { pair ->
-                        pair.second
-                    }.map { entry ->
-                        ProgressItem(entry.value.sumBy { pair -> pair.first }.div(resultsList.size).toFloat(), entry.key.substringBeforeLast('.'))
-                    }.toMutableList()
-
                 withContext(Dispatchers.Main) {
-                    actionsAfter.invoke(workout, userWorkoutEntity, exercises, progressItems)
+                    actionsAfter.invoke(workout, exercisesResults)
                 }
             }
         }

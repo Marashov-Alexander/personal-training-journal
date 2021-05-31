@@ -37,20 +37,4 @@ abstract class BaseFragment : Fragment() {
 
     protected open fun isBottomNavVisible(): Boolean = true
 
-    fun switchChartMode(mode: ProgressChartView.ChartMode) {
-        when (mode) {
-            ProgressChartView.ChartMode.DAY -> {
-
-            }
-            ProgressChartView.ChartMode.WEEK -> {
-
-            }
-            ProgressChartView.ChartMode.MONTH -> {
-
-            }
-            ProgressChartView.ChartMode.YEAR -> {
-
-            }
-        }
-    }
 }
