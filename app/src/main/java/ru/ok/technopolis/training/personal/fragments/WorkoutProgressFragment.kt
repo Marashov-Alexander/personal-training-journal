@@ -115,6 +115,7 @@ class WorkoutProgressFragment : WorkoutFragment() {
                     )
             )
             selectableList.select(0)
+            itemsList.select(0)
 
             chart?.invalidate()
         }

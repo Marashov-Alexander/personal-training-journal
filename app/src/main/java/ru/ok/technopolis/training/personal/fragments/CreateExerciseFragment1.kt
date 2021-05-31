@@ -14,6 +14,7 @@ import ru.ok.technopolis.training.personal.db.entity.UserLevelEntity
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.EXERCISE_CREATING_ID_KEY
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.EXERCISE_ID_KEY
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.WORKOUT_ID_KEY
+import ru.ok.technopolis.training.personal.repository.CurrentUserRepository
 import ru.ok.technopolis.training.personal.views.ExerciseParametersWrapper
 
 
@@ -45,6 +46,8 @@ class CreateExerciseFragment1 : ExerciseFragment() {
         } else {
             activity?.base_toolbar?.title = getString(R.string.exercise_edit)
         }
+
+        userId = CurrentUserRepository.currentUser.value!!.id
 
         loadExerciseInfo(userId, workoutId, exerciseId) { exercise, category, author, userLevel, levelsMap, maxLevel, mediaData ->
 
