@@ -9,6 +9,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.fragment_next_exercise.*
 import kotlinx.android.synthetic.main.item_media_viewer.*
+import kotlinx.android.synthetic.main.view_appbar.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -62,8 +63,9 @@ class ActivePreExerciseFragment : ExerciseFragment() {
         progress[currentIndex] = ProgressRectItem.STATUS_CURRENT
 
         val workoutExerciseId = workoutExercises[currentIndex]
-//        val currentRepeatCounter = counters[currentIndex]
+        val currentRepeatCounter = counters[currentIndex]
         loadPreExerciseInfo(workoutExerciseId) { wex, exercise, author, mediaData ->
+            activity?.base_toolbar?.title = getString(R.string.exercise) + " \"${exercise.name}\" ($currentRepeatCounter/${wex.counter})"
             startCard?.setOnClickListener {
                 // TODO: configure userId and workoutId
                 println("On start exercise")

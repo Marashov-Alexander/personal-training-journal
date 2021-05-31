@@ -10,6 +10,7 @@ import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.fragment_active_exercise.*
 import kotlinx.android.synthetic.main.item_media_viewer.*
+import kotlinx.android.synthetic.main.view_appbar.*
 import kotlinx.coroutines.Dispatchers
 import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
@@ -82,6 +83,7 @@ class ActiveExerciseFragment : ExerciseFragment() {
                     workoutExercise.workoutId,
                     workoutExercise.exerciseId
             ) { exercise, category, author, userLevel, levelsMap, maxLevel, mediaData ->
+                activity?.base_toolbar?.title = getString(R.string.exercise) + " \"${exercise.name}\" ($currentRepeatCounter/${workoutExercise.counter})"
                 // TODO: load repeats count from parameters
                 mediaViewer = MediaViewerWrapper(
                         this,
