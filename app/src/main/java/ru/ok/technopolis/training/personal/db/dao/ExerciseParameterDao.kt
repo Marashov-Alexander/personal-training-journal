@@ -23,7 +23,7 @@ interface ExerciseParameterDao {
     @Query("SELECT * FROM ExerciseParameterEntity WHERE exerciseId=:exerciseId")
     fun getAllByExercise(exerciseId: Long): List<ExerciseParameterEntity>
 
-    @Query("SELECT pe.id, pe.input, pe.measureUnit, pe.name, pe.resultType, pe.serverId, pe.showInDescription FROM ParameterEntity AS pe " +
+    @Query("SELECT pe.id, pe.input, pe.measureUnit, pe.name, pe.resultType, pe.serverId, pe.showInDescription, pe.parameterType FROM ParameterEntity AS pe " +
         "JOIN ExerciseParameterEntity AS epe ON pe.id = epe.parameterId " +
         "WHERE epe.exerciseId = :exerciseId")
     fun getParametersForExercise(exerciseId: Long): List<ParameterEntity>

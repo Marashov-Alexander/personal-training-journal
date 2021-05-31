@@ -10,7 +10,6 @@ import retrofit2.http.Headers
 import retrofit2.http.PATCH
 import retrofit2.http.POST
 import retrofit2.http.Path
-import ru.ok.technopolis.training.personal.db.dao.ParameterResultDao
 import ru.ok.technopolis.training.personal.dto.UserDto
 import ru.ok.technopolis.training.personal.dto.UserSignUpDto
 import ru.ok.technopolis.training.personal.dto.db.DoneExerciseDto

@@ -14,19 +14,19 @@ class ProgressRectViewHolder(
 
     override fun bind(item: ProgressRectItem) {
         when (item.status) {
-            ProgressRectItem.ProgressStatus.PASSED -> {
+            ProgressRectItem.STATUS_PASSED -> {
                 rect.setBackgroundColor(itemView.context.getColor(R.color.green_progress))
                 rect.elevation = 0f
             }
-            ProgressRectItem.ProgressStatus.FAILED -> {
+            ProgressRectItem.STATUS_FAILED -> {
                 rect.setBackgroundColor(itemView.context.getColor(R.color.red))
                 rect.elevation = 0f
             }
-            ProgressRectItem.ProgressStatus.CURRENT -> {
+            ProgressRectItem.STATUS_CURRENT -> {
                 rect.setBackgroundColor(itemView.context.getColor(R.color.magic_mint))
                 rect.elevation = elevation
             }
-            ProgressRectItem.ProgressStatus.FUTURE -> {
+            ProgressRectItem.STATUS_FUTURE -> {
                 rect.setBackgroundColor(itemView.context.getColor(R.color.white))
                 rect.elevation = 0f
             }

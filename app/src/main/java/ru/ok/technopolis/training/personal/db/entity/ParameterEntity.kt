@@ -11,6 +11,7 @@ data class ParameterEntity(
     @ColumnInfo var resultType: Int = GREATER_BETTER,
     @ColumnInfo var input: Int = INPUT_SIMPLE,
     @ColumnInfo var showInDescription: Boolean = false,
+    @ColumnInfo var parameterType: Int = PARAMETER_ORDINARY,
     @ColumnInfo var serverId: Long = -1L,
     @PrimaryKey(autoGenerate = true) var id: Long = 0
 ) : WithServerId {
@@ -25,5 +26,9 @@ data class ParameterEntity(
         const val GREATER_BETTER = 1
         const val EQUALS_BETTER = 2
         const val LESS_BETTER = 3
+
+        const val PARAMETER_ORDINARY = 0
+        const val PARAMETER_REPEATS = 1
+        const val PARAMETER_REST = 2
     }
 }

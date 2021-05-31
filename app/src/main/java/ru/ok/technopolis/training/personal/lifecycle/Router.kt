@@ -5,11 +5,16 @@ import android.content.Intent
 import android.os.Bundle
 import ru.ok.technopolis.training.personal.activities.BaseFragmentActivity
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.AUTHOR_ID_KEY
+import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.COUNTERS_ID_KEY
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.OPPONENT_ID_KEY
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.EXERCISE_ID_KEY
+import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.INDEX_ID_KEY
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.MESSAGE_ID_KEY
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.PAGE_KEY
+import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.PROGRESS_ID_KEY
+import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.REST_ID_KEY
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.USER_ID_KEY
+import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.WORKOUT_EXERCISES_ID_KEY
 import ru.ok.technopolis.training.personal.lifecycle.Page.Companion.WORKOUT_ID_KEY
 import ru.ok.technopolis.training.personal.utils.logger.Logger
 import kotlin.reflect.full.createInstance
@@ -88,18 +93,29 @@ class Router(private val activity: Activity) {
         showPage(Page.Fragment.TrainingView)
     }
 
-    fun showActiveExercisePage(userId: Long, workoutId: Long) {
-        val workoutIdBundle = Bundle(2)
-        workoutIdBundle.putLong(USER_ID_KEY, userId)
-        workoutIdBundle.putLong(WORKOUT_ID_KEY, workoutId)
-        showPage(Page.Fragment.ActiveExercise, workoutIdBundle)
+    fun showActiveExercisePage(currentIndex: Int, workoutExercises: LongArray, counters: IntArray, progress: IntArray) {
+        val bundle = Bundle(4)
+        bundle.putInt(INDEX_ID_KEY, currentIndex)
+        bundle.putLongArray(WORKOUT_EXERCISES_ID_KEY, workoutExercises)
+        bundle.putIntArray(COUNTERS_ID_KEY, counters)
+        bundle.putIntArray(PROGRESS_ID_KEY, progress)
+        showPage(Page.Fragment.ActiveExercise, bundle)
     }
 
-    fun showActivePreExercisePage(userId: Long, workoutId: Long) {
-        val workoutIdBundle = Bundle(2)
-        workoutIdBundle.putLong(USER_ID_KEY, userId)
-        workoutIdBundle.putLong(WORKOUT_ID_KEY, workoutId)
-        showPage(Page.Fragment.ActivePreExercise, workoutIdBundle)
+    fun showActivePreExercisePage(
+            currentIndex: Int,
+            workoutExercises: LongArray,
+            counters: IntArray,
+            progress: IntArray,
+            restValue: Int
+    ) {
+        val bundle = Bundle(5)
+        bundle.putInt(INDEX_ID_KEY, currentIndex)
+        bundle.putLongArray(WORKOUT_EXERCISES_ID_KEY, workoutExercises)
+        bundle.putIntArray(COUNTERS_ID_KEY, counters)
+        bundle.putIntArray(PROGRESS_ID_KEY, progress)
+        bundle.putInt(REST_ID_KEY, restValue)
+        showPage(Page.Fragment.ActivePreExercise, bundle)
     }
 
     fun showWorkoutDonePage(userId: Long, workoutId: Long) {

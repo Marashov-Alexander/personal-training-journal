@@ -17,6 +17,9 @@ interface WorkoutExerciseDao {
     @Query("SELECT * FROM WorkoutExerciseEntity WHERE workoutId=:workoutId")
     fun getAllByWorkout(workoutId: Long): List<WorkoutExerciseEntity>
 
+    @Query("SELECT * FROM WorkoutExerciseEntity WHERE id=:workoutExerciseId")
+    fun getById(workoutExerciseId: Long): WorkoutExerciseEntity
+
     @Query("SELECT * FROM WorkoutExerciseEntity WHERE workoutId=:workoutId AND exerciseId=:exerciseId")
     fun getById(workoutId: Long, exerciseId: Long): WorkoutExerciseEntity
 
