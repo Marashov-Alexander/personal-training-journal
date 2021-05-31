@@ -102,21 +102,15 @@ class WorkoutProgressFragment : WorkoutFragment() {
                                 chartMode = ProgressChartView.ChartMode.DAY
                                 setResults(chartMode, currentExerciseResult)
                             },
-                            SelectableButtonWrapper(week_mode, week_chosen, week_line) {
+                            SelectableButtonWrapper(month_mode, month_chosen, month_line) {
                                 println("Clicked 1")
                                 selectableList.select(1)
-                                chartMode = ProgressChartView.ChartMode.WEEK
-                                setResults(chartMode, currentExerciseResult)
-                            },
-                            SelectableButtonWrapper(month_mode, month_chosen, month_line) {
-                                println("Clicked 2")
-                                selectableList.select(2)
                                 chartMode = ProgressChartView.ChartMode.MONTH
                                 setResults(chartMode, currentExerciseResult)
                             },
                             SelectableButtonWrapper(year_mode, year_chosen, year_line) {
-                                println("Clicked 3")
-                                selectableList.select(3)
+                                println("Clicked 2")
+                                selectableList.select(2)
                                 chartMode = ProgressChartView.ChartMode.YEAR
                                 setResults(chartMode, currentExerciseResult)
                             }

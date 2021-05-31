@@ -331,6 +331,6 @@ class ProgressChartView @JvmOverloads constructor(
     }
 
     enum class ChartMode {
-        DAY, WEEK, MONTH, YEAR
+        DAY, MONTH, YEAR
     }
 }
