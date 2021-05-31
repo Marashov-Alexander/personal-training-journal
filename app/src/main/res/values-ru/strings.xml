@@ -338,4 +338,6 @@
     <string name="subscriber_text">Подписчики</string>
     <string name="want_to_share">Хочу поделиться: </string>
     <string name="no_thank_you">Нет, спасибо</string>
+    <string name="workout_editing">Редактирование тренировки</string>
+    <string name="exercise_edit">Редактирование упражнения</string>
 </resources>

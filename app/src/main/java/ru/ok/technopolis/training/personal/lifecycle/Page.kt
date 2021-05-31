@@ -133,6 +133,8 @@ sealed class Page : Serializable {
         const val PAGE_KEY = "PAGE"
         const val USER_ID_KEY = "USER_ID"
         const val WORKOUT_ID_KEY = "WORKOUT_ID"
+        const val WORKOUT_CREATING_ID_KEY = "WORKOUT_CREATING_ID"
+        const val EXERCISE_CREATING_ID_KEY = "EXERCISE_CREATING_ID"
         const val EXERCISE_ID_KEY = "EXERCISE_ID"
         const val AUTHOR_ID_KEY = "AUTHOR_ID"
         const val OPPONENT_ID_KEY = "OPPONENT_ID"
