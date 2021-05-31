@@ -19,7 +19,6 @@ import ru.ok.technopolis.training.personal.db.dao.ExerciseParameterDao
 import ru.ok.technopolis.training.personal.db.dao.LevelExerciseParameterDao
 import ru.ok.technopolis.training.personal.db.dao.MessageDao
 import ru.ok.technopolis.training.personal.db.dao.ParameterDao
-import ru.ok.technopolis.training.personal.db.dao.ParameterResultDao
 import ru.ok.technopolis.training.personal.db.dao.SubscriptionDao
 import ru.ok.technopolis.training.personal.db.dao.UserDao
 import ru.ok.technopolis.training.personal.db.dao.UserExerciseDao
@@ -37,7 +36,6 @@ import ru.ok.technopolis.training.personal.db.entity.ExerciseParameterEntity
 import ru.ok.technopolis.training.personal.db.entity.LevelExerciseParameterEntity
 import ru.ok.technopolis.training.personal.db.entity.MessageEntity
 import ru.ok.technopolis.training.personal.db.entity.ParameterEntity
-import ru.ok.technopolis.training.personal.db.entity.ParameterResultEntity
 import ru.ok.technopolis.training.personal.db.entity.SubscriptionEntity
 import ru.ok.technopolis.training.personal.db.entity.UserEntity
 import ru.ok.technopolis.training.personal.db.entity.UserExerciseEntity
