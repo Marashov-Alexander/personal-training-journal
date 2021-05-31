@@ -63,7 +63,7 @@ class WorkoutPlanFragment : WorkoutFragment() {
         activity?.base_toolbar?.title = getString(R.string.workouts_plan)
         addWorkoutButton?.setOnClickListener {
             createNewWorkout(userId) { workoutId: Long ->
-                router?.showNewWorkoutPage(workoutId)
+                router?.showNewWorkoutPage(workoutId, true)
             }
         }
 
@@ -176,20 +176,6 @@ class WorkoutPlanFragment : WorkoutFragment() {
                         hintArrow.visibility = INVISIBLE
                     }
                     workoutsList.setData(filtered)
-                }
-            }
-        }
-    }
-
-    private fun createNewWorkout(userId: Long, actionsAfter: (Long) -> Unit?) {
-        GlobalScope.launch(Dispatchers.IO) {
-            database!!.let {
-                val newWorkout = WorkoutEntity("", "", 1L, 1L, 1, false, userId)
-                newWorkout.id = it.workoutDao().insert(newWorkout)
-                val newUserWorkout = UserWorkoutEntity(userId, newWorkout.id, true, System.currentTimeMillis())
-                newUserWorkout.id = it.userWorkoutDao().insert(newUserWorkout)
-                withContext(Dispatchers.Main) {
-                    actionsAfter.invoke(newWorkout.id)
                 }
             }
         }

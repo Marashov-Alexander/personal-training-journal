@@ -85,4 +85,34 @@ abstract class WorkoutFragment : BaseFragment() {
             }
         }
     }
+
+    protected fun createNewExercise(userId: Long, workoutId: Long?, orderNumber: Int, actionsAfter: (Long) -> Unit?) {
+        GlobalScope.launch(Dispatchers.IO) {
+            database!!.let {
+                val newExercise = ExerciseEntity("", "", "Не указано",1, false, userId)
+                newExercise.id = it.exerciseDao().insert(newExercise)
+                if (workoutId != null) {
+                    val newWorkoutExercise = WorkoutExerciseEntity(workoutId, newExercise.id, orderNumber)
+                    newWorkoutExercise.id = it.workoutExerciseDao().insert(newWorkoutExercise)
+                }
+                withContext(Dispatchers.Main) {
+                    actionsAfter.invoke(newExercise.id)
+                }
+            }
+        }
+    }
+
+    protected fun createNewWorkout(userId: Long, actionsAfter: (Long) -> Unit?) {
+        GlobalScope.launch(Dispatchers.IO) {
+            database!!.let {
+                val newWorkout = WorkoutEntity("", "", 1L, 1L, 1, false, userId)
+                newWorkout.id = it.workoutDao().insert(newWorkout)
+                val newUserWorkout = UserWorkoutEntity(userId, newWorkout.id, true, System.currentTimeMillis())
+                newUserWorkout.id = it.userWorkoutDao().insert(newUserWorkout)
+                withContext(Dispatchers.Main) {
+                    actionsAfter.invoke(newWorkout.id)
+                }
+            }
+        }
+    }
 }

@@ -12,14 +12,10 @@ import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.controllers.ButtonGroupController
-import ru.ok.technopolis.training.personal.db.entity.ParameterEntity
-import ru.ok.technopolis.training.personal.db.entity.ResultEntity
-import ru.ok.technopolis.training.personal.db.entity.UserWorkoutEntity
+import ru.ok.technopolis.training.personal.db.entity.ExerciseEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutEntity
 import ru.ok.technopolis.training.personal.items.BundleItem
-import ru.ok.technopolis.training.personal.items.ExerciseItem
 import ru.ok.technopolis.training.personal.items.ExerciseResultsHelper
-import ru.ok.technopolis.training.personal.items.ProgressItem
 import ru.ok.technopolis.training.personal.items.SelectableItem
 import ru.ok.technopolis.training.personal.items.SingleSelectableList
 import ru.ok.technopolis.training.personal.lifecycle.Page
@@ -29,11 +25,6 @@ import ru.ok.technopolis.training.personal.viewholders.BundleItemViewHolder
 import ru.ok.technopolis.training.personal.views.CustomScrollView
 import ru.ok.technopolis.training.personal.views.ProgressChartView
 import ru.ok.technopolis.training.personal.views.SelectableButtonWrapper
-import java.lang.Math.abs
-import java.sql.Date
-import java.text.DateFormat
-import kotlin.math.roundToInt
-import kotlin.random.Random
 
 class WorkoutProgressFragment : WorkoutFragment() {
 
@@ -42,7 +33,10 @@ class WorkoutProgressFragment : WorkoutFragment() {
     private var buttonGroup: ButtonGroupController? = null
     private var exerciseRecycler: RecyclerView? = null
 
-    private val formatter: DateFormat = DateFormat.getDateInstance(DateFormat.SHORT)
+    private lateinit var chartMode: ProgressChartView.ChartMode
+    private lateinit var currentExerciseResult: ExerciseResultsHelper
+    private lateinit var exercisesResults: List<ExerciseResultsHelper>
+    private lateinit var workoutEntity: WorkoutEntity
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -54,6 +48,9 @@ class WorkoutProgressFragment : WorkoutFragment() {
         val userId = CurrentUserRepository.currentUser.value!!.id
 
         loadWorkoutProgress(userId, workoutId) { workoutEntity, exercisesResults ->
+            this.chartMode = ProgressChartView.ChartMode.DAY
+            this.workoutEntity = workoutEntity
+            this.exercisesResults = exercisesResults
             chart?.setScrollLockListener(
                     lockListener = {
                         scrollView?.isEnableScrolling = false
@@ -64,9 +61,8 @@ class WorkoutProgressFragment : WorkoutFragment() {
             )
 
             val exercisesBundles = exercisesResults.map { exerciseResult ->
-                BundleItem(exerciseResult.exercise.id, exerciseResult.exercise.exercise.id, exerciseResult.exercise.exercise.name)
+                BundleItem(exerciseResult.exercise.id.toString(), exerciseResult.exercise.id, exerciseResult.exercise.name)
             }.toMutableList()
-            exercisesBundles.add(0, BundleItem("0", 0, "Все"))
 
             val itemsList = SingleSelectableList(exercisesBundles)
 
@@ -77,6 +73,8 @@ class WorkoutProgressFragment : WorkoutFragment() {
                     onBundleClick = { bundleItem, _ ->
                         println("Bundle $bundleItem clicked")
                         itemsList.select(bundleItem)
+                        currentExerciseResult = exercisesResults.find {erh -> erh.exercise.id == bundleItem.itemId}!!
+                        setResults(chartMode, currentExerciseResult)
                     }
             )
             exerciseRecycler?.adapter = exerciseAdapter
@@ -93,22 +91,26 @@ class WorkoutProgressFragment : WorkoutFragment() {
                             SelectableButtonWrapper(day_mode, day_chosen, day_line) {
                                 println("Clicked 0")
                                 selectableList.select(0)
-                                switchChartMode(ProgressChartView.ChartMode.DAY)
+                                chartMode = ProgressChartView.ChartMode.DAY
+                                setResults(chartMode, currentExerciseResult)
                             },
                             SelectableButtonWrapper(week_mode, week_chosen, week_line) {
                                 println("Clicked 1")
                                 selectableList.select(1)
-                                switchChartMode(ProgressChartView.ChartMode.WEEK)
+                                chartMode = ProgressChartView.ChartMode.WEEK
+                                setResults(chartMode, currentExerciseResult)
                             },
                             SelectableButtonWrapper(month_mode, month_chosen, month_line) {
                                 println("Clicked 2")
                                 selectableList.select(2)
-                                switchChartMode(ProgressChartView.ChartMode.MONTH)
+                                chartMode = ProgressChartView.ChartMode.MONTH
+                                setResults(chartMode, currentExerciseResult)
                             },
                             SelectableButtonWrapper(year_mode, year_chosen, year_line) {
-                                println("Clicked 2")
+                                println("Clicked 3")
                                 selectableList.select(3)
-                                switchChartMode(ProgressChartView.ChartMode.YEAR)
+                                chartMode = ProgressChartView.ChartMode.YEAR
+                                setResults(chartMode, currentExerciseResult)
                             }
                     )
             )
@@ -118,18 +120,9 @@ class WorkoutProgressFragment : WorkoutFragment() {
         }
     }
 
-
-    fun switchChartMode(mode: ProgressChartView.ChartMode) {
-    setResults(mode, exercisesResults)
-    }
-
     private fun setResults(chartMode: ProgressChartView.ChartMode, exerciseResultsHelper: ExerciseResultsHelper) {
-        exerciseResultsHelper.getResults(chartMode)
-        chart?.bindData(
-                results,
-                100f,
-                "% "
-        )
+        val results = exerciseResultsHelper.getResults(chartMode)
+        chart?.bindData(results, 100f, "% ")
     }
 
     override fun onDetach() {
@@ -148,60 +141,29 @@ class WorkoutProgressFragment : WorkoutFragment() {
             database!!.let {
                 val workoutExercisesByWorkout = it.workoutExerciseDao().getAllByWorkout(workoutId)
                 val workout = it.workoutDao().getById(workoutId)
-                val userWorkoutEntity = it.userWorkoutDao().getById(userId, workout.id)
-                val progressItems: MutableList<ProgressItem>
-                val exercises: MutableList<ExerciseItem>
-                    exercises = workoutExercisesByWorkout.map { workoutExercise ->
-                        val exercise = it.exerciseDao().getById(workoutExercise.exerciseId)
-                        val importantParameters = it.parameterDao().getImportantParameters(exercise.id)
-                        val description =
-                                if (importantParameters.isEmpty())
-                                    ""
-                                else
-                                    importantParameters.map { info -> "${info.name}: ${info.value} ${info.units}" }.reduce { acc, str -> "$acc, $str" }
-                        ExerciseItem(
-                                Random.nextInt().toString(),
-                                exercise,
-                                workoutExercise,
-                                description
-                        )
+                val exercises: MutableList<ExerciseEntity> = workoutExercisesByWorkout.map { workoutExercise ->
+                        it.exerciseDao().getById(workoutExercise.exerciseId)
                     }.toMutableList()
-//                val resultsList = it.resultsDao().getByWorkoutAndUser(workoutId, userId)
-                val exercisesResults =exercises.map {exerciseItem ->
-                    val resultsList = it.resultsDao().getByWorkoutAndUserAndExercise(workoutId, userId, exerciseItem.exercise.id)
+
+                val exercisesResults =exercises.map {exercise ->
+                    val resultsList = it.resultsDao().getByWorkoutAndUserAndExercise(workoutId, userId, exercise.id)
                     ExerciseResultsHelper(
-                            exerciseItem,
+                            exercise,
                             resultsList
                     )
-                }
+                }.toMutableList()
+                exercisesResults.add(
+                        0,
+                        ExerciseResultsHelper(
+                                ExerciseEntity("Все", null, categoryId = 1, isPublic = false, authorId = userId, id = 0),
+                                it.resultsDao().getByWorkoutAndUser(workoutId, userId)
+                        )
+                )
                 withContext(Dispatchers.Main) {
                     actionsAfter.invoke(workout, exercisesResults)
                 }
             }
         }
-    }
-
-    private fun getResult(resultEntity: ResultEntity): Int {
-        var percents = when (resultEntity.resultType) {
-            ParameterEntity.LESS_BETTER -> {
-                resultEntity.goal * 100f / resultEntity.result
-            }
-            ParameterEntity.EQUALS_BETTER -> {
-                100f - abs(resultEntity.result - resultEntity.goal) * 100f / resultEntity.goal
-            }
-            ParameterEntity.GREATER_BETTER -> {
-                resultEntity.result * 100f / resultEntity.goal
-            }
-            else -> {
-                0f
-            }
-        }
-        if (percents.isInfinite()) {
-            percents = 100f
-        } else if (percents.isNaN()) {
-            percents = 0f
-        }
-        return percents.roundToInt()
     }
 
     override fun getFragmentLayoutId(): Int = R.layout.fragment_workout_progress

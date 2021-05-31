@@ -1,5 +1,6 @@
 package ru.ok.technopolis.training.personal.items
 
+import ru.ok.technopolis.training.personal.db.entity.ExerciseEntity
 import ru.ok.technopolis.training.personal.db.entity.ParameterEntity
 import ru.ok.technopolis.training.personal.db.entity.ResultEntity
 import ru.ok.technopolis.training.personal.views.ProgressChartView
@@ -8,30 +9,34 @@ import java.text.DateFormat
 import kotlin.math.roundToInt
 
 data class ExerciseResultsHelper(
-        val exercise: ExerciseItem,
+        val exercise: ExerciseEntity,
         val results: List<ResultEntity>
 ) {
-    companion object {
-        val formatMap : Map<ProgressChartView.ChartMode, DateFormat> = mapOf(
-               Pair(ProgressChartView.ChartMode.DAY, DateFormat.getDateInstance(DateFormat.SHORT)),
-                Pair(ProgressChartView.ChartMode.WEEK, DateFormat.getDateInstance(DateFormat.WEEK_OF_YEAR_FIELD)),
-                Pair(ProgressChartView.ChartMode.MONTH, DateFormat.getDateInstance(DateFormat.MONTH_FIELD)),
-                Pair(ProgressChartView.ChartMode.YEAR, DateFormat.getDateInstance(DateFormat.YEAR_FIELD))
-        )
-
-    }
-    private val formatter: DateFormat = DateFormat.getDateInstance(DateFormat.SHORT)
-
+    private val formatter = DateFormat.getDateInstance(DateFormat.SHORT)
 
     fun getResults(chartMode: ProgressChartView.ChartMode): MutableList<ProgressItem> {
-      return results.map { resultEntity ->
+        return results.map { resultEntity ->
             val result = getResult(resultEntity)
-            Pair(result, formatter.format(Date(resultEntity.timestamp)))
+            val dateStr = getDateStr(chartMode, resultEntity.timestamp)
+            Pair(result, dateStr)
         }.groupBy { pair ->
             pair.second
         }.map { entry ->
             ProgressItem(entry.value.sumBy { pair -> pair.first }.div(results.size).toFloat(), entry.key.substringBeforeLast('.'))
         }.toMutableList()
+    }
+
+    private fun getDateStr(chartMode: ProgressChartView.ChartMode, timestamp: Long): String {
+        val str = formatter.format(Date(timestamp))
+
+        val delimiter = if (str.contains('.')) '.' else '/'
+        return when (chartMode) {
+            ProgressChartView.ChartMode.DAY -> str
+            ProgressChartView.ChartMode.WEEK -> TODO()
+            ProgressChartView.ChartMode.MONTH -> str.substringAfter(delimiter)
+            ProgressChartView.ChartMode.YEAR -> str.substringAfter(delimiter).substringAfter(delimiter)
+        }
+
     }
 
     private fun getResult(resultEntity: ResultEntity): Int {

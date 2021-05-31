@@ -11,7 +11,7 @@ import ru.ok.technopolis.training.personal.items.CategoryWorkoutsItem
 import ru.ok.technopolis.training.personal.items.ShortWorkoutItem
 import kotlin.random.Random
 
-abstract class CategoryWorkoutFragment : BaseFragment() {
+abstract class CategoryWorkoutFragment : WorkoutFragment() {
     protected fun loadCategoryWorkouts( userId: Long, library: Boolean,
             actionsAfter: (
                     MutableList<CategoryWorkoutsItem>

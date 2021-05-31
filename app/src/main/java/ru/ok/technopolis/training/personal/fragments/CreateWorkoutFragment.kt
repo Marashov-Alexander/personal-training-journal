@@ -87,55 +87,41 @@ class CreateWorkoutFragment : WorkoutFragment() {
             }
 
             addExerciseButton.setOnClickListener {
-                createNewExercise(exercisesList.items.size) { exerciseId: Long ->
+                createNewExercise(userId, workoutId, exercisesList.items.size) { exerciseId: Long ->
                     router?.showNewExercisePage1(workoutId, exerciseId, true)
                 }
             }
 
             exercisesList = ExercisesList(exercises)
             val adapter = ExerciseAdapter(
-                holderType = ExerciseItemViewHolder::class,
-                layoutId = R.layout.item_exercise,
-                dataSource = exercisesList,
-                onClick = { exercise ->
-                    print("Exercise $exercise clicked")
-                },
-                onView = {exerciseItem ->
-                    if (!chooseMode) {
-                        print("View exercise $exerciseItem clicked")
-                        router?.showExercisePage(exerciseItem.exercise.id)
+                    holderType = ExerciseItemViewHolder::class,
+                    layoutId = R.layout.item_exercise,
+                    dataSource = exercisesList,
+                    onClick = { exercise ->
+                        print("Exercise $exercise clicked")
+                    },
+                    onView = {exerciseItem ->
+                        if (!chooseMode) {
+                            print("View exercise $exerciseItem clicked")
+                            router?.showExercisePage(exerciseItem.exercise.id)
+                        }
+                        chooseMode
+                    },
+                    onEdit = {exerciseItem: ExerciseItem ->
+                        if (!chooseMode) {
+                            print("View exercise $exerciseItem clicked")
+                            router?.showNewExercisePage1(workoutId, exerciseItem.exercise.id, true)
+                        }
+                        chooseMode
+                    },
+                    onLongExerciseClick = { item, itemView ->
+                        val popup = PopupMenu(requireContext(), itemView)
+                        popup.inflate(R.menu.exercise_menu)
+                        popup.setOnMenuItemClickListener(getMenuItemClickListener(item))
+                        popup.show()
                     }
-                    chooseMode
-                },
-                onEdit = {exerciseItem: ExerciseItem ->
-                    if (!chooseMode) {
-                        print("View exercise $exerciseItem clicked")
-                        router?.showNewExercisePage1(workoutId, exerciseItem.exercise.id, true)
-                    }
-                    chooseMode
-                },
-                onLongExerciseClick = { item, itemView ->
-                    val popup = PopupMenu(requireContext(), itemView)
-                    popup.inflate(R.menu.exercise_menu)
-                    popup.setOnMenuItemClickListener(getMenuItemClickListener(item))
-                    popup.show()
-                }
             )
             exercisesRecycler.adapter = adapter
-        }
-    }
-
-    private fun createNewExercise(orderNumber: Int, actionsAfter: (Long) -> Unit?) {
-        GlobalScope.launch(Dispatchers.IO) {
-            database!!.let {
-                val newExercise = ExerciseEntity("", "", "Не указано",1, false, userId)
-                newExercise.id = it.exerciseDao().insert(newExercise)
-                val newWorkoutExercise = WorkoutExerciseEntity(workoutId, newExercise.id, orderNumber)
-                newWorkoutExercise.id = it.workoutExerciseDao().insert(newWorkoutExercise)
-                withContext(Dispatchers.Main) {
-                    actionsAfter.invoke(newExercise.id)
-                }
-            }
         }
     }
 
@@ -187,7 +173,7 @@ class CreateWorkoutFragment : WorkoutFragment() {
                         exercisesList.supersetFromChosen()
                         addExerciseButton.setImageResource(R.drawable.ic_add_black_24dp)
                         addExerciseButton.setOnClickListener {
-                            createNewExercise(exercisesList.items.size) { exerciseId: Long ->
+                            createNewExercise(userId, workoutId, exercisesList.items.size) { exerciseId: Long ->
                                 router?.showNewExercisePage1(workoutId, exerciseId, true)
                             }
                         }

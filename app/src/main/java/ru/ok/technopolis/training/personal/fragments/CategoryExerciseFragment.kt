@@ -9,7 +9,6 @@ import ru.ok.technopolis.training.personal.db.entity.ExerciseCategoryEntity
 import ru.ok.technopolis.training.personal.db.entity.ExerciseEntity
 import ru.ok.technopolis.training.personal.items.CategoryExerciseItem
 import ru.ok.technopolis.training.personal.items.ShortExerciseItem
-
 import kotlin.random.Random
 
 abstract class CategoryExerciseFragment : BaseFragment() {
@@ -57,5 +56,17 @@ abstract class CategoryExerciseFragment : BaseFragment() {
             )
         }.toMutableList()
         categoryElem.add(CategoryExerciseItem(category.id.toString(), category.name, exercisesList))
+    }
+
+    protected fun createNewExercise(userId: Long, actionsAfter: (Long) -> Unit?) {
+        GlobalScope.launch(Dispatchers.IO) {
+            database!!.let {
+                val newExercise = ExerciseEntity("", "", "Не указано",1, false, userId)
+                newExercise.id = it.exerciseDao().insert(newExercise)
+                withContext(Dispatchers.Main) {
+                    actionsAfter.invoke(newExercise.id)
+                }
+            }
+        }
     }
 }

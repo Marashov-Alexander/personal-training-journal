@@ -150,8 +150,7 @@ class ExerciseViewFragment : ExerciseFragment() {
 
         val editButton: MenuItem = menu.findItem(R.id.edit_item)
         editButton.setOnMenuItemClickListener {
-
-            router?.showNewExercisePage1(1, workoutId!!, exerciseId!!)
+            router?.showNewExercisePage1(workoutId!!, exerciseId!!, false)
             true
         }
     }

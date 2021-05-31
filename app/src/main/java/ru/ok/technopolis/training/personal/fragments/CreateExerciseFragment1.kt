@@ -54,10 +54,10 @@ class CreateExerciseFragment1 : ExerciseFragment() {
                 this.exercise.name = nameTextView.text.toString()
                 // сохранение упражнения в базу данных
                 saveChanges(
-                    this.exercise,
-                    parametersWrapper.levelsCount,
-                    parametersWrapper.levelsMap,
-                    parametersWrapper.removedParameters
+                        this.exercise,
+                        parametersWrapper.levelsCount,
+                        parametersWrapper.levelsMap,
+                        parametersWrapper.removedParameters
                 ) {
                     router?.showNewExercisePage2(workoutId, exerciseId)
                 }
@@ -67,16 +67,16 @@ class CreateExerciseFragment1 : ExerciseFragment() {
             this.exercise = exercise
 
             parametersWrapper = ExerciseParametersWrapper(
-                this,
-                parameters_recycler,
-                add_parameter_button,
-                increase_level,
-                decrease_level,
-                level_value,
-                levelsMap = levelsMap,
-                userLevel = userLevel,
-                maxLevel = maxLevel,
-                editable = true
+                    this,
+                    parameters_recycler,
+                    add_parameter_button,
+                    increase_level,
+                    decrease_level,
+                    level_value,
+                    levelsMap = levelsMap,
+                    userLevel = userLevel,
+                    maxLevel = maxLevel,
+                    editable = true
             )
         }
 

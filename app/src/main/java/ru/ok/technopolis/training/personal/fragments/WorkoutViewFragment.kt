@@ -125,8 +125,7 @@ class WorkoutViewFragment : WorkoutFragment() {
 
         val editButton: MenuItem = menu.findItem(R.id.edit_item)
         editButton.setOnMenuItemClickListener {
-
-            router?.showNewWorkoutPage(workoutId)
+            router?.showNewWorkoutPage(workoutId, false)
             true
         }
     }

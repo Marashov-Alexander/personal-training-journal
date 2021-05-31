@@ -22,9 +22,11 @@ class CategoryWorkoutsFragment : CategoryWorkoutFragment() {
         recycler = view.navigation_view_main_block
         addButton = view.add_element_button
         loadWorkouts()
+        val userId = CurrentUserRepository.currentUser.value!!.id
         addButton?.setOnClickListener {
-            // TODO: create new workout here
-            router?.showNewWorkoutPage(1)
+            createNewWorkout(userId) { workoutId: Long ->
+                router?.showNewWorkoutPage(workoutId, true)
+            }
         }
     }
 
