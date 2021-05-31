@@ -51,9 +51,10 @@
         app:layout_constraintEnd_toEndOf="parent"
         app:layout_constraintBottom_toBottomOf="parent"
         app:layout_constraintStart_toEndOf="@id/message_input"
-        android:background="@color/background"
+        android:background="?android:selectableItemBackground"
         android:padding="@dimen/padding_10"
         android:layout_marginVertical="@dimen/padding_10"
+        android:clickable="true"
         />
 
 </androidx.constraintlayout.widget.ConstraintLayout>

@@ -173,7 +173,7 @@ class ViewAuthorFragment : UserFragment() {
         val button: MenuItem = menu.findItem(R.id.subscribe_button)
         val userId = CurrentUserRepository.currentUser.value?.id
         var falg = false
-        getUserSubscribtionsIdList(userId!!) { subscribers ->
+        getUserSubscriptionsIdList(userId!!) { subscribers ->
             if (authorId in subscribers) {
                 button.setIcon(R.drawable.ic_person_added)
             } else {

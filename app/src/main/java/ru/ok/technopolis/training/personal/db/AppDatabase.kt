@@ -12,6 +12,42 @@ import kotlinx.coroutines.launch
 import ru.ok.technopolis.training.personal.db.converter.DateConverter
 import ru.ok.technopolis.training.personal.db.dao.*
 import ru.ok.technopolis.training.personal.db.entity.*
+import ru.ok.technopolis.training.personal.db.dao.ExerciseCategoryDao
+import ru.ok.technopolis.training.personal.db.dao.ExerciseDao
+import ru.ok.technopolis.training.personal.db.dao.ExerciseMediaDao
+import ru.ok.technopolis.training.personal.db.dao.ExerciseParameterDao
+import ru.ok.technopolis.training.personal.db.dao.LevelExerciseParameterDao
+import ru.ok.technopolis.training.personal.db.dao.MessageDao
+import ru.ok.technopolis.training.personal.db.dao.ParameterDao
+import ru.ok.technopolis.training.personal.db.dao.ParameterResultDao
+import ru.ok.technopolis.training.personal.db.dao.SubscriptionDao
+import ru.ok.technopolis.training.personal.db.dao.UserDao
+import ru.ok.technopolis.training.personal.db.dao.UserExerciseDao
+import ru.ok.technopolis.training.personal.db.dao.UserLevelDao
+import ru.ok.technopolis.training.personal.db.dao.UserWorkoutDao
+import ru.ok.technopolis.training.personal.db.dao.WorkoutCategoryDao
+import ru.ok.technopolis.training.personal.db.dao.WorkoutDao
+import ru.ok.technopolis.training.personal.db.dao.WorkoutExerciseDao
+import ru.ok.technopolis.training.personal.db.dao.WorkoutMediaDao
+import ru.ok.technopolis.training.personal.db.dao.WorkoutSportDao
+import ru.ok.technopolis.training.personal.db.entity.ExerciseCategoryEntity
+import ru.ok.technopolis.training.personal.db.entity.ExerciseEntity
+import ru.ok.technopolis.training.personal.db.entity.ExerciseMediaEntity
+import ru.ok.technopolis.training.personal.db.entity.ExerciseParameterEntity
+import ru.ok.technopolis.training.personal.db.entity.LevelExerciseParameterEntity
+import ru.ok.technopolis.training.personal.db.entity.MessageEntity
+import ru.ok.technopolis.training.personal.db.entity.ParameterEntity
+import ru.ok.technopolis.training.personal.db.entity.ParameterResultEntity
+import ru.ok.technopolis.training.personal.db.entity.SubscriptionEntity
+import ru.ok.technopolis.training.personal.db.entity.UserEntity
+import ru.ok.technopolis.training.personal.db.entity.UserExerciseEntity
+import ru.ok.technopolis.training.personal.db.entity.UserLevelEntity
+import ru.ok.technopolis.training.personal.db.entity.UserWorkoutEntity
+import ru.ok.technopolis.training.personal.db.entity.WorkoutCategoryEntity
+import ru.ok.technopolis.training.personal.db.entity.WorkoutEntity
+import ru.ok.technopolis.training.personal.db.entity.WorkoutExerciseEntity
+import ru.ok.technopolis.training.personal.db.entity.WorkoutMediaEntity
+import ru.ok.technopolis.training.personal.db.entity.WorkoutSportEntity
 import ru.ok.technopolis.training.personal.db.generators.InitialDataGenerator
 
 @Database(
@@ -31,7 +67,9 @@ import ru.ok.technopolis.training.personal.db.generators.InitialDataGenerator
         WorkoutExerciseEntity::class,
         WorkoutSportEntity::class,
         SubscriptionEntity::class,
-        ResultEntity::class
+        ResultEntity::class,
+        WorkoutMediaEntity::class,
+        ExerciseMediaEntity::class
     ],
     version = 1
 )
@@ -52,9 +90,9 @@ abstract class AppDatabase : RoomDatabase() {
                     instance
                 } else {
                     instance = Room.databaseBuilder(
-                        context.applicationContext,
-                        AppDatabase::class.java,
-                        DATABASE_NAME
+                            context.applicationContext,
+                            AppDatabase::class.java,
+                            DATABASE_NAME
                     ).addCallback(object : RoomDatabase.Callback() {
                         override fun onCreate(db: SupportSQLiteDatabase) {
                             super.onCreate(db)
@@ -84,7 +122,7 @@ abstract class AppDatabase : RoomDatabase() {
                             }
                         }
                     })
-                        .build()
+                            .build()
                     instance
                 }
             }
@@ -107,4 +145,6 @@ abstract class AppDatabase : RoomDatabase() {
     abstract fun workoutSportDao(): WorkoutSportDao
     abstract fun subscriptionDao(): SubscriptionDao
     abstract fun resultsDao(): ResultDao
+    abstract fun workoutMediaDao(): WorkoutMediaDao
+    abstract fun exerciseMediaDao(): ExerciseMediaDao
 }
