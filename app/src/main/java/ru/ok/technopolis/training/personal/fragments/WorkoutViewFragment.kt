@@ -51,6 +51,7 @@ class WorkoutViewFragment : WorkoutFragment() {
     private var workoutId: Long = -1L
 
     private lateinit var mediaViewer: MediaViewerWrapper
+    private var chooseMode: Boolean = false
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
@@ -93,10 +94,19 @@ class WorkoutViewFragment : WorkoutFragment() {
                     router?.showExercisePage(exercise.id.toLong())
                 },
                 onView = {exercise ->
-                    print("View exercise $exercise clicked")
-                    router?.showExercisePage(exercise.exercise.id)
-                    false
+                    if (!chooseMode) {
+                        print("View exercise $exercise clicked")
+                        router?.showExercisePage(exercise.exercise.id)
+                    }
+                    chooseMode
                 },
+                    onEdit = {exerciseItem: ExerciseItem ->
+                if (!chooseMode) {
+                    print("View exercise $exerciseItem clicked")
+                    router?.showNewExercisePage1(workoutId, exerciseItem.exercise.id, true)
+                }
+                chooseMode
+            },
                 onLongExerciseClick = {  item, itemView  ->
                     print("Exercise $item clicked")
                 }
