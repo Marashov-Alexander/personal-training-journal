@@ -30,9 +30,10 @@ class NavigationFragment : BaseFragment() {
         tabView?.adapter = NavigationAdapter(this)
         activity?.base_toolbar?.title = getString(R.string.navigation)
         print(navigationTabs?.tabCount)
-        TabLayoutMediator(navigationTabs!!, tabView!!) { tab, position ->
+        val tabLayoutMediator = TabLayoutMediator(navigationTabs!!, tabView!!) { tab, position ->
             tab.text = tabNames!![position]
-        }.attach()
+        }
+        tabLayoutMediator.attach()
         tabView?.isUserInputEnabled = false;
         search = view.search_input
     }

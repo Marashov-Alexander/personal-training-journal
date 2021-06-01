@@ -383,5 +383,6 @@
     <string name="rest">Rest</string>
 
     <string name="percents_value" translatable="false">%d%%</string>
+    <string name="from_created">Find</string>
 
 </resources>

@@ -10,31 +10,33 @@ import androidx.recyclerview.widget.ItemTouchHelper
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import ru.ok.technopolis.training.personal.R
-import ru.ok.technopolis.training.personal.db.entity.LevelExerciseParameterEntity
-import ru.ok.technopolis.training.personal.db.entity.ParameterEntity
-import ru.ok.technopolis.training.personal.db.entity.UserLevelEntity
+import ru.ok.technopolis.training.personal.db.entity.*
 import ru.ok.technopolis.training.personal.fragments.BaseFragment
 import ru.ok.technopolis.training.personal.fragments.dialogs.ParameterDialogFragment
 import ru.ok.technopolis.training.personal.items.ItemsList
 import ru.ok.technopolis.training.personal.items.ParameterItem
 import ru.ok.technopolis.training.personal.utils.recycler.adapters.ParameterAdapter
 import ru.ok.technopolis.training.personal.viewholders.ParameterViewHolder
-import java.lang.Integer.min
 import java.lang.Integer.max
+import java.lang.Integer.min
 import kotlin.random.Random
 
 class ExerciseParametersWrapper(
-    private val fragment: BaseFragment,
-    parametersRecycler: RecyclerView,
-    addParameterBtn: FloatingActionButton,
-    addLevelBtn: FloatingActionButton,
-    removeLevelBtn: FloatingActionButton,
-    private val levelSpinner: Spinner,
-    var levelsMap: MutableMap<Int, MutableList<ParameterItem>>,
-    userLevel: UserLevelEntity?,
-    maxLevel: Int,
-    editable: Boolean
+        private val fragment: BaseFragment,
+        parametersRecycler: RecyclerView,
+        addParameterBtn: FloatingActionButton,
+        addLevelBtn: FloatingActionButton,
+        removeLevelBtn: FloatingActionButton,
+        private val levelSpinner: Spinner,
+        var levelsMap: MutableMap<Int, MutableList<ParameterItem>>,
+        userLevel: UserLevelEntity?,
+        maxLevel: Int,
+        editable: Boolean
 
 ) : ParameterDialogFragment.ParameterDialogListener {
 
@@ -56,8 +58,11 @@ class ExerciseParametersWrapper(
             levelsMap[currentLevel] = mutableListOf()
         }
 
-        addParameterBtn.setOnClickListener {
-            createNewParameter()
+        if (editable) {
+            fragment.registerForContextMenu(addParameterBtn)
+            addParameterBtn.setOnClickListener {
+                addParameterBtn.showContextMenu()
+            }
         }
         val arrayAdapter = ArrayAdapter<String>(fragment.requireContext(), R.layout.spinner_item, levelsList)
         arrayAdapter.setDropDownViewResource(R.layout.support_simple_spinner_dropdown_item)
@@ -71,18 +76,18 @@ class ExerciseParametersWrapper(
 
         parametersList = ItemsList(levelsMap[currentLevel]!!)
         parametersRecycler.adapter = ParameterAdapter(
-            holderType = ParameterViewHolder::class,
-            layoutId = R.layout.item_parameter_short,
-            dataSource = parametersList!!,
-            editable = editable,
-            onEdit = {
-                ParameterDialogFragment(it, this)
-                    .show(fragment.requireActivity().supportFragmentManager, "ParameterDialogFragment")
-            },
-            onValueChanged = { newValue, item ->
-                println("Changed ${item?.id} to $newValue")
-                item?.levelExerciseParameterEntity?.value = newValue
-            }
+                holderType = ParameterViewHolder::class,
+                layoutId = R.layout.item_parameter_short,
+                dataSource = parametersList!!,
+                editable = editable,
+                onEdit = {
+                    ParameterDialogFragment(it, this)
+                            .show(fragment.requireActivity().supportFragmentManager, "ParameterDialogFragment")
+                },
+                onValueChanged = { newValue, item ->
+                    println("Changed ${item?.id} to $newValue")
+                    item?.levelExerciseParameterEntity?.value = newValue
+                }
         )
         val layoutManager = LinearLayoutManager(fragment.requireContext(), RecyclerView.VERTICAL, false)
         parametersRecycler.layoutManager = layoutManager
@@ -185,16 +190,38 @@ class ExerciseParametersWrapper(
         }
     }
 
-    private fun createNewParameter() {
+    fun createNewParameter() {
         ParameterDialogFragment(
-            ParameterItem(
-                Random.nextInt().toString(),
-                ParameterEntity("", ""),
-                LevelExerciseParameterEntity(currentLevel, 0.0f, -1),
-                true
-            ),
-            this
+                ParameterItem(
+                        Random.nextInt().toString(),
+                        ParameterEntity("", ""),
+                        LevelExerciseParameterEntity(currentLevel, 0.0f, -1),
+                        true
+                ),
+                this
         ).show(fragment.requireActivity().supportFragmentManager, "ParameterDialogFragment")
     }
 
+    fun addParameter(parameter: ParameterEntity, exercise: ExerciseEntity) {
+        GlobalScope.launch(Dispatchers.IO) {
+            fragment.database?.let {
+                val exPar = ExerciseParameterEntity(exercise.id, parameter.id)
+                exPar.id = it.exerciseParameterDao().insert(exPar)
+                val exLvl = LevelExerciseParameterEntity(1, 15f, exPar.id)
+                it.levelExerciseParameterDao().insert(exLvl)
+                withContext(Dispatchers.Main) {
+                    parametersList?.addLast(
+                            ParameterItem(
+                                    Random.nextInt().toString(),
+                                    parameter,
+                                    exLvl,
+                                    true
+                            )
+                    )
+                }
+            }
+
+        }
+
+    }
 }

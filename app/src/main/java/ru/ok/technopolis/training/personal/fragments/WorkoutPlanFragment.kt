@@ -1,6 +1,7 @@
 package ru.ok.technopolis.training.personal.fragments
 
 import android.os.Bundle
+import android.view.ContextMenu
 import android.view.View
 import android.view.View.INVISIBLE
 import android.view.View.VISIBLE
@@ -9,6 +10,8 @@ import android.widget.TextView
 import androidx.recyclerview.widget.LinearLayoutManager
 import androidx.recyclerview.widget.RecyclerView
 import com.google.android.material.floatingactionbutton.FloatingActionButton
+import kotlinx.android.synthetic.main.fragment_workout.*
+import kotlinx.android.synthetic.main.fragment_workout_plan.*
 import kotlinx.android.synthetic.main.fragment_workout_plan.view.*
 import kotlinx.android.synthetic.main.view_appbar.*
 import kotlinx.coroutines.Dispatchers
@@ -16,8 +19,6 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.ok.technopolis.training.personal.R
-import ru.ok.technopolis.training.personal.db.entity.UserWorkoutEntity
-import ru.ok.technopolis.training.personal.db.entity.WorkoutEntity
 import ru.ok.technopolis.training.personal.items.*
 import ru.ok.technopolis.training.personal.repository.CurrentUserRepository
 import ru.ok.technopolis.training.personal.utils.recycler.adapters.DayListAdapter
@@ -51,20 +52,20 @@ class WorkoutPlanFragment : WorkoutFragment() {
     private lateinit var workoutsList: ItemsList<ScheduledWorkoutItem>
     private lateinit var hintText: TextView
     private lateinit var hintArrow: ImageView
+    private var userId = -1L
 
     override fun onViewCreated(view: View, savedInstanceState: Bundle?) {
         super.onViewCreated(view, savedInstanceState)
-        val userId = CurrentUserRepository.currentUser.value!!.id
+        userId = CurrentUserRepository.currentUser.value!!.id
         recyclerView = view.days_recycler_view
         workoutsRecycler = view.scheduled_workouts_recycler
         addWorkoutButton = view.add_workout_button
         hintText = view.hint_text
         hintArrow = view.hint_arrow
         activity?.base_toolbar?.title = getString(R.string.workouts_plan)
+        addWorkoutButton?.let { registerForContextMenu(it) }
         addWorkoutButton?.setOnClickListener {
-            createNewWorkout(userId) { workoutId: Long ->
-                router?.showNewWorkoutPage(workoutId, true)
-            }
+            addWorkoutButton?.showContextMenu()
         }
 
         calendar.time = Date(System.currentTimeMillis())
@@ -118,6 +119,22 @@ class WorkoutPlanFragment : WorkoutFragment() {
         val todayItem = itemsList.items.find { it.isToday }!!
         itemsList.select(todayItem)
         loadScheduledWorkouts(todayItem.date)
+    }
+
+    override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+        if (v.id == add_workout_button.id) {
+            menu.add(0, 0, 0, v.resources.getString(R.string.create_new)).setOnMenuItemClickListener {
+                createNewWorkout(userId) { workoutId: Long ->
+                    router?.showNewWorkoutPage(workoutId, true)
+                }
+                true
+            }
+            menu.add(0, 1, 1, v.resources.getString(R.string.from_created)).setOnMenuItemClickListener {
+                router?.showNavigationPage()
+                true
+            }
+        }
     }
 
     private fun loadScheduledWorkouts(date: java.util.Date) {

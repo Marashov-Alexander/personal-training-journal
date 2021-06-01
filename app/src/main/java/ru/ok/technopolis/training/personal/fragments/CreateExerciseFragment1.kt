@@ -1,13 +1,20 @@
 package ru.ok.technopolis.training.personal.fragments
 
 import android.os.Bundle
+import android.view.ContextMenu
 import android.view.View
 import android.widget.AutoCompleteTextView
 import android.widget.Spinner
 import com.google.android.material.card.MaterialCardView
 import kotlinx.android.synthetic.main.element_exercise_parameters.*
 import kotlinx.android.synthetic.main.fragment_new_exercise_1.*
+import kotlinx.android.synthetic.main.fragment_new_exercise_1.next_step_card
+import kotlinx.android.synthetic.main.fragment_new_workout_1.*
 import kotlinx.android.synthetic.main.view_appbar.*
+import kotlinx.coroutines.Dispatchers
+import kotlinx.coroutines.GlobalScope
+import kotlinx.coroutines.launch
+import kotlinx.coroutines.withContext
 import ru.ok.technopolis.training.personal.R
 import ru.ok.technopolis.training.personal.db.entity.ExerciseEntity
 import ru.ok.technopolis.training.personal.db.entity.UserLevelEntity
@@ -89,6 +96,30 @@ class CreateExerciseFragment1 : ExerciseFragment() {
         exerciseTypeSpinner = exercise_type_spinner
         nameTextView = name
         nextStepCard = next_step_card
+    }
+
+    override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+        if (v.id == add_parameter_button.id) {
+            menu.add(0, 0, 0, v.resources.getString(R.string.create_new)).setOnMenuItemClickListener {
+                parametersWrapper.createNewParameter()
+                true
+            }
+            GlobalScope.launch(Dispatchers.IO) {
+                database?.let {
+                    val parameters = it.parameterDao().getAll()
+                    withContext(Dispatchers.Main) {
+                        for (parameter in parameters) {
+                            menu.add(1, parameter.id.toInt(), 0, parameter.name).setOnMenuItemClickListener {
+                                parametersWrapper.addParameter(parameter, exercise)
+                                true
+                            }
+                        }
+                    }
+                }
+            }
+        }
+
     }
 
     override fun getFragmentLayoutId(): Int = R.layout.fragment_new_exercise_1

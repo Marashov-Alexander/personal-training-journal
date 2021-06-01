@@ -113,6 +113,30 @@ abstract class WorkoutFragment : BaseFragment() {
         }
     }
 
+    protected fun addExercise(exercise: ExerciseEntity, workoutId: Long, orderNumber: Int, actionsAfter: (ExerciseItem) -> Unit?) {
+        GlobalScope.launch(Dispatchers.IO) {
+            database!!.let {
+                val newWorkoutExercise = WorkoutExerciseEntity(workoutId, exercise.id, orderNumber)
+                newWorkoutExercise.id = it.workoutExerciseDao().insert(newWorkoutExercise)
+                val importantParameters = it.parameterDao().getImportantParameters(exercise.id)
+                val description =
+                        if (importantParameters.isEmpty())
+                            ""
+                        else
+                            importantParameters.map { info -> "${info.name}: ${info.value} ${info.units}" }.reduce { acc, str -> "$acc, $str" }
+                val exerciseItem = ExerciseItem(
+                        Random.nextInt().toString(),
+                        exercise,
+                        newWorkoutExercise,
+                        description
+                )
+                withContext(Dispatchers.Main) {
+                    actionsAfter.invoke(exerciseItem)
+                }
+            }
+        }
+    }
+
     protected fun createNewWorkout(userId: Long, actionsAfter: (Long) -> Unit?) {
         GlobalScope.launch(Dispatchers.IO) {
             database!!.let {

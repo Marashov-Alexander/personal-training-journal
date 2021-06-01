@@ -1,6 +1,7 @@
 package ru.ok.technopolis.training.personal.fragments
 
 import android.os.Bundle
+import android.view.ContextMenu
 import android.view.View
 import android.widget.AutoCompleteTextView
 import androidx.appcompat.widget.PopupMenu
@@ -16,9 +17,7 @@ import kotlinx.coroutines.GlobalScope
 import kotlinx.coroutines.launch
 import kotlinx.coroutines.withContext
 import ru.ok.technopolis.training.personal.R
-import ru.ok.technopolis.training.personal.db.entity.ExerciseEntity
 import ru.ok.technopolis.training.personal.db.entity.WorkoutEntity
-import ru.ok.technopolis.training.personal.db.entity.WorkoutExerciseEntity
 import ru.ok.technopolis.training.personal.items.ExerciseItem
 import ru.ok.technopolis.training.personal.items.ExercisesList
 import ru.ok.technopolis.training.personal.lifecycle.Page
@@ -86,10 +85,9 @@ class CreateWorkoutFragment : WorkoutFragment() {
                 }
             }
 
+            registerForContextMenu(addExerciseButton)
             addExerciseButton.setOnClickListener {
-                createNewExercise(userId, workoutId, exercisesList.items.size) { exerciseId: Long ->
-                    router?.showNewExercisePage1(workoutId, exerciseId, true)
-                }
+                addExerciseButton.showContextMenu()
             }
 
             exercisesList = ExercisesList(exercises)
@@ -122,6 +120,33 @@ class CreateWorkoutFragment : WorkoutFragment() {
                     }
             )
             exercisesRecycler.adapter = adapter
+        }
+    }
+
+    override fun onCreateContextMenu(menu: ContextMenu, v: View, menuInfo: ContextMenu.ContextMenuInfo?) {
+        super.onCreateContextMenu(menu, v, menuInfo)
+        if (v.id == add_exercise_button.id) {
+            menu.add(0, 0, 0, v.resources.getString(R.string.create_new)).setOnMenuItemClickListener {
+                createNewExercise(userId, workoutId, exercisesList.items.size) { exerciseId: Long ->
+                    router?.showNewExercisePage1(workoutId, exerciseId, true)
+                }
+                true
+            }
+            GlobalScope.launch(Dispatchers.IO) {
+                database?.let {
+                    val exercises = it.exerciseDao().getAll()
+                    withContext(Dispatchers.Main) {
+                        for (exercise in exercises) {
+                            menu.add(1, exercise.id.toInt(), 0, exercise.name).setOnMenuItemClickListener {
+                                addExercise(exercise, workoutId, exercisesList.items.size) { exerciseItem ->
+                                    exercisesList.addLast(exerciseItem)
+                                }
+                                true
+                            }
+                        }
+                    }
+                }
+            }
         }
     }
 

@@ -15,7 +15,7 @@ abstract class BaseFragment : Fragment() {
 
     protected var router: Router? = null
     protected val taskContainer: CompositeDisposable = CompositeDisposable()
-    protected var database: AppDatabase? = null
+    var database: AppDatabase? = null
 
     override fun onCreateView(inflater: LayoutInflater, container: ViewGroup?, savedInstanceState: Bundle?): View? {
         router = (activity as BaseActivity).router
