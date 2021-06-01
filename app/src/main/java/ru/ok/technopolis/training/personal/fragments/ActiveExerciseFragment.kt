@@ -99,7 +99,7 @@ class ActiveExerciseFragment : ExerciseFragment() {
                 val ordinaryParams = parameters.filter {par -> par.parameter.parameterType == ParameterEntity.PARAMETER_ORDINARY}.toMutableList()
                 val goals = ordinaryParams.map { parItem -> parItem.levelExerciseParameterEntity.value }
                 restParam = parameters.firstOrNull { par -> par.parameter.parameterType == ParameterEntity.PARAMETER_REST }
-                repeatsParam = parameters.firstOrNull { par -> par.parameter.parameterType == ParameterEntity.PARAMETER_REST }
+                repeatsParam = parameters.firstOrNull { par -> par.parameter.parameterType == ParameterEntity.PARAMETER_REPEATS }
                 parametersList.setData(ordinaryParams)
 
                 restValue = restParam?.levelExerciseParameterEntity?.value ?: 15.0f
