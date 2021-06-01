@@ -1,5 +1,6 @@
 package ru.ok.technopolis.training.personal.lifecycle
 
+import ru.ok.technopolis.training.personal.activities.auth.LoginActivity
 import ru.ok.technopolis.training.personal.fragments.ProfileFragment
 import ru.ok.technopolis.training.personal.mockActivities.auth.FakeLoginActivity
 import ru.ok.technopolis.training.personal.activities.auth.RegistrationActivity
@@ -18,7 +19,7 @@ sealed class Page : Serializable {
         abstract val clazz: KClass<out android.app.Activity>
 
         object Login : Activity() {
-            override val clazz = FakeLoginActivity::class
+            override val clazz = LoginActivity::class
         }
 
 
